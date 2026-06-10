@@ -111,23 +111,31 @@ CFLAGS = -Wall -Wextra -Werror -Iincludes -I$(MLX42)/include/MLX42
 EXT_LIBS = -ldl -lglfw -pthread -lm
 
 
-MLX_DIR = minilibx-linux
+MLX_DIR = mlx42
 SAMPLE = sample_minilibx
-CFLAGS = -Wall -Wextra -Werror -I$(MLX_DIR)
-LDFLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
+LDFLAGS = -lmlx -lXext -lX11 -lm -lbsd
+
+EXT_LIBS = -ldl -lglfw -pthread -lm
 
 all: $(SAMPLE)
 
 sample: $(SAMPLE)
 
 #$(SAMPLE): src/sample_minilibx.c $(MLX_DIR)/libmlx.a
-FORCE:
 
-$(SAMPLE): src/sample_minilibx.c $(MLX_DIR)/libmlx.a FORCE
-	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
 
-$(MLX_DIR)/libmlx.a:
-	$(MAKE) -C $(MLX_DIR)
+sample: $(MLX42LIB)
+	$(CC) $(CFLAGS) sample_minilibx.c -o sample_minilibx -L$(BUILD_DIR) -lmlx42 $(EXT_LIBS)
+
+$(MLX42LIB):
+	if [ ! -d $(MLX42) ]; then \
+		git clone https://github.com/codam-coding-college/MLX42.git $(MLX42); \
+	fi
+	if [ ! -f $(BUILD_DIR)/libmlx42.a ]; then \
+		cmake $(MLX42) -B $(BUILD_DIR) && \
+		cmake --build $(BUILD_DIR) -j4; \
+	fi
+
 
 clean:
 	rm -f $(SAMPLE)
