@@ -1,0 +1,112 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build-sample",
+			"type": "shell",
+			"command": "make sample",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "build-sample-wsl",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make sample'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "build-sample-wsl",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make sample'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "rebuild-sample-wsl",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make clean sample'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "debug-sample-make",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && rm -f sample_minilibx && ls -l sample_minilibx || true && make sample -n'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "debug-make-d",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && rm -f sample_minilibx && make -d sample 2>&1 | head -n 120'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "debug-make-grep",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && rm -f sample_minilibx && make -d sample 2>&1 | grep -E \"sample_minilibx|Must remake|No rule|Found an implicit rule|Prerequisite|Considering target file|Updating goal targets|Finished prerequisites\"'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "debug-make-grep-2",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && rm -f sample_minilibx && make -d sample 2>&1 | grep -E \"sample_minilibx|Must|No rule|Found|Prerequisite|Considering|Updating|Finished\"'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "verify-sample-build",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make sample && ls -l sample_minilibx'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "verify-sample-build",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make clean sample && ls -l sample_minilibx'",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "build sample",
+			"type": "shell",
+			"command": "make sample",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "build sample via wsl",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make sample'",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "verify sample build",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && make sample && ls -l sample_minilibx'",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
