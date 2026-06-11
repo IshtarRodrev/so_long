@@ -1,4 +1,5 @@
-﻿#include "so_long.h"
+﻿#include "libft.h"
+#include "so_long.h"
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -274,4 +275,41 @@ int path_is_valid(const t_map *map)
         return 0;
     }
     return 1;
+}
+char **read_map_file(const char *path)
+{
+    int fd;
+    char *line;
+    char **map;
+    int rows;
+    int i;
+
+    fd = open(path, O_RDONLY);
+    if (fd < 0)
+        return (NULL);
+    map = NULL;
+    rows = 0;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        i = 0;
+        while (line[i] != '\0' && line[i] != '\n')
+            i++;
+        if (line[i] == '\n')
+            line[i] = '\0';
+        if (rows == 0)
+            map = malloc(sizeof(char *) * 2);
+        else
+            map = realloc(map, sizeof(char *) * (rows + 2));
+        if (!map)
+            return (NULL);
+        map[rows] = line;
+        map[rows + 1] = NULL;
+        rows++;
+    }
+    close(fd);
+    if (rows == 0)
+        return (NULL);
+    g_game.rows = rows;
+    g_game.cols = (int)ft_strlen(map[0]);
+    return (map);
 }

@@ -35,14 +35,21 @@
 
 CC = cc
 MLX_DIR = minilibx-linux
-CFLAGS = -Wall -Wextra -Werror -I$(MLX_DIR)
-LDFLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
+LIBFT_DIR = libft
+INCLUDES = -Iinclude -I$(MLX_DIR) -I$(LIBFT_DIR)
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
+LDFLAGS = -L$(MLX_DIR) -L$(LIBFT_DIR) -lmlx -lXext -lX11 -lm -lbsd -lft
 NAME = game
+SRCS = game.c src/game_render.c src/game_controls.c src/map.c
+OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): game.c $(MLX_DIR)/libmlx.a
-	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
+$(NAME): $(OBJS) $(MLX_DIR)/libmlx.a $(LIBFT_DIR)/libft.a
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
+
+%.o: %.c include/so_long.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(MLX_DIR)/libmlx.a:
 	@if [ ! -d $(MLX_DIR) ]; then \
@@ -50,8 +57,12 @@ $(MLX_DIR)/libmlx.a:
 	fi
 	$(MAKE) -C $(MLX_DIR)
 
+$(LIBFT_DIR)/libft.a:
+	$(MAKE) -C $(LIBFT_DIR)
+
 clean:
-	rm -f $(NAME)
+	rm -f $(NAME) $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean 2>/dev/null || true
 	$(MAKE) -C $(MLX_DIR) clean 2>/dev/null || true
 
 .PHONY: all clean #fclean re make
