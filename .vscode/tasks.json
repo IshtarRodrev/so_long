@@ -107,6 +107,15 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "list artifacts",
+			"type": "shell",
+			"command": "wsl.exe -d debian bash -lc 'cd /mnt/c/Users/User/myWorkspace/42/so_long && ls -la && echo --- && find . -maxdepth 2 -type f \\( -name \"sample_minilibx\" -o -name \"game\" -o -name \"so_long\" \\) -ls'",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }

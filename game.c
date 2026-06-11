@@ -18,10 +18,10 @@ int main(void)
     mlx = mlx_init();
     if (!mlx)
         return (1);
-    win = mlx_new_window(mlx, 640, 480, "so_long sample");
+    win = mlx_new_window(mlx, 640, 480, "so_long game");
     if (!win)
         return (1);
-    mlx_string_put(mlx, win, 220, 230, 0xFFFFFF, "MiniLibX sample ready");
+    mlx_string_put(mlx, win, 220, 230, 0xFFFFFF, "so_long ready");
     mlx_key_hook(win, close_hook, NULL);
     mlx_loop(mlx);
     return (0);
