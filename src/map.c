@@ -4,54 +4,54 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-static void free_lines(char **lines, size_t count)
-{
-    size_t i;
+// static void free_lines(char **lines, size_t count)
+// {
+//     size_t i;
 
-    if (!lines)
-        return;
-    i = 0;
-    while (i < count)
-    {
-        free(lines[i]);
-        i++;
-    }
-    free(lines);
-}
+//     if (!lines)
+//         return;
+//     i = 0;
+//     while (i < count)
+//     {
+//         free(lines[i]);
+//         i++;
+//     }
+//     free(lines);
+// }
 
-static void strip_newline(char *line)
-{
-    size_t len;
+// static void strip_newline(char *line)
+// {
+//     size_t len;
 
-    if (!line)
-        return;
-    len = ft_strlen(line);
-    if (len > 0 && line[len - 1] == '\n')
-        line[len - 1] = '\0';
-}
+//     if (!line)
+//         return;
+//     len = ft_strlen(line);
+//     if (len > 0 && line[len - 1] == '\n')
+//         line[len - 1] = '\0';
+// }
 
-static int append_line(char ***lines, size_t rows, char *line)
-{
-    char **next;
-    size_t i;
+// static int append_line(char ***lines, size_t rows, char *line)
+// {
+//     char **next;
+//     size_t i;
 
-    next = malloc((rows + 2) * sizeof(char *));
-    if (!next)
-        return 0;
-    i = 0;
-    while (i < rows)
-    {
-        next[i] = (*lines)[i];
-        i++;
-    }
-    next[rows] = line;
-    next[rows + 1] = NULL;
-    free(*lines);
-    *lines = next;
-    return 1;
-}
+//     next = malloc((rows + 2) * sizeof(char *));
+//     if (!next)
+//         return 0;
+//     i = 0;
+//     while (i < rows)
+//     {
+//         next[i] = (*lines)[i];
+//         i++;
+//     }
+//     next[rows] = line;
+//     next[rows + 1] = NULL;
+//     free(*lines);
+//     *lines = next;
+//     return 1;
+// }
 
-int parse_map_file(const char *path, t_map *map)
+/* int parse_map_file(const char *path, t_map *map)
 {
     int fd;
     char *line;
@@ -80,11 +80,7 @@ int parse_map_file(const char *path, t_map *map)
         }
         rows++;
     }
-    if (close(fd) < 0)
-    {
-        free_lines(lines, rows);
-        return 0;
-    }
+    close(fd);
     if (rows == 0)
     {
         free(lines);
@@ -98,7 +94,7 @@ int parse_map_file(const char *path, t_map *map)
     map->collectibles = 0;
     map->exits = 0;
     return 1;
-}
+} */
 
 void free_map(t_map *map)
 {
@@ -193,7 +189,7 @@ int validate_map(const t_map *map)
     return 1;
 }
 
-int path_is_valid(const t_map *map)
+int path_is_valid(const t_map *map) //TODO: replace with flood fill
 {
     size_t total;
     bool *visited;

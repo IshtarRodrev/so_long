@@ -12,7 +12,7 @@ int main(void)
     g_game.mlx = mlx_init();
     if (!g_game.mlx)
         return (1);
-    g_game.map = read_map_file("maps/min.ber");
+    g_game.map = read_map_file("maps/floor1.ber");
     if (!g_game.map)
         return (1);
     g_game.win = mlx_new_window(g_game.mlx,
