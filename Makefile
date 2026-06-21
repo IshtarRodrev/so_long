@@ -34,31 +34,54 @@
 # .PHONY: all clean fclean re
 
 CC = cc
-MLX_DIR = minilibx-linux
+NAME = game
+
+SRCS = game.c \
+	src/game_render.c \
+	src/game_controls.c \
+	src/map.c \
+	src/controls.c \
+	src/params.c \
+	src/main.c
+OBJS = $(SRCS:.c=.o)
+
+
+
+MLX_TYPE = MLX42
+
+MLX_DIR = mlx42
+MLX_BUILD = $(MLX_DIR)/build
+MLX_LIB = $(MLX_BUILD)/libmlx42.a
+MLX_INC = -I$(MLX_DIR)/include/MLX42
+#     MLX_LDFLAGS = $(MLX_LIB) -ldl -lglfw -lm -lpthread -lGL
+MLX_LDFLAGS = $(MLX_LIB) -ldl -lglfw(3) -pthread -lm
+
+# MLX_DIR = minilibx-linux
+
 LIBFT_DIR = libft
-INCLUDES = -Iinclude -I$(MLX_DIR) -I$(LIBFT_DIR)
+INCLUDES = -Iinclude -I$(LIBFT_DIR) $(MLX_INC)
 CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
 LDFLAGS = -L$(MLX_DIR) -L$(LIBFT_DIR) -lmlx -lXext -lX11 -lm -lbsd -lft
-NAME = game
-SRCS = game.c src/game_render.c src/game_controls.c src/map.c
-OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(MLX_DIR)/libmlx.a $(LIBFT_DIR)/libft.a
+$(NAME): $(MLX_DIR)/libmlx.a $(LIBFT_DIR)/libft.a $(OBJS) 
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 %.o: %.c include/so_long.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(MLX_DIR)/libmlx.a:
-	@if [ ! -d $(MLX_DIR) ]; then \
-		tar -xzf $(MLX_DIR).tgz; \
-	fi
-	$(MAKE) -C $(MLX_DIR)
-
 $(LIBFT_DIR)/libft.a:
 	$(MAKE) -C $(LIBFT_DIR)
+
+$(MLX_LIB):
+	if [ ! -d $(MLX_DIR) ]; then \
+		git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR); \
+	fi
+	if [ ! -f $(BUILD_DIR)/libmlx42.a ]; then \
+		cmake $(MLX_DIR) -B $(BUILD_DIR) && \
+		cmake --build $(BUILD_DIR) -j4; \
+	fi
 
 clean:
 	rm -f $(NAME) $(OBJS)
