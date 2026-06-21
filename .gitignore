@@ -1,4 +1,5 @@
 mlx42
 *.o
 *.tgz
-.vscode/
+.vscode
+game
