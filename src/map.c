@@ -132,12 +132,11 @@ int validate_map(const t_map *map)
 	row = 0;
 	while (row < map->rows)
 	{
-/* FIXME: the map must be rectangular, not just square!!
-        if (ft_strlen(map->lines[row]) != map->cols)
-        {
-            ft_printf("Error: map rows must have equal width\n");
-            return 0;
-        } */
+		if (ft_strlen(map->lines[row]) != map->cols)
+		{
+			ft_printf("Error: map rows must have equal width\n");
+			return (0);
+		}
         col = 0;
         while (col < map->cols)
         {
@@ -148,14 +147,6 @@ int validate_map(const t_map *map)
             {
                 ft_printf("Error: invalid character '%c' in map\n", tile);
                 return 0;
-            }
-            if (row == 0 || row == map->rows - 1 || col == 0 || col == map->cols - 1)
-            {
-                if (tile != '1')
-                {
-                    ft_printf("Error: map border must be walls ('1')\n");
-                    return 0;
-                }
             }
             if (tile == 'P')
             {
@@ -189,6 +180,12 @@ int validate_map(const t_map *map)
     return 1;
 }
 
+static int is_map_edge(const t_map *map, int y, int x)
+{
+    return (y == 0 || y == (int)map->rows - 1
+        || x == 0 || x == (int)map->cols - 1);
+}
+
 int path_is_valid(const t_map *map) //TODO: replace with flood fill
 {
     size_t total;
@@ -198,6 +195,7 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
     size_t qend;
     int found_collectibles;
     int found_exits;
+    int leaked;
     int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     if (!map || !map->lines)
@@ -216,6 +214,7 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
     qend = 0;
     found_collectibles = 0;
     found_exits = 0;
+    leaked = is_map_edge(map, map->player.y, map->player.x);
     queue[qend++] = map->player.y * (int)map->cols + map->player.x;
     visited[queue[0]] = true;
     while (qstart < qend)
@@ -254,12 +253,19 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
                 continue;
             }
             visited[nindex] = true;
+            if (is_map_edge(map, ny, nx))
+                leaked = 1;
             queue[qend++] = nindex;
             i++;
         }
     }
     free(visited);
     free(queue);
+    if (leaked)
+    {
+        ft_printf("Error: map is not sealed, player can reach the edge\n");
+        return 0;
+    }
     if (found_collectibles != map->collectibles)
     {
         ft_printf("Error: not all collectibles are reachable\n");
@@ -292,6 +298,8 @@ char **read_map_file(const char *path)
             i++;
         if (line[i] == '\n')
             line[i] = '\0';
+        if (i > 0 && line[i - 1] == '\r')
+            line[i - 1] = '\0';
         if (rows == 0)
             map = malloc(sizeof(char *) * 2);
         else

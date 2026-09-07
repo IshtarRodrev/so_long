@@ -31,6 +31,18 @@ int find_player(int *x, int *y)
     return (find_player_local(x, y));
 }
 
+static void update_player_dir(int dx, int dy)
+{
+    if (dy < 0)
+        g_game.player_dir = DIR_BACK;
+    else if (dy > 0)
+        g_game.player_dir = DIR_FRONT;
+    else if (dx < 0)
+        g_game.player_dir = DIR_LEFT;
+    else if (dx > 0)
+        g_game.player_dir = DIR_RIGHT;
+}
+
 int move_player(int dx, int dy)
 {
     int x;
@@ -42,28 +54,33 @@ int move_player(int dx, int dy)
         return (0);
     nx = x + dx;
     ny = y + dy;
-    if (ny < 0 || ny >= g_game.rows || nx < 0 || nx >= g_game.cols)
+    update_player_dir(dx, dy);
+    if (ny < 0 || ny >= g_game.rows || nx < 0 || nx >= g_game.cols
+        || g_game.map[ny][nx] == '1')
+    {
+        render_map();
         return (0);
-    if (g_game.map[ny][nx] == '1')
-        return (0);
+    }
     g_game.map[y][x] = '0';
     g_game.map[ny][nx] = 'P';
+    g_game.player_frame++;
     render_map();
     return (0);
 }
 
-int key_hook(int keycode, void *param)
+void key_hook(mlx_key_data_t keydata, void *param)
 {
     (void)param;
-    if (keycode == 65307)
+    if (keydata.action != MLX_PRESS && keydata.action != MLX_REPEAT)
+        return ;
+    if (keydata.key == MLX_KEY_ESCAPE)
         exit(0);
-    if (keycode == 65362 || keycode == 119 || keycode == 87)
-        return (move_player(0, -1));
-    if (keycode == 65364 || keycode == 115 || keycode == 83)
-        return (move_player(0, 1));
-    if (keycode == 65361 || keycode == 97 || keycode == 65)
-        return (move_player(-1, 0));
-    if (keycode == 65363 || keycode == 100 || keycode == 68)
-        return (move_player(1, 0));
-    return (0);
+    if (keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_W)
+        move_player(0, -1);
+    if (keydata.key == MLX_KEY_DOWN || keydata.key == MLX_KEY_S)
+        move_player(0, 1);
+    if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_A)
+        move_player(-1, 0);
+    if (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_D)
+        move_player(1, 0);
 }
