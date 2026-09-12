@@ -91,21 +91,14 @@ static uint32_t blend_pixel(uint8_t *p, uint32_t bg)
         | ((uint32_t)out[2] << 8) | 0xFF);
 }
 
-void draw_player_tile(int x, int y)
+static void draw_texture_tile(mlx_texture_t *tex, int x, int y, uint32_t bg)
 {
-    mlx_texture_t *tex;
-    uint32_t bg;
     int i;
     int j;
     int sx;
     int sy;
     uint8_t *p;
-    int frame_idx;
 
-    frame_idx = g_game.player_frame
-        % g_game.player_frame_count[g_game.player_dir];
-    tex = g_game.player_tex[g_game.player_dir][frame_idx];
-    bg = ((uint32_t)tile_color('0') << 8) | 0xFF;
     i = 0;
     while (i < TILE_SIZE)
     {
@@ -121,6 +114,33 @@ void draw_player_tile(int x, int y)
         }
         i++;
     }
+}
+
+void draw_player_tile(int x, int y)
+{
+    mlx_texture_t *tex;
+    int frame_idx;
+
+    frame_idx = g_game.player_frame
+        % g_game.player_frame_count[g_game.player_dir];
+    tex = g_game.player_tex[g_game.player_dir][frame_idx];
+    draw_texture_tile(tex, x, y, ((uint32_t)tile_color('0') << 8) | 0xFF);
+}
+
+void load_exit_sprite(void)
+{
+    g_game.exit_tex = mlx_load_png(EXIT_SPRITE_PATH);
+    if (!g_game.exit_tex)
+    {
+        ft_printf("Error: failed to load exit sprite\n");
+        exit(1);
+    }
+}
+
+void draw_exit_tile(int x, int y)
+{
+    draw_texture_tile(g_game.exit_tex, x, y,
+        ((uint32_t)tile_color('0') << 8) | 0xFF);
 }
 
 void draw_tile(int x, int y, int color)
@@ -162,6 +182,8 @@ void render_map(void)
             my = g_game.cam_y + y;
             if (g_game.map[my][mx] == 'P')
                 draw_player_tile(x, y);
+            else if (g_game.map[my][mx] == 'E')
+                draw_exit_tile(x, y);
             else
                 draw_tile(x, y, tile_color(g_game.map[my][mx]));
             x++;

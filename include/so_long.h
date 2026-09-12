@@ -13,6 +13,7 @@
 # define CAMERA_MARGIN 5
 # define MENU_MAX_MAPS 9
 # define SPRITE_DIR "assets/sprites"
+# define EXIT_SPRITE_PATH "assets/sprites/exit_tile.png"
 # define SPRITE_FRAMES 16
 # define DIR_FRONT 0
 # define DIR_BACK 1
@@ -40,6 +41,7 @@ typedef struct s_game
     int player_frame_count[DIR_COUNT];
     int player_dir;
     int player_frame;
+    mlx_texture_t *exit_tex;
 } t_game;
 
 extern t_game g_game;
@@ -85,6 +87,8 @@ int tile_color(char tile);
 void draw_tile(int x, int y, int color);
 void load_player_sprites(void);
 void draw_player_tile(int x, int y);
+void load_exit_sprite(void);
+void draw_exit_tile(int x, int y);
 void init_camera(void);
 void update_camera(void);
 void render_map(void);
