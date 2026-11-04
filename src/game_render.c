@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+/*FIXME: Gobal variables are not allowed by the norm*/
 static const char *g_dir_names[DIR_COUNT] = {"front", "back", "left", "right"};
 
 int tile_color(char tile)

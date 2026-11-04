@@ -196,6 +196,7 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
     int found_collectibles;
     int found_exits;
     int leaked;
+    int trapped;
     int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     if (!map || !map->lines)
@@ -227,7 +228,10 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
         y = index / (int)map->cols;
         x = index % (int)map->cols;
         if (map->lines[y][x] == 'C')
+        {
             found_collectibles++;
+            continue ;
+        }
         else if (map->lines[y][x] == 'E')
             found_exits++;
         int i;
@@ -259,6 +263,30 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
             i++;
         }
     }
+    trapped = 0;
+    qstart = 0;
+    while (qstart < qend)
+    {
+        int y;
+        int x;
+        int i;
+
+        y = queue[qstart] / (int)map->cols;
+        x = queue[qstart++] % (int)map->cols;
+        i = -1;
+        while (map->lines[y][x] == 'C' && ++i < 4)
+        {
+            int nx;
+            int ny;
+
+            nx = x + directions[i][0];
+            ny = y + directions[i][1];
+            if (ny >= 0 && ny < (int)map->rows && nx >= 0
+                && nx < (int)map->cols && map->lines[ny][nx] != '1'
+                && !visited[ny * (int)map->cols + nx])
+                trapped = 1;
+        }
+    }
     free(visited);
     free(queue);
     if (leaked)
@@ -274,6 +302,11 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
     if (found_exits < 1)
     {
         ft_printf("Error: exit is not reachable\n");
+        return 0;
+    }
+    if (trapped)
+    {
+        ft_printf("Error: a collectible leads to an area the player can't leave\n");
         return 0;
     }
     return 1;

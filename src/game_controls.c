@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "so_long.h"
 
 #include <stdlib.h>
@@ -61,9 +62,15 @@ int move_player(int dx, int dy)
         render_map();
         return (0);
     }
-    g_game.map[y][x] = '0';
+    if (g_game.on_collected)
+        g_game.map[y][x] = '1';
+    else
+        g_game.map[y][x] = '0';
+    g_game.on_collected = (g_game.map[ny][nx] == 'C');
     g_game.map[ny][nx] = 'P';
     g_game.player_frame++;
+    g_game.move_count++;
+    ft_printf("Moves: %d\n", g_game.move_count);
     render_map();
     return (0);
 }

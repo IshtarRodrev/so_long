@@ -42,6 +42,8 @@ typedef struct s_game
     int player_dir;
     int player_frame;
     mlx_texture_t *exit_tex;
+    int move_count;
+    int on_collected;
 } t_game;
 
 extern t_game g_game;
