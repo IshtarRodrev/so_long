@@ -57,20 +57,27 @@ int move_player(int dx, int dy)
     ny = y + dy;
     update_player_dir(dx, dy);
     if (ny < 0 || ny >= g_game.rows || nx < 0 || nx >= g_game.cols
-        || g_game.map[ny][nx] == '1')
+        || g_game.map[ny][nx] == '1'
+        || (g_game.map[ny][nx] == 'E' && g_game.collectibles_left > 0))
     {
         render_map();
         return (0);
+    }
+    g_game.move_count++;
+    ft_printf("Moves: %d\n", g_game.move_count);
+    if (g_game.map[ny][nx] == 'E')
+    {
+        ft_printf("You won!\n");
+        exit(0);
     }
     if (g_game.on_collected)
         g_game.map[y][x] = '1';
     else
         g_game.map[y][x] = '0';
     g_game.on_collected = (g_game.map[ny][nx] == 'C');
+    g_game.collectibles_left -= g_game.on_collected;
     g_game.map[ny][nx] = 'P';
     g_game.player_frame++;
-    g_game.move_count++;
-    ft_printf("Moves: %d\n", g_game.move_count);
     render_map();
     return (0);
 }

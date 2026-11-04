@@ -44,6 +44,7 @@ typedef struct s_game
     mlx_texture_t *exit_tex;
     int move_count;
     int on_collected;
+    int collectibles_left;
 } t_game;
 
 extern t_game g_game;

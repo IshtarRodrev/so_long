@@ -173,6 +173,7 @@ static void	try_select_map(int index)
 		show_status("Error: that map failed validation (see terminal) - pick another");
 		return ;
 	}
+	g_game.collectibles_left = lay.collectibles;
 	start_game(map);
 }
 

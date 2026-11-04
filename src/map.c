@@ -233,7 +233,10 @@ int path_is_valid(const t_map *map) //TODO: replace with flood fill
             continue ;
         }
         else if (map->lines[y][x] == 'E')
+        {
             found_exits++;
+            continue ;
+        }
         int i;
 
         i = 0;
