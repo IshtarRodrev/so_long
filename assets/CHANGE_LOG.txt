@@ -1,2 +1,245 @@
 v0.1. - Published 18.08.2025.
 Initial publish of Dithart's FREE Sci-fi Tileset
+
+
+TODO: here are the promptbase for tiles generating:
+/*******************************************/
+/******** PROMPTS FOR NANO BANANA **********/
+/*******************************************/
+style reference provided in Modern Office Top-Down Interrior Map.png
+general requirements (to be adjusted if nessesary):
+- Style: Pixel Art
+- Theme: Modern / Office / Interior
+- Perspective: Top-Down
+- Format: PNG
+- Resolution: 512x512 pixel
+- One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+- Use the style reference only for the style and camera angle, and draw nothing else from it
+- Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+- Any floor is flat, uniform grey in colour #505050 with no texture
+- No shadows, text, people or watermarks
+
+Every prompt below already contains the requirements above. Attach what it says and paste everything under PROMPT.
+If a requirement changes, every prompt has to change with it.
+Note: a prompt cannot set the file format or the exact size, the tool decides those. If your tool has PNG and 512 settings, use them. Anything else must be converted to a square PNG before the game can use it.
+
+facing_wall.png
+Attach: Modern Office Top-Down Interrior Map.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+The empty wall facing camera without windows. A plain, empty office wall as the top-down camera sees the far wall of a room, like the back wall of the office in the attached image, without windows, doors or decorations, filling the whole image. The top 30% of the image is the top of the wall in flat white #E8E8E8. The lower 70% is the front of the wall in flat light grey #C8C8C8, with one thin darker line between the two and a thin darker baseboard along the bottom edge. All of these run straight off the left and right edges with no line there, because the wall continues into the next tile.
+
+deskseat-back.png
+Do this before the other desk tiles, they depend on it.
+Attach: Modern Office Top-Down Interrior Map.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+One office desk seat seen from behind the monitor. The top 40% of the image is floor reaching the top, left and right edges. Centred on the floor is a near-black office chair facing the table, half as wide as the image, with a light grey highlight along its top edge so it stands out from the floor. We see the front of its backrest, with its seat tucked under the table edge, and a little floor above and beside it. The lower 60% of the image is one solid white tabletop in flat colour #E8E8E8, running straight off the left, right and bottom edges with no line there, because it continues into the next tile. Centred on it is the back of a large black monitor with its stand. The monitor is 60% as wide as the image. The table holds only the monitor and is otherwise perfectly flat and empty, with no lines, seams, shadows, bottles, plants, papers or cables.
+
+empty-table-back.png
+Do this after deskseat-back.png.
+Attach: Modern Office Top-Down Interrior Map.png and deskseat-back.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+The other attached image is deskseat-back.png. Keep its exact style, colours and table position, but remove the monitor and the chair. Only the white table and the grey floor remain, with the table edge in exactly the same place.
+
+deskseat-front.png
+Do this after deskseat-back.png.
+Attach: Modern Office Top-Down Interrior Map.png and deskseat-back.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+The other attached image is deskseat-back.png. This tile matches it exactly in style, colours, pixel size, chair and monitor design, and shows the other side of the same desk. The upper 65% of the image is one solid white tabletop in flat colour #E8E8E8, running straight off the left, right and top edges with no line there, because it continues into the next tile. Centred on it is a large black monitor with a dark, blank screen facing the viewer, on a small stand. The monitor is 60% as wide as the image. Below it is a black keyboard, 40% as wide as the image, with a small black mouse to its right. A thin light grey edge runs along the front of the table, straight across the image. The lower 35% of the image is floor reaching the left, right and bottom edges, with no table legs or panels under the table. Centred on the floor is a near-black office chair seen from behind, half as wide as the image, with a light grey highlight along its top edge so it stands out from the floor. We see its backrest and five-wheeled base, with a little floor visible below the base. The table holds only the monitor, keyboard and mouse and is otherwise perfectly flat and empty, with no lines, seams, shadows, bottles, plants, papers or cables.
+
+empty-table-front.png
+Do this after deskseat-front.png.
+Attach: Modern Office Top-Down Interrior Map.png and deskseat-front.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+The other attached image is deskseat-front.png. Keep its exact style, colours and table position, but remove the monitor, keyboard, mouse and chair. Only the white table, its thin front edge and the grey floor remain, with the table edges in exactly the same place.
+
+shower.png
+Attach: Modern Office Top-Down Interrior Map.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+Shower facing right tile. A shower cabin facing the right side of the image, seen from the top-down camera, standing on the floor, centred and filling about 80% of the image.
+
+toilet.png
+Attach: Modern Office Top-Down Interrior Map.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+Toilet facing bottom tile. A white toilet facing the bottom of the image, seen from the top-down camera, standing on the floor, centred and filling about 80% of the image.
+
+kitchen.png
+Attach: Modern Office Top-Down Interrior Map.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+Kitchen facing bottom tile. A kitchen counter with a sink, facing the bottom of the image, seen from the top-down camera. The counter fills the top 70% of the image and runs straight off the left and right edges with no line there, because it continues into the next tile. Floor fills the rest of the image.
+
+coffee-mashine.png
+Attach: Modern Office Top-Down Interrior Map.png
+PROMPT:
+Style: Pixel Art
+Theme: Modern / Office / Interior
+Perspective: Top-Down
+Format: PNG
+Resolution: 512x512 pixel
+One single square game tile: the image is the tile itself, filled edge to edge, with no border, frame or margin
+Use the attached office map image only for the style and camera angle, and draw nothing else from it
+Crisp, hard-edged large square pixels, flat colours and simple bold shapes that stay readable at 40x40 pixels
+Any floor is flat, uniform grey in colour #505050 with no texture
+No shadows, text, people or watermarks
+Coffee mashine facing bottom tile. An espresso coffee machine facing the bottom of the image, seen from the top-down camera, standing on the floor, centred and filling about 80% of the image.
+
+broken_sign_tile.png
+yellow traingle
+Already made: assets/sprites/broken_sign_tile.png
+
+LIST TODO: 
+
+[DONE] new rule in src/patterns/patterns.c: all the 1 tiles that have collectables on the left and right and floor on the top render as empty back tables.
+Also all the 1 tiles that have collectables on the left and right and floor on the bottom render as empty front tables.
+Added for the corners of a desk block: a 1 with a collectable on one side and one directly above or below it.
+
+SPRITES TO GENERATE
+[ ] 1. deskseat-front.png - desk-front-grey.png is only a stand-in, computers too small
+[ ] 2. deskseat-back.png - desk-back-grey.png is only a stand-in, computers too small
+[ ] 3. empty-table-front.png - the file there now is a temporary stand-in, replace it
+[ ] 4. empty-table-back.png - the file there now is a temporary stand-in, replace it
+[ ] 5. facing_wall.png - NEXT. wall1.jpg is generated but it is a 797x800 JPG, it must become a square PNG
+[ ] 6. shower.png
+[ ] 7. toilet.png
+[ ] 8. kitchen.png
+[ ] 9. coffee-mashine.png
+[ ] 10. Decide which of these get a sprite. They are on the floor plan but not in the
+        prompt list: urinal, faucet, vending machine, fridge, dishwasher, water dispenser,
+        air hockey, foosball, table tennis, Switch, TV
+
+PROMPTS
+[x] 11. Write the prompt text for all the tiles. Done, see the list at the top.
+[x] 12. Computers look too tiny. The prompts now ask for a monitor 60% of the tile width.
+        Check this once 1 and 2 are generated.
+[x] 13. Ask for no line across the table, no shadows and no table legs. Done in the prompts.
+[x] 14. Chairs are hard to see on the grey floor. The prompts now ask for a near-black chair
+        with a light highlight.
+[x] 15. Each empty table must have the same table edges as its desk tile. The prompts make
+        each empty table from its desk tile, so the edges should match.
+
+HOW TILES LOOK NEXT TO EACH OTHER
+[x] 16. Uneven table. A 1 between two seats is a full white square, but a seat tile has
+        floor and a chair in its outer part, so the table edge goes up and down.
+        Fix: 3, 4 and 19.
+[ ] 17. Warning sign covers the chair on back tiles and the monitor on front tiles.
+        Decide its size and position.
+
+CODE
+[x] 18. Wrong sprite: 10 collectibles in the rooms on the right were drawn as desks. Fixed:
+        collectibles side by side against a wall are not desks. They are in 22 now.
+[x] 19. New rule in src/patterns/ to draw the 1 tiles between seats as empty table.
+[x] 20. New rule in src/patterns/patterns.c for facing_wall.png (1 with floor below it).
+        Tables from 19 go first. Until the PNG exists these walls stay plain white.
+[ ] 21. Decide how the game knows which equipment a C is. C alone cannot tell a toilet
+        from a coffee machine, and validate_map only accepts 0 1 C E P.
+        Options: new map letters, or a list of positions. Blocks using 6-10.
+[ ] 22. 26 collectibles match no rule and are still yellow squares: lines 18 20 22 24
+        col 153, line 26 (5 tiles), line 28 (6), line 32 (3), line 34 (2),
+        lines 36 40 44 col 103, line 52 (3).
+[ ] 23. Point so_long.h at the final sprite names once they exist (deskseat-front.png,
+        deskseat-back.png). Final tiles must be PNG, the game cannot load JPG.
+
+MAPS
+[ ] 24. floorOG has 105 of the 218 collectibles:
+        Cluster 2 desks: 79 on the map, 77-78 on the floor plan page.
+        Cluster 3 desks: 96-97 on the page, not placed yet.
+        Other equipment: 26 of 44.
+[ ] 25. floorEG has 170 collectibles but the count cannot be checked. Only the Second
+        floor page is saved in misc/, the First floor page is needed.
+[ ] 26. test1.ber is rejected: not sealed.
+[ ] 27. test2.ber and test5.ber are sandbox tries that were not accurate. Keep or delete.
+[ ] 28. The menu lists 9 maps and there are exactly 9 now. A 10th would not show up.
+
+BEFORE SUBMITTING
+[ ] 29. Free everything on exit. mlx_terminate is never called, and the map, the textures
+        and progress.collected are not freed.
+[ ] 30. Check the subject for allowed functions. Used now: snprintf, access
+        (game_render.c), realloc (map.c), opendir, readdir, closedir (menu.c).
+[ ] 31. Norm: global variables g_game and g_dir_names (FIXME in game_render.c), ternaries
+        in camera.c, path_is_valid is far too long (TODO in map.c also says to replace it).
+[ ] 32. Check the subject for these: main ignores its arguments (no ./so_long map.ber),
+        errors print "Error: ..." and not "Error" on its own line, floor maps have 0
+        tiles on their outer edge and not walls.
+[ ] 33. Delete unused files: src/flood_fill.c, game.c, desk-tile-back.png,
+        desk-tile-front.png, desk-tile-back-no-background.png,
+        desk-tile-front-no-background.png, desk-tile-front-no-background copy.png
+[ ] 34. Commit. src/patterns, src/progress and the new sprites are not in git yet.
