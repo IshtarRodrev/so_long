@@ -39,12 +39,24 @@ NAME = game
 SRCS = src/main.c \
 	src/controls.c \
 	src/menu.c \
+	src/menu_transition.c \
+	src/menu_keys.c \
 	src/game_render.c \
+	src/game_render_texture.c \
+	src/game_render_tiles.c \
+	src/game_render_map.c \
 	src/game_controls.c \
 	src/map/map.c \
+	src/map/map_path.c \
+	src/map/map_path_check.c \
+	src/map/map_read.c \
 	src/map/params.c \
 	src/camera/camera.c \
 	src/patterns/patterns.c \
+	src/patterns/patterns_tile.c \
+	src/patterns/patterns_runs.c \
+	src/patterns/patterns_lines.c \
+	src/patterns/patterns_desks.c \
 	src/progress/progress.c
 OBJS = $(SRCS:.c=.o)
 

@@ -14,6 +14,7 @@
 # define VIEWPORT_ROWS (MENU_WIN_H / TILE_SIZE)
 # define CAMERA_MARGIN 5
 # define MENU_MAX_MAPS 9
+# define MAPS_DIR "maps"
 # define SPRITE_DIR "assets/sprites"
 # define EXIT_SPRITE_PATH "assets/sprites/exit_tile.png"
 # define BROKEN_SIGN_SPRITE_PATH "assets/sprites/broken_sign_tile.png"
@@ -132,15 +133,32 @@ typedef t_map	t_lay;
 void			init_game(t_game *game);
 
 /* menu.c */
+int				scan_maps_dir(t_game *game);
+void			draw_map_list(t_game *game);
+
+/* menu_transition.c */
+void			show_status(t_game *game, const char *msg);
+void			start_game(t_game *game, char **map);
+
+/* menu_keys.c */
 void			start_map_menu(t_game *game);
 
 /* map/map.c */
 char			*read_file_to_string(const char *path);
-char			**read_map_file(t_game *game, const char *path);
 int				parse_map_file(const char *path, t_map *map);
 int				validate_map(const t_map *map);
-int				path_is_valid(const t_map *map);
 void			free_map(t_map *map);
+
+/* map/map_path.c */
+void			search_from_player(t_path_search *s);
+int				collectible_is_trapped(t_path_search *s);
+
+/* map/map_path_check.c */
+int				map_error(const char *msg);
+int				path_is_valid(const t_map *map);
+
+/* map/map_read.c */
+char			**read_map_file(t_game *game, const char *path);
 
 /* map/params.c */
 int				has_valid_extension(const char *path);
@@ -161,17 +179,40 @@ void			key_hook(mlx_key_data_t keydata, void *param);
 
 /* game_render.c */
 int				tile_color(char tile);
-void			draw_tile(t_game *game, int x, int y, int color);
 void			load_player_sprites(t_game *game);
+
+/* game_render_texture.c */
+void			draw_texture_tile(t_game *game, mlx_texture_t *layers[2],
+					t_point pos, uint32_t bg);
 void			draw_player_tile(t_game *game, int x, int y);
 void			load_exit_sprite(t_game *game);
+
+/* game_render_tiles.c */
 void			draw_exit_tile(t_game *game, int x, int y);
+void			draw_tile(t_game *game, int x, int y, int color);
+
+/* game_render_map.c */
 void			render_map(t_game *game);
 
 /* patterns/patterns.c */
 void			load_pattern_sprites(t_game *game);
+
+/* patterns/patterns_tile.c */
+char			tile_at(t_game *game, int mx, int my);
+bool			is_corridor(t_game *game, int mx, int my);
+mlx_texture_t	*facing_wall_texture(t_game *game, int mx, int my);
+
+/* patterns/patterns_runs.c */
+bool			is_equipment_run(char first, char last, int length);
+mlx_texture_t	*run_texture(t_game *game, t_run run, int face);
+
+/* patterns/patterns_lines.c */
+bool			column_sprite(t_game *game, int mx, int my,
+					mlx_texture_t **sprite);
+mlx_texture_t	*row_texture(t_game *game, int mx, int my);
+
+/* patterns/patterns_desks.c */
 mlx_texture_t	*collectible_tile_texture(t_game *game, int mx, int my);
 mlx_texture_t	*empty_table_texture(t_game *game, int mx, int my);
-mlx_texture_t	*facing_wall_texture(t_game *game, int mx, int my);
 
 #endif
