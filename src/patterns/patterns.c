@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   patterns.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:42:55 by akechedz          #+#    #+#             */
-/*   Updated: 2026/11/06 17:42:56 by akechedz         ###   ########.fr       */
+/*   Updated: 2026/11/06 20:33:49 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static mlx_texture_t	*load_named(const char *name, const char *direction)
 	return (mlx_load_png(path));
 }
 
-/* Loads <name>_down.png, <name>_up.png, <name>_left.png and <name>_right.png. */
+/* Loads <name>_down.png, <name>_up.png,
+<name>_left.png and <name>_right.png. */
 
 static void	load_faces(mlx_texture_t **tex, const char *name)
 {

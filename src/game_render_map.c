@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       :::      ::::::::    */
-/*   game_render_map.c                                 :+:      :+:    :+:    */
-/*                                                   +:+ +:+         +:+      */
-/*   By: akechedz <akechedz@student.42heilbronn.de>#+#  +:+       +#+         */
-/*                                               +#+#+#+#+#+   +#+            */
-/*   Created: 2026/11/06 17:48:30 by akechedz         #+#    #+#              */
-/*   Updated: 2026/11/06 17:49:12 by akechedz        ###   ########.fr        */
+/*                                                        :::      ::::::::   */
+/*   game_render_map.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/06 17:48:30 by akechedz          #+#    #+#             */
+/*   Updated: 2026/11/06 20:49:09 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	draw_wall_tile(t_game *game, t_point pos, int mx, int my)
 		draw_tile(game, pos.x, pos.y, tile_color('1'));
 }
 
-/* The strip above the map: empty at the start, full when all tasks are collected. */
+/*The bar above the map: empty at the start, full when all tasks are collected*/
 
 static void	draw_score_bar(t_game *game)
 {

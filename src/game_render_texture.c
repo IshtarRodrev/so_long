@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       :::      ::::::::    */
-/*   game_render_texture.c                             :+:      :+:    :+:    */
-/*                                                   +:+ +:+         +:+      */
-/*   By: akechedz <akechedz@student.42heilbronn.de>#+#  +:+       +#+         */
-/*                                               +#+#+#+#+#+   +#+            */
-/*   Created: 2026/11/06 17:48:30 by akechedz         #+#    #+#              */
-/*   Updated: 2026/11/06 17:49:12 by akechedz        ###   ########.fr        */
+/*                                                        :::      ::::::::   */
+/*   game_render_texture.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/06 17:48:30 by akechedz          #+#    #+#             */
+/*   Updated: 2026/11/06 20:46:20 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static uint32_t	blend_pixel(uint8_t *p, uint32_t bg)
 	uint8_t	a;
 	uint8_t	out[3];
 	int		i;
+	int		bg_c;
 
 	a = p[3];
 	if (a == 255)
@@ -30,8 +31,8 @@ static uint32_t	blend_pixel(uint8_t *p, uint32_t bg)
 	i = 0;
 	while (i < 3)
 	{
-		out[i] = (uint8_t)(((int) p[i] * a
-					+(int)((bg >> (24 - i * 8)) & 0xFF) * (255 - a)) / 255);
+		bg_c = (bg >> (24 - i * 8)) & 0xFF;
+		out[i] = (uint8_t)((p[i] * a + bg_c * (255 - a)) / 255);
 		i++;
 	}
 	return (((uint32_t) out[0] << 24) | ((uint32_t) out[1] << 16)
@@ -74,7 +75,9 @@ void	draw_texture_tile(t_game *game, mlx_texture_t *layers[2],
 			color = bg;
 			if (layers[0])
 				color = texture_pixel(layers[0], i, j, bg);
-			mlx_put_pixel(game->img, pos.x * TILE_SIZE + j, SCORE_BAR_HEIGHT + pos.y * TILE_SIZE + i, texture_pixel(layers[1], i, j, color));
+			mlx_put_pixel(game->img, pos.x * TILE_SIZE + j,
+				SCORE_BAR_HEIGHT + pos.y * TILE_SIZE + i,
+				texture_pixel(layers[1], i, j, color));
 			j++;
 		}
 		i++;

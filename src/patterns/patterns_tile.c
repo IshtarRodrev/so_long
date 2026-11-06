@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   patterns_tile.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:42:55 by akechedz          #+#    #+#             */
-/*   Updated: 2026/11/06 17:42:56 by akechedz         ###   ########.fr       */
+/*   Updated: 2026/11/06 20:33:24 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ bool	is_corridor(t_game *game, int mx, int my)
 		&& tile_at(game, mx, my + 1) == '1');
 }
 
-/* True if the walls at (mx, my) and (mx + dx, my + 1) touch only at a corner. */
+/* True if the walls at (mx, my) and (mx + dx, my + 1)
+touch only at a corner.*/
 
 static bool	diagonal_step(t_game *game, int mx, int my, int dx)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   patterns_collectible.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:42:55 by akechedz          #+#    #+#             */
-/*   Updated: 2026/11/06 17:42:56 by akechedz         ###   ########.fr       */
+/*   Updated: 2026/11/06 20:34:19 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "so_long.h"
 
 /*
-** A seat in a table line one tile thick: walls on two opposite sides and floor on
+** A seat in a table line one tile thick: walls on
+** two opposite sides and floor on
 ** the other two. Vertical lines always face left, horizontal lines face the
 ** centre of the map.
 */

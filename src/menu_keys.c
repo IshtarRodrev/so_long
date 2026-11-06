@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu_keys.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:40:28 by akechedz          #+#    #+#             */
-/*   Updated: 2026/11/06 17:49:21 by akechedz         ###   ########.fr       */
+/*   Updated: 2026/11/06 20:50:24 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	try_select_map(t_game *game, int index)
 	map = load_and_validate(game, game->map_names[index], &lay);
 	if (!map)
 	{
-		show_status(game, "Error: that map failed validation (see terminal) - pick another");
+		show_status(game, "Error: map validation fail (see terminal)");
 		return ;
 	}
 	progress_init(game, &lay);

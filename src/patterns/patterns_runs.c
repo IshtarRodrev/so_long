@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   patterns_runs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:42:55 by akechedz          #+#    #+#             */
-/*   Updated: 2026/11/06 17:42:56 by akechedz         ###   ########.fr       */
+/*   Updated: 2026/11/06 20:34:49 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ bool	is_equipment_run(char first, char last, int length)
 		&& (first == '0' || last == '0'));
 }
 
-/* Which sprite a straight run of collectibles gets, given what is at its two ends. */
+/* Which sprite a straight run of collectibles
+gets, given what is at its two ends. */
 mlx_texture_t	*run_texture(t_game *game, t_run run, int face)
 {
 	if (!is_equipment_run(run.first, run.last, run.length))
