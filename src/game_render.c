@@ -28,17 +28,6 @@ static const char	*dir_name(int d)
 	return ("front");
 }
 
-int	tile_color(char tile)
-{
-	if (tile == '1')
-		return (0xE8E8E8);
-	if (tile == 'C')
-		return (0xFFD700);
-	if (tile == 'E')
-		return (0x32CD32);
-	return (0x505050);
-}
-
 static char	*sprite_path(const char *dir_name, int frame)
 {
 	char	buf[128];
@@ -47,29 +36,34 @@ static char	*sprite_path(const char *dir_name, int frame)
 	return (ft_strdup(buf));
 }
 
-static void	load_direction_sprites(t_game *game, int d)
+/* Loads frame f of direction d. Returns false if its file does not exist. */
+static bool	load_frame(t_game *game, int d, int f)
 {
-	int		f;
 	char	*path;
 
-	f = 0;
-	while (f < SPRITE_FRAMES)
+	path = sprite_path(dir_name(d), f + 1);
+	if (access(path, F_OK) != 0)
 	{
-		path = sprite_path(dir_name(d), f + 1);
-		if (access(path, F_OK) != 0)
-		{
-			free(path);
-			break ;
-		}
-		game->player_tex[d][f] = mlx_load_png(path);
 		free(path);
-		if (!game->player_tex[d][f])
-		{
-			ft_printf("Error: failed to load player sprite\n");
-			exit(1);
-		}
-		f++;
+		return (false);
 	}
+	game->player_tex[d][f] = mlx_load_png(path);
+	free(path);
+	if (!game->player_tex[d][f])
+	{
+		ft_printf("Error: failed to load player sprite\n");
+		exit(1);
+	}
+	return (true);
+}
+
+static void	load_direction_sprites(t_game *game, int d)
+{
+	int	f;
+
+	f = 0;
+	while (f < SPRITE_FRAMES && load_frame(game, d, f))
+		f++;
 	game->player_frame_count[d] = f;
 	if (f == 0)
 	{

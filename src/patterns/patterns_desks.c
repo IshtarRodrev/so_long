@@ -20,7 +20,7 @@
 ** column, or walls above and below it and a seat diagonally across its wall.
 */
 
-static bool	is_sideways_desk(t_game *game, int mx, int my)
+bool	is_sideways_desk(t_game *game, int mx, int my)
 {
 	char	left;
 	char	right;
@@ -72,73 +72,6 @@ static mlx_texture_t	*sideways_table_texture(t_game *game, int mx, int my)
 	if (right == '0')
 		return (game->table_tex[FACE_RIGHT]);
 	return (NULL);
-}
-
-/*
-** A seat in a table line one tile thick: walls on two opposite sides and floor on
-** the other two. Vertical lines always face left, horizontal lines face the
-** centre of the map.
-*/
-
-static mlx_texture_t	*thin_line_desk_texture(t_game *game, int mx, int my)
-{
-	char	left;
-	char	right;
-	char	top;
-	char	bottom;
-
-	left = tile_at(game, mx - 1, my);
-	right = tile_at(game, mx + 1, my);
-	top = tile_at(game, mx, my - 1);
-	bottom = tile_at(game, mx, my + 1);
-	if (top == '1' && bottom == '1' && left == '0' && right == '0')
-		return (game->desk_tex[FACE_LEFT]);
-	if (left != '1' || right != '1' || top != '0' || bottom != '0')
-		return (NULL);
-	if (my < game->rows / 2)
-		return (game->desk_tex[FACE_DOWN]);
-	return (game->desk_tex[FACE_UP]);
-}
-
-/*
-** Returns the sprite for the collectible at (mx, my), or NULL if no rule fits.
-** Toilets, sinks, kitchens and vending machines are recognised by their row or
-** column.
-** A shower has walls above, below and on one side, and opens into a corridor.
-** Collectibles side by side against a wall are other equipment, not desks.
-*/
-
-mlx_texture_t	*collectible_tile_texture(t_game *game, int mx, int my)
-{
-	mlx_texture_t	*row;
-	bool			beside;
-	char			top;
-	char			bottom;
-
-	row = row_texture(game, mx, my);
-	if (row)
-		return (row);
-	if (column_sprite(game, mx, my, &row))
-		return (row);
-	beside = (tile_at(game, mx - 1, my) == 'C'
-			|| tile_at(game, mx + 1, my) == 'C');
-	top = tile_at(game, mx, my - 1);
-	bottom = tile_at(game, mx, my + 1);
-	if (top == '1' && bottom == '1' && tile_at(game, mx - 1, my) == '1'
-		&& is_corridor(game, mx + 1, my))
-		return (game->shower_tex[FACE_RIGHT]);
-	if (top == '1' && bottom == '1' && tile_at(game, mx + 1, my) == '1'
-		&& is_corridor(game, mx - 1, my))
-		return (game->shower_tex[FACE_LEFT]);
-	if (is_sideways_desk(game, mx, my) && tile_at(game, mx - 1, my) == '0')
-		return (game->desk_tex[FACE_LEFT]);
-	if (is_sideways_desk(game, mx, my))
-		return (game->desk_tex[FACE_RIGHT]);
-	if (top == '0' && (bottom == 'C' || (bottom == '1' && !beside)))
-		return (game->desk_tex[FACE_UP]);
-	if (bottom == '0' && (top == 'C' || (top == '1' && !beside)))
-		return (game->desk_tex[FACE_DOWN]);
-	return (thin_line_desk_texture(game, mx, my));
 }
 
 /*

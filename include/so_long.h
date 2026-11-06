@@ -178,7 +178,6 @@ int				move_player(t_game *game, int dx, int dy);
 void			key_hook(mlx_key_data_t keydata, void *param);
 
 /* game_render.c */
-int				tile_color(char tile);
 void			load_player_sprites(t_game *game);
 
 /* game_render_texture.c */
@@ -188,6 +187,7 @@ void			draw_player_tile(t_game *game, int x, int y);
 void			load_exit_sprite(t_game *game);
 
 /* game_render_tiles.c */
+int				tile_color(char tile);
 void			draw_exit_tile(t_game *game, int x, int y);
 void			draw_tile(t_game *game, int x, int y, int color);
 
@@ -212,7 +212,10 @@ bool			column_sprite(t_game *game, int mx, int my,
 mlx_texture_t	*row_texture(t_game *game, int mx, int my);
 
 /* patterns/patterns_desks.c */
-mlx_texture_t	*collectible_tile_texture(t_game *game, int mx, int my);
+bool			is_sideways_desk(t_game *game, int mx, int my);
 mlx_texture_t	*empty_table_texture(t_game *game, int mx, int my);
+
+/* patterns/patterns_collectible.c */
+mlx_texture_t	*collectible_tile_texture(t_game *game, int mx, int my);
 
 #endif

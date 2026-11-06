@@ -17,6 +17,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int	tile_color(char tile)
+{
+	if (tile == '1')
+		return (0xE8E8E8);
+	if (tile == 'C')
+		return (0xFFD700);
+	if (tile == 'E')
+		return (0x32CD32);
+	return (0x505050);
+}
+
 void	draw_exit_tile(t_game *game, int x, int y)
 {
 	mlx_texture_t	*layers[2];
