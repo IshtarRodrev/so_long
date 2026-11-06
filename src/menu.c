@@ -144,9 +144,9 @@ static void	start_game(char **map)
 	g_game.map = map;
 	init_camera();
 	mlx_set_window_size(g_game.mlx, g_game.view_cols * TILE_SIZE,
-			g_game.view_rows * TILE_SIZE);
+			g_game.view_rows * TILE_SIZE + SCORE_BAR_HEIGHT);
 	mlx_resize_image(g_game.img, g_game.view_cols * TILE_SIZE,
-			g_game.view_rows * TILE_SIZE);
+			g_game.view_rows * TILE_SIZE + SCORE_BAR_HEIGHT);
 	render_map();
 	mlx_key_hook(g_game.mlx, key_hook, NULL);
 }
@@ -173,7 +173,7 @@ static void	try_select_map(int index)
 		show_status("Error: that map failed validation (see terminal) - pick another");
 		return ;
 	}
-	g_game.collectibles_left = lay.collectibles;
+	progress_init(&lay);
 	start_game(map);
 }
 
