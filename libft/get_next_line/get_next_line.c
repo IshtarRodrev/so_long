@@ -65,6 +65,7 @@ char *get_next_line(int fd)
     static char *remainder;
     char buffer[BUFFER_SIZE + 1];
     ssize_t bytes_read;
+    char *line;
 
     if (fd < 0 || BUFFER_SIZE <= 0)
         return NULL;
@@ -84,10 +85,7 @@ char *get_next_line(int fd)
         remainder = NULL;
         return NULL;
     }
-    {
-        char *line = extract_line(remainder);
-
-        remainder = save_remainder(remainder);
-        return line;
-    }
+    line = extract_line(remainder);
+    remainder = save_remainder(remainder);
+    return line;
 }

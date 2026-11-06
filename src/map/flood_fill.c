@@ -5,22 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/22 03:25:00 by akechedz          #+#    #+#             */
-/*   Updated: 2026/06/22 03:25:42 by akechedz         ###   ########.fr       */
+/*   Created: 2026/06/22 03:25:00 by username          #+#    #+#             */
+/*   Updated: 2026/11/06 17:39:09 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-typedef struct 	s_point {
-	int			x;
-	int			y;
-}				t_point;
- 
+#include "so_long.h"
+
 void	fill(char **tab, t_point size, t_point cur, char to_fill)
 {
 	if (cur.y < 0 || cur.y >= size.y || cur.x < 0 || cur.x >= size.x
 		|| tab[cur.y][cur.x] != to_fill)
-		return;
-
+		return ;
 	tab[cur.y][cur.x] = 'F';
 	fill(tab, size, (t_point){cur.x - 1, cur.y}, to_fill);
 	fill(tab, size, (t_point){cur.x + 1, cur.y}, to_fill);

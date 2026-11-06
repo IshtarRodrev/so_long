@@ -37,12 +37,12 @@ CC = cc
 NAME = game
 
 SRCS = src/main.c \
-	src/params.c \
 	src/controls.c \
 	src/menu.c \
 	src/game_render.c \
 	src/game_controls.c \
-	src/map.c \
+	src/map/map.c \
+	src/map/params.c \
 	src/camera/camera.c \
 	src/patterns/patterns.c \
 	src/progress/progress.c
