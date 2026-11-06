@@ -17,9 +17,12 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	(void) argc;
-	(void) argv;
+	if (argc != 2)
+	{
+		ft_printf("Error: usage: ./game <map name>, e.g. ./game floorOG\n");
+		return (1);
+	}
 	ft_bzero(&game, sizeof(game));
-	init_game(&game);
+	init_game(&game, argv[1]);
 	return (0);
 }

@@ -39,8 +39,6 @@ NAME = game
 SRCS = src/main.c \
 	src/controls.c \
 	src/menu.c \
-	src/menu_transition.c \
-	src/menu_keys.c \
 	src/game_render.c \
 	src/game_render_texture.c \
 	src/game_render_tiles.c \

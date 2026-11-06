@@ -25,8 +25,14 @@ static int	setup_window(t_game *game)
 	return (1);
 }
 
-void	init_game(t_game *game)
+void	init_game(t_game *game, const char *map_name)
 {
+	t_lay	lay;
+
+	game->map = load_map_by_name(game, map_name, &lay);
+	if (!game->map)
+		exit(1);
+	progress_init(game, &lay);
 	if (!setup_window(game))
 	{
 		ft_printf("Error: failed to initialize window\n");
@@ -35,6 +41,6 @@ void	init_game(t_game *game)
 	load_player_sprites(game);
 	load_exit_sprite(game);
 	load_pattern_sprites(game);
-	start_map_menu(game);
+	start_map_menu(game, map_name);
 	mlx_loop(game->mlx);
 }

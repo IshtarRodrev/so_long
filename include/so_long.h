@@ -13,7 +13,7 @@
 # define VIEWPORT_COLS (MENU_WIN_W / TILE_SIZE)
 # define VIEWPORT_ROWS (MENU_WIN_H / TILE_SIZE)
 # define CAMERA_MARGIN 5
-# define MENU_MAX_MAPS 9
+# define MENU_LINES 2
 # define MAPS_DIR "maps"
 # define SPRITE_DIR "assets/sprites"
 # define EXIT_SPRITE_PATH "assets/sprites/exit_tile.png"
@@ -56,11 +56,7 @@ typedef struct s_game
 	char			**map;
 	int				rows;
 	int				cols;
-	char			*map_names[MENU_MAX_MAPS];
-	int				map_count;
-	mlx_image_t		*menu_imgs[MENU_MAX_MAPS + 1];
-	int				menu_img_count;
-	mlx_image_t		*status_img;
+	mlx_image_t		*menu_imgs[MENU_LINES];
 	int				cam_x;
 	int				cam_y;
 	int				view_cols;
@@ -130,18 +126,10 @@ typedef enum e_tile
 typedef t_map	t_lay;
 
 /* controls.c */
-void			init_game(t_game *game);
+void			init_game(t_game *game, const char *map_name);
 
 /* menu.c */
-int				scan_maps_dir(t_game *game);
-void			draw_map_list(t_game *game);
-
-/* menu_transition.c */
-void			show_status(t_game *game, const char *msg);
-void			start_game(t_game *game, char **map);
-
-/* menu_keys.c */
-void			start_map_menu(t_game *game);
+void			start_map_menu(t_game *game, const char *map_name);
 
 /* map/map.c */
 char			*read_file_to_string(const char *path);
@@ -161,8 +149,9 @@ int				path_is_valid(const t_map *map);
 char			**read_map_file(t_game *game, const char *path);
 
 /* map/params.c */
-int				has_valid_extension(const char *path);
 char			**load_and_validate(t_game *game, const char *path, t_lay *lay);
+char			**load_map_by_name(t_game *game, const char *map_name,
+					t_lay *lay);
 
 /* progress/progress.c */
 void			progress_init(t_game *game, const t_lay *lay);

@@ -12,20 +12,11 @@
 
 #include "libft.h"
 #include "so_long.h"
+#include <stdlib.h>
 
 /******************************************************************************/
 /*								 PARAM HELPERS								  */
 /******************************************************************************/
-
-int	has_valid_extension(const char *path)
-{
-	size_t	len;
-
-	len = ft_strlen(path);
-	if (len < 4)
-		return (0);
-	return (ft_strncmp(path + len - 4, ".ber", 4) == 0);
-}
 
 char	**load_and_validate(t_game *game, const char *path, t_lay *lay)
 {
@@ -47,5 +38,27 @@ char	**load_and_validate(t_game *game, const char *path, t_lay *lay)
 		free_map(lay);
 		return (NULL);
 	}
+	return (map);
+}
+
+/* Loads and validates maps/<map_name>.ber. */
+char	**load_map_by_name(t_game *game, const char *map_name, t_lay *lay)
+{
+	char	*tmp;
+	char	*path;
+	char	**map;
+
+	tmp = ft_strjoin(MAPS_DIR "/", map_name);
+	path = NULL;
+	if (tmp)
+		path = ft_strjoin(tmp, ".ber");
+	free(tmp);
+	if (!path)
+	{
+		ft_printf("Error: memory allocation failed\n");
+		return (NULL);
+	}
+	map = load_and_validate(game, path, lay);
+	free(path);
 	return (map);
 }
