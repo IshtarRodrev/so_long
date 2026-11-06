@@ -43,7 +43,9 @@ SRCS = src/main.c \
 	src/game_render.c \
 	src/game_controls.c \
 	src/map.c \
-	src/camera/camera.c
+	src/camera/camera.c \
+	src/patterns/patterns.c \
+	src/progress/progress.c
 OBJS = $(SRCS:.c=.o)
 
 
