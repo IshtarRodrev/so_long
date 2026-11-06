@@ -26,6 +26,7 @@ void	init_game(void)
 	}
 	load_player_sprites();
 	load_exit_sprite();
+	load_pattern_sprites();
 	start_map_menu();
 	mlx_loop(g_game.mlx);
 }

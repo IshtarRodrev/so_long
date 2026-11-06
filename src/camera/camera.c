@@ -30,9 +30,8 @@ void init_camera(void)
     int px;
     int py;
 
-    px = 0;
-    py = 0;
-    find_player(&px, &py);
+    px = g_game.progress.player.x;
+    py = g_game.progress.player.y;
     compute_viewport_size();
     g_game.cam_x = px - g_game.view_cols / 2;
     g_game.cam_y = py - g_game.view_rows / 2;
@@ -44,9 +43,8 @@ void update_camera(void)
     int px;
     int py;
 
-    px = 0;
-    py = 0;
-    find_player(&px, &py);
+    px = g_game.progress.player.x;
+    py = g_game.progress.player.y;
     compute_viewport_size();
     if (px - g_game.cam_x < CAMERA_MARGIN)
         g_game.cam_x = px - CAMERA_MARGIN;
