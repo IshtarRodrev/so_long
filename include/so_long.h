@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/06 22:25:29 by akechedz          #+#    #+#             */
+/*   Updated: 2026/11/06 22:25:35 by akechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
@@ -10,8 +22,8 @@
 # define SCORE_BAR_BORDER 2
 # define MENU_WIN_W 1200
 # define MENU_WIN_H 800
-# define VIEWPORT_COLS (MENU_WIN_W / TILE_SIZE)
-# define VIEWPORT_ROWS (MENU_WIN_H / TILE_SIZE)
+# define VIEWPORT_COLS 30
+# define VIEWPORT_ROWS 20
 # define CAMERA_MARGIN 5
 # define MENU_LINES 2
 # define MAPS_DIR "maps"
@@ -21,8 +33,8 @@
 # define WALL_DOWN_SPRITE_PATH "assets/sprites/wall_down.png"
 # define SHOWER_RIGHT_SPRITE_PATH "assets/sprites/shower_right.png"
 # define SHOWER_LEFT_SPRITE_PATH "assets/sprites/shower_left.png"
-# define GLASS_DOWN_RIGHT_SPRITE_PATH "assets/sprites/glass_fence_down_right.png"
-# define GLASS_DOWN_LEFT_SPRITE_PATH "assets/sprites/glass_fence_down_left.png"
+# define GLASS_DR_SPRITE_PATH "assets/sprites/glass_fence_down_right.png"
+# define GLASS_DL_SPRITE_PATH "assets/sprites/glass_fence_down_left.png"
 # define FACE_DOWN 0
 # define FACE_UP 1
 # define FACE_LEFT 2

@@ -34,7 +34,7 @@
 # .PHONY: all clean fclean re
 
 CC = cc
-NAME = game
+NAME = so_long
 
 SRCS = src/main.c \
 	src/controls.c \
@@ -105,4 +105,6 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+FORCE:
+
+.PHONY: all clean fclean re FORCE
