@@ -63,7 +63,7 @@ static bool	load_frame(t_game *game, int d, int f)
 	if (!game->player_tex[d][f])
 	{
 		print_error("failed to load player sprite", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	return (true);
 }
@@ -79,7 +79,7 @@ static void	load_direction_sprites(t_game *game, int d)
 	if (f == 0)
 	{
 		print_error("no sprites found for direction", dir_name(d));
-		exit(1);
+		exit_game(game, 1);
 	}
 }
 

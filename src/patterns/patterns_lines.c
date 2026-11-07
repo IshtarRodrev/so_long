@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
 /*
 ** Which way the row from start to end on line my faces: down if walls run all

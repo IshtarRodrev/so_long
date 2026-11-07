@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
 void	progress_init(t_game *game, const t_lay *lay)
 {
@@ -21,7 +20,7 @@ void	progress_init(t_game *game, const t_lay *lay)
 	if (!game->progress.collected || !game->cover)
 	{
 		print_error("memory allocation failed", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	game->progress.player = lay->player;
 	game->progress.collectibles_left = lay->collectibles;

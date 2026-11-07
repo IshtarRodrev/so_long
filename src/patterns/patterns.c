@@ -12,9 +12,8 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
-static mlx_texture_t	*load_required_texture(const char *path)
+static mlx_texture_t	*load_required_texture(t_game *game, const char *path)
 {
 	mlx_texture_t	*tex;
 
@@ -22,7 +21,7 @@ static mlx_texture_t	*load_required_texture(const char *path)
 	if (!tex)
 	{
 		print_error("failed to load sprite", path);
-		exit(1);
+		exit_game(game, 1);
 	}
 	return (tex);
 }
@@ -48,7 +47,8 @@ static void	load_faces(mlx_texture_t **tex, const char *name)
 	tex[FACE_RIGHT] = load_named(name, "_right.png");
 }
 
-static void	load_required_faces(mlx_texture_t **tex, const char *name)
+static void	load_required_faces(t_game *game, mlx_texture_t **tex,
+		const char *name)
 {
 	int	face;
 
@@ -59,7 +59,7 @@ static void	load_required_faces(mlx_texture_t **tex, const char *name)
 		if (!tex[face])
 		{
 			print_error("failed to load the sprites of", name);
-			exit(1);
+			exit_game(game, 1);
 		}
 		face++;
 	}
@@ -67,9 +67,10 @@ static void	load_required_faces(mlx_texture_t **tex, const char *name)
 
 void	load_pattern_sprites(t_game *game)
 {
-	load_required_faces(game->desk_tex, "desk");
-	load_required_faces(game->table_tex, "table");
-	game->broken_sign_tex = load_required_texture(BROKEN_SIGN_SPRITE_PATH);
+	load_required_faces(game, game->desk_tex, "desk");
+	load_required_faces(game, game->table_tex, "table");
+	game->broken_sign_tex = load_required_texture(game,
+			BROKEN_SIGN_SPRITE_PATH);
 	game->facing_wall_tex = mlx_load_png(WALL_DOWN_SPRITE_PATH);
 	game->glass_down_right_tex = mlx_load_png(GLASS_DR_SPRITE_PATH);
 	game->glass_down_left_tex = mlx_load_png(GLASS_DL_SPRITE_PATH);

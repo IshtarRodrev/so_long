@@ -12,9 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 static int	is_map_edge(const t_map *map, int y, int x)
 {

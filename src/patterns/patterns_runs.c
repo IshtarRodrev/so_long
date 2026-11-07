@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
 /*
 ** A kitchen starts with a water cooler and a coffee machine, and ends with a

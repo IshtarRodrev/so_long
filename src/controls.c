@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
 static int	setup_window(t_game *game)
 {
@@ -28,16 +27,17 @@ void	init_game(t_game *game, const char *map_name)
 
 	game->map = load_map(game, map_name, &lay);
 	if (!game->map)
-		exit(1);
+		exit_game(game, 1);
 	progress_init(game, &lay);
 	if (!setup_window(game))
 	{
 		print_error("failed to initialize window", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	load_player_sprites(game);
 	load_exit_sprite(game);
 	load_pattern_sprites(game);
 	start_map_menu(game, map_name);
 	mlx_loop(game->mlx);
+	free_game(game);
 }

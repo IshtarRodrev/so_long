@@ -13,7 +13,6 @@
 #include "MLX42.h"
 #include "so_long.h"
 #include "libft.h"
-#include <stdlib.h>
 
 /* One hidden instance per player frame, on top of the map. */
 static void	place_player(t_game *game)
@@ -80,7 +79,7 @@ static void	update_score_bar(t_game *game)
 			SCORE_BAR_HEIGHT - 2 * SCORE_BAR_BORDER))
 	{
 		print_error("failed to resize score bar", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	game->bar_img[1]->instances[0].enabled = true;
 }

@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
 /*
 ** True if (mx, my) is a seat in a sideways desk block: floor on one side, a wall

@@ -153,6 +153,10 @@ typedef enum e_tile
 
 typedef t_map	t_lay;
 
+/* cleanup.c */
+void			free_game(t_game *game);
+void			exit_game(t_game *game, int code);
+
 /* controls.c */
 void			init_game(t_game *game, const char *map_name);
 

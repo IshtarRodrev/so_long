@@ -13,8 +13,6 @@
 #include "libft.h"
 #include "so_long.h"
 
-#include <stdlib.h>
-
 static void	update_player_dir(t_game *game, int dx, int dy)
 {
 	if (dy < 0)
@@ -45,7 +43,8 @@ int	move_player(t_game *game, int dx, int dy)
 	if (game->map[ny][nx] == 'E')
 	{
 		ft_printf("You won!\n");
-		exit(0);
+		mlx_close_window(game->mlx);
+		return (0);
 	}
 	game->progress.player = (t_point){nx, ny};
 	if (game->map[ny][nx] == 'C' && !is_collected(game, nx, ny))
@@ -62,7 +61,10 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	if (keydata.action != MLX_PRESS && keydata.action != MLX_REPEAT)
 		return ;
 	if (keydata.key == MLX_KEY_ESCAPE)
-		exit(0);
+	{
+		mlx_close_window(game->mlx);
+		return ;
+	}
 	if (keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_W)
 		move_player(game, 0, -1);
 	if (keydata.key == MLX_KEY_DOWN || keydata.key == MLX_KEY_S)

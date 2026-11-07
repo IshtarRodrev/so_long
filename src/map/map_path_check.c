@@ -12,8 +12,6 @@
 
 #include "libft.h"
 #include "so_long.h"
-#include <fcntl.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 /* Prints "Error\n<msg>[ '<detail>']\n" to stderr. detail may be NULL. */

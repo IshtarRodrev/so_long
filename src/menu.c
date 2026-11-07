@@ -25,7 +25,7 @@ static void	draw_menu(t_game *game, const char *map_name)
 	if (!label)
 	{
 		print_error("memory allocation failed", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	label[ft_strlen(label) - 4] = '\0';
 	game->menu_imgs[0] = mlx_put_string(game->mlx, label, 40, 40);
@@ -63,7 +63,10 @@ static void	menu_key_hook(mlx_key_data_t keydata, void *param)
 	if (keydata.action != MLX_PRESS)
 		return ;
 	if (keydata.key == MLX_KEY_ESCAPE)
-		exit(0);
+	{
+		mlx_close_window(((t_game *) param)->mlx);
+		return ;
+	}
 	start_game(param);
 }
 

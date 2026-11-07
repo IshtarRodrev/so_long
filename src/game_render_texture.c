@@ -13,7 +13,6 @@
 #include "MLX42.h"
 #include "so_long.h"
 #include "libft.h"
-#include <stdlib.h>
 
 /* Makes an image of tex, scaled to fit a tile and keeping its proportions. */
 mlx_image_t	*texture_image(t_game *game, mlx_texture_t *tex)
@@ -36,7 +35,7 @@ mlx_image_t	*texture_image(t_game *game, mlx_texture_t *tex)
 	if (!img || !mlx_resize_image(img, w, h))
 	{
 		print_error("failed to create image", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	return (img);
 }
@@ -56,7 +55,7 @@ mlx_image_t	*image_for(t_game *game, mlx_texture_t *tex)
 	if (game->cache_count == IMG_CACHE)
 	{
 		print_error("too many different sprites", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	game->cache_tex[i] = tex;
 	game->cache_img[i] = texture_image(game, tex);
@@ -73,13 +72,13 @@ mlx_image_t	*color_image(t_game *game, uint32_t rgba, uint32_t w, uint32_t h)
 	if (!img)
 	{
 		print_error("failed to create image", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	mlx_put_pixel(img, 0, 0, rgba);
 	if (!mlx_resize_image(img, w, h))
 	{
 		print_error("failed to create image", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	return (img);
 }
@@ -93,7 +92,7 @@ int	put_image(t_game *game, mlx_image_t *img, int x, int y)
 	if (index < 0)
 	{
 		print_error("failed to put image to window", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 	return (index);
 }
@@ -104,6 +103,6 @@ void	load_exit_sprite(t_game *game)
 	if (!game->exit_tex)
 	{
 		print_error("failed to load exit sprite", NULL);
-		exit(1);
+		exit_game(game, 1);
 	}
 }
