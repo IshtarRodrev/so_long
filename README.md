@@ -115,10 +115,10 @@ folder: files are replaced or added, never deleted. It is never run by `make`.
 and the files a patch added are deleted; other new sprites of yours are kept, but
 uncommitted edits to committed sprites are reverted too.
 
-**Run** — the argument is the name of a map file in `maps/`:
+**Run** — the argument is a path to a `.ber` file; a bare name is also looked up in `maps/`:
 ```
-./so_long floorOG.ber
-./so_long labyrinth.ber
+./so_long maps/floorOG.ber
+./so_long labyrinth.ber      # same as maps/labyrinth.ber
 ./so_long err_two_exits.ber  # every err_*.ber map shows one error message
 ```
 
