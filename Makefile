@@ -4,6 +4,8 @@ NAME = so_long
 SRCS = src/main.c \
 	src/game/game.c \
 	src/game/menu.c \
+	src/game/menu_draw.c \
+	src/game/blink.c \
 	src/game/input.c \
 	src/game/error.c \
 	src/game/cleanup.c \
@@ -90,4 +92,4 @@ re: fclean all
 
 FORCE:
 
-.PHONY: all clean fclean re FORCE
+.PHONY: all clean fclean re patch unpatch FORCE
