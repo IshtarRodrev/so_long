@@ -30,9 +30,11 @@ char	**load_and_validate(t_game *game, const char *path, t_map *parsed)
 	parsed->cols = (size_t) game->cols;
 	parsed->collectibles = 0;
 	parsed->exits = 0;
-	if (!validate_map(parsed) || !path_is_valid(parsed))
+	game->map = map;
+	if (!validate_map(parsed) || !path_is_valid(game, parsed))
 	{
 		free_map(parsed);
+		game->map = NULL;
 		return (NULL);
 	}
 	return (map);

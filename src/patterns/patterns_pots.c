@@ -14,11 +14,22 @@
 #include "so_long.h"
 #include <stdlib.h>
 
+/* True for floor in a closed area the player can never reach (dark). */
+static bool	is_closed_floor(t_game *game, int x, int y)
+{
+	int	index;
+
+	if (tile_at(game, x, y) != '0')
+		return (false);
+	index = tile_index(game, x, y);
+	return (!game->layout.reachable[index] && !game->layout.outside[index]);
+}
+
 /*
 ** Rightmost column, top and bottom row of the area in queue[start .. qend),
 ** and how many of its tiles are in that rightmost column (its height).
 */
-static t_area	area_bounds(t_pot_fill *f, size_t start)
+static t_area	area_bounds(t_flood *f, size_t start)
 {
 	t_area	a;
 	size_t	i;
@@ -48,11 +59,11 @@ static t_area	area_bounds(t_pot_fill *f, size_t start)
 }
 
 /*
-** Marks the pots of the area in queue[start .. qend): its rightmost column,
+** Marks in pots the area in queue[start .. qend): its rightmost column,
 ** its top row and its bottom row - only if that rightmost column is a real
 ** vertical row (2 tiles or more). An area ending in a diagonal gets none.
 */
-static void	mark_area(t_pot_fill *f, size_t start)
+static void	mark_area(t_flood *f, size_t start, bool *pots)
 {
 	t_area	a;
 	size_t	i;
@@ -68,7 +79,7 @@ static void	mark_area(t_pot_fill *f, size_t start)
 		x = f->queue[i] % f->game->cols;
 		y = f->queue[i] / f->game->cols;
 		if (x == a.right || y == a.top || y == a.bottom)
-			f->pots[f->queue[i]] = true;
+			pots[f->queue[i]] = true;
 		i++;
 	}
 }
@@ -79,29 +90,25 @@ static void	mark_area(t_pot_fill *f, size_t start)
 */
 bool	*pot_tiles(t_game *game)
 {
-	t_pot_fill	f;
-	size_t		start;
-	int			i;
+	t_flood	f;
+	bool	*pots;
+	size_t	start;
+	int		i;
 
-	ft_bzero(&f, sizeof(f));
-	f.game = game;
-	f.seen = ft_calloc((size_t) game->rows * game->cols, sizeof(bool));
-	f.pots = ft_calloc((size_t) game->rows * game->cols, sizeof(bool));
-	f.queue = malloc((size_t) game->rows * game->cols * sizeof(int));
+	pots = ft_calloc((size_t) game->rows * game->cols, sizeof(bool));
+	if (!pots || !flood_init(&f, game, is_closed_floor, NULL))
+	{
+		free(pots);
+		return (NULL);
+	}
 	i = -1;
-	while (f.seen && f.pots && f.queue && ++i < game->rows * game->cols)
+	while (++i < game->rows * game->cols)
 	{
 		start = f.qend;
-		add_area_tile(&f, i % game->cols, i / game->cols);
-		fill_area(&f, start);
-		mark_area(&f, start);
+		flood_add(&f, i % game->cols, i / game->cols);
+		flood_spread(&f, start);
+		mark_area(&f, start, pots);
 	}
-	if (!f.seen || !f.queue)
-	{
-		free(f.pots);
-		f.pots = NULL;
-	}
-	free(f.seen);
-	free(f.queue);
-	return (f.pots);
+	free(flood_finish(&f));
+	return (pots);
 }

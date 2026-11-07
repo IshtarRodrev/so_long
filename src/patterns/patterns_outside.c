@@ -10,84 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
 
-/* Marks (x, y) as outside and queues it if it is unreachable floor. */
-static void	add_tile(t_fill *f, int x, int y)
+/* True for a tile the player cannot reach that is not a wall. */
+static bool	is_unreachable_floor(t_game *game, int x, int y)
 {
-	int	index;
-
-	if (y < 0 || y >= (int) f->map->rows || x < 0 || x >= (int) f->map->cols)
-		return ;
-	index = y * (int) f->map->cols + x;
-	if (f->map->lines[y][x] == '1' || f->reachable[index] || f->outside[index])
-		return ;
-	f->outside[index] = true;
-	f->queue[f->qend++] = index;
-}
-
-/* Starts the fill from every tile on the border of the map. */
-static void	add_border(t_fill *f)
-{
-	int	i;
-
-	i = -1;
-	while (++i < (int) f->map->cols)
-	{
-		add_tile(f, i, 0);
-		add_tile(f, i, (int) f->map->rows - 1);
-	}
-	i = -1;
-	while (++i < (int) f->map->rows)
-	{
-		add_tile(f, 0, i);
-		add_tile(f, (int) f->map->cols - 1, i);
-	}
-}
-
-/* Spreads from every queued tile to its unreachable floor neighbours. */
-static void	spread(t_fill *f)
-{
-	size_t	next;
-	int		x;
-	int		y;
-
-	next = 0;
-	while (next < f->qend)
-	{
-		x = f->queue[next] % (int) f->map->cols;
-		y = f->queue[next] / (int) f->map->cols;
-		next++;
-		add_tile(f, x + 1, y);
-		add_tile(f, x - 1, y);
-		add_tile(f, x, y + 1);
-		add_tile(f, x, y - 1);
-	}
+	return (tile_at(game, x, y) != '1'
+		&& !game->layout.reachable[tile_index(game, x, y)]);
 }
 
 /*
-** Flood fill from the map border through floor the player cannot reach:
+** Flood fill from every border tile through floor the player cannot reach:
 ** true for every tile outside the walls. Returns NULL if memory runs out.
 */
-bool	*outside_tiles(const t_map *map, const bool *reachable)
+bool	*outside_tiles(t_game *game)
 {
-	t_fill	f;
+	t_flood	f;
+	int		i;
 
-	ft_bzero(&f, sizeof(f));
-	f.map = map;
-	f.reachable = reachable;
-	f.outside = ft_calloc(map->rows * map->cols, sizeof(bool));
-	f.queue = malloc(map->rows * map->cols * sizeof(int));
-	if (!f.outside || !f.queue)
-	{
-		free(f.outside);
-		free(f.queue);
+	if (!flood_init(&f, game, is_unreachable_floor, NULL))
 		return (NULL);
+	i = -1;
+	while (++i < game->cols)
+	{
+		flood_add(&f, i, 0);
+		flood_add(&f, i, game->rows - 1);
 	}
-	add_border(&f);
-	spread(&f);
-	free(f.queue);
-	return (f.outside);
+	i = -1;
+	while (++i < game->rows)
+	{
+		flood_add(&f, 0, i);
+		flood_add(&f, game->cols - 1, i);
+	}
+	flood_spread(&f, 0);
+	return (flood_finish(&f));
 }

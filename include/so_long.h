@@ -150,6 +150,23 @@ typedef struct s_game
 	int				move_count;
 }	t_game;
 
+/* A yes/no question about one tile, used by the flood fill. */
+typedef bool	(*t_tile_test)(t_game *game, int x, int y);
+
+/*
+** One flood fill over the map: tiles it may enter (passable), tiles it may
+** continue from (spreads, NULL = all), what it has seen and its queue.
+*/
+typedef struct s_flood
+{
+	t_game		*game;
+	t_tile_test	passable;
+	t_tile_test	spreads;
+	bool		*seen;
+	int			*queue;
+	size_t		qend;
+}	t_flood;
+
 typedef struct s_map
 {
 	char	**lines;
@@ -159,44 +176,6 @@ typedef struct s_map
 	int		collectibles;
 	int		exits;
 }	t_map;
-
-typedef struct s_path_search
-{
-	const t_map	*map;
-	bool		*visited;
-	int			*queue;
-	size_t		qend;
-	int			found_collectibles;
-	int			found_exits;
-	int			leaked;
-}	t_path_search;
-
-typedef struct s_fill
-{
-	const t_map	*map;
-	const bool	*reachable;
-	bool		*outside;
-	int			*queue;
-	size_t		qend;
-}	t_fill;
-
-typedef struct s_pot_fill
-{
-	t_game		*game;
-	bool		*seen;
-	bool		*pots;
-	int			*queue;
-	size_t		qend;
-}	t_pot_fill;
-
-/* A flood fill over the tiles of a t_game: seen tiles and the queue. */
-typedef struct s_flood
-{
-	t_game		*game;
-	bool		*seen;
-	int			*queue;
-	size_t		qend;
-}	t_flood;
 
 typedef struct s_area
 {
@@ -254,12 +233,18 @@ char			**read_map_file(t_game *game, const char *path);
 int				validate_map(const t_map *map);
 void			free_map(t_map *map);
 
+/* map/flood.c */
+bool			flood_init(t_flood *f, t_game *game, t_tile_test passable,
+					t_tile_test spreads);
+void			flood_add(t_flood *f, int x, int y);
+void			flood_spread(t_flood *f, size_t start);
+bool			*flood_finish(t_flood *f);
+
 /* map/map_path.c */
-void			search_from_player(t_path_search *s);
+bool			*reachable_tiles(t_game *game, t_point start);
 
 /* map/map_path_check.c */
-int				path_is_valid(const t_map *map);
-bool			*reachable_tiles(const t_map *map);
+int				path_is_valid(t_game *game, const t_map *parsed);
 
 /* map/map_tile.c */
 bool			in_map(t_game *game, int x, int y);
@@ -359,11 +344,7 @@ mlx_image_t		*floor_image(t_game *game, int mx, int my);
 mlx_image_t		*decoration_image(t_game *game, int mx, int my);
 
 /* patterns/patterns_outside.c */
-bool			*outside_tiles(const t_map *map, const bool *reachable);
-
-/* patterns/patterns_areas.c */
-void			add_area_tile(t_pot_fill *f, int x, int y);
-void			fill_area(t_pot_fill *f, size_t start);
+bool			*outside_tiles(t_game *game);
 
 /* patterns/patterns_pots.c */
 bool			*pot_tiles(t_game *game);

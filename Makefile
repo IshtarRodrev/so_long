@@ -10,6 +10,7 @@ SRCS = src/main.c \
 	src/map/map_load.c \
 	src/map/map_read.c \
 	src/map/map.c \
+	src/map/flood.c \
 	src/map/map_path.c \
 	src/map/map_path_check.c \
 	src/map/map_tile.c \
@@ -37,7 +38,6 @@ SRCS = src/main.c \
 	src/patterns/patterns_glass.c \
 	src/patterns/patterns_floor.c \
 	src/patterns/patterns_outside.c \
-	src/patterns/patterns_areas.c \
 	src/patterns/patterns_pots.c \
 	src/patterns/patterns_trees.c
 OBJS = $(SRCS:.c=.o)

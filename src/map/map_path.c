@@ -10,60 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "so_long.h"
 
-static int	is_map_edge(const t_map *map, int y, int x)
+static bool	is_walkable(t_game *game, int x, int y)
 {
-	return (y == 0 || y == (int) map->rows - 1
-		|| x == 0 || x == (int) map->cols - 1);
+	return (tile_at(game, x, y) != '1');
 }
 
-/* Queues the tile at (x, y) if it is in the map, not a wall and not seen. */
-static void	queue_tile(t_path_search *s, int x, int y)
+/* The exit ends a path: it stays locked until every collectible is taken. */
+static bool	is_not_exit(t_game *game, int x, int y)
 {
-	int	index;
-
-	if (y < 0 || y >= (int) s->map->rows || x < 0 || x >= (int) s->map->cols)
-		return ;
-	index = y * (int) s->map->cols + x;
-	if (s->visited[index] || s->map->lines[y][x] == '1')
-		return ;
-	s->visited[index] = true;
-	if (is_map_edge(s->map, y, x))
-		s->leaked = 1;
-	s->queue[s->qend++] = index;
+	return (tile_at(game, x, y) != 'E');
 }
 
 /*
-** Walks every tile the player can reach. The exit ends a path: it stays
-** locked until every collectible is taken.
+** Flood fill from start through everything that is not a wall, not going on
+** past the exit: true for every tile the player can reach. NULL if memory
+** runs out.
 */
-void	search_from_player(t_path_search *s)
+bool	*reachable_tiles(t_game *game, t_point start)
 {
-	size_t	next;
-	int		x;
-	int		y;
-	char	tile;
+	t_flood	f;
 
-	queue_tile(s, s->map->player.x, s->map->player.y);
-	next = 0;
-	while (next < s->qend)
-	{
-		x = s->queue[next] % (int) s->map->cols;
-		y = s->queue[next] / (int) s->map->cols;
-		next++;
-		tile = s->map->lines[y][x];
-		if (tile == 'C')
-			s->found_collectibles++;
-		if (tile == 'E')
-			s->found_exits++;
-		else
-		{
-			queue_tile(s, x + 1, y);
-			queue_tile(s, x - 1, y);
-			queue_tile(s, x, y + 1);
-			queue_tile(s, x, y - 1);
-		}
-	}
+	if (!flood_init(&f, game, is_walkable, is_not_exit))
+		return (NULL);
+	flood_add(&f, start.x, start.y);
+	flood_spread(&f, 0);
+	return (flood_finish(&f));
 }

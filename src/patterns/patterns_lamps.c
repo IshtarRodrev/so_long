@@ -14,39 +14,10 @@
 #include "so_long.h"
 #include <stdlib.h>
 
-/* Queues (x, y) if it is a wall or a collectible and was not seen yet. */
-static void	add_island_tile(t_flood *f, int x, int y)
+/* True for the tiles an island is made of: walls and collectibles. */
+static bool	is_island_tile(t_game *game, int x, int y)
 {
-	int	index;
-
-	if (tile_at(f->game, x, y) != '1' && tile_at(f->game, x, y) != 'C')
-		return ;
-	index = tile_index(f->game, x, y);
-	if (f->seen[index])
-		return ;
-	f->seen[index] = true;
-	f->queue[f->qend] = index;
-	f->qend++;
-}
-
-/* Marks the whole island of walls and collectibles around (x, y) as seen. */
-static void	fill_island(t_flood *f, int x, int y)
-{
-	size_t	next;
-
-	f->qend = 0;
-	add_island_tile(f, x, y);
-	next = 0;
-	while (next < f->qend)
-	{
-		x = f->queue[next] % f->game->cols;
-		y = f->queue[next] / f->game->cols;
-		add_island_tile(f, x + 1, y);
-		add_island_tile(f, x - 1, y);
-		add_island_tile(f, x, y + 1);
-		add_island_tile(f, x, y - 1);
-		next++;
-	}
+	return (tile_at(game, x, y) == '1' || tile_at(game, x, y) == 'C');
 }
 
 /*
@@ -58,28 +29,27 @@ bool	*lamp_tiles(t_game *game)
 {
 	t_flood	f;
 	bool	*lamps;
+	size_t	start;
 	int		i;
 
-	f.game = game;
-	f.seen = ft_calloc((size_t) game->rows * game->cols, sizeof(bool));
-	f.queue = malloc((size_t) game->rows * game->cols * sizeof(int));
 	lamps = ft_calloc((size_t) game->rows * game->cols, sizeof(bool));
+	if (!lamps || !flood_init(&f, game, is_island_tile, NULL))
+	{
+		free(lamps);
+		return (NULL);
+	}
 	i = -1;
-	while (f.seen && f.queue && lamps && ++i < game->rows * game->cols)
+	while (++i < game->rows * game->cols)
 	{
 		if (!f.seen[i] && is_lamp_spot(game, i % game->cols, i / game->cols))
 		{
 			lamps[i] = true;
-			fill_island(&f, i % game->cols, i / game->cols);
+			start = f.qend;
+			flood_add(&f, i % game->cols, i / game->cols);
+			flood_spread(&f, start);
 		}
 	}
-	if (!f.seen || !f.queue)
-	{
-		free(lamps);
-		lamps = NULL;
-	}
-	free(f.seen);
-	free(f.queue);
+	free(flood_finish(&f));
 	return (lamps);
 }
 

@@ -20,9 +20,9 @@
 */
 void	init_patterns(t_game *game, const t_map *parsed)
 {
-	game->layout.reachable = reachable_tiles(parsed);
+	game->layout.reachable = reachable_tiles(game, parsed->player);
 	if (game->layout.reachable)
-		game->layout.outside = outside_tiles(parsed, game->layout.reachable);
+		game->layout.outside = outside_tiles(game);
 	if (game->layout.outside)
 		game->layout.pots = pot_tiles(game);
 	if (game->layout.pots)

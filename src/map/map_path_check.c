@@ -10,64 +10,58 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "so_long.h"
 #include <stdlib.h>
 
-/* Prints why the search failed, if it did. Returns 1 if the path is valid. */
-static int	report_path(t_path_search *s)
+/* True if tile number i lies on the border of the map. */
+static bool	is_edge(t_game *game, int i)
 {
-	if (s->leaked)
+	return (i % game->cols == 0 || i % game->cols == game->cols - 1
+		|| i / game->cols == 0 || i / game->cols == game->rows - 1);
+}
+
+/*
+** Checks what the player can reach (seen) and prints why the map fails, if
+** it does. Returns 1 if the path is valid.
+*/
+static int	report_path(t_game *game, const t_map *parsed, const bool *seen)
+{
+	int		i;
+	int		collectibles;
+	bool	exit;
+	bool	leaked;
+
+	collectibles = 0;
+	exit = false;
+	leaked = false;
+	i = -1;
+	while (++i < game->rows * game->cols)
+	{
+		if (!seen[i])
+			continue ;
+		collectibles += (game->map[i / game->cols][i % game->cols] == 'C');
+		exit = exit || game->map[i / game->cols][i % game->cols] == 'E';
+		leaked = leaked || is_edge(game, i);
+	}
+	if (leaked)
 		return (map_error("map is not sealed, player can reach the edge"));
-	if (s->found_collectibles != s->map->collectibles)
+	if (collectibles != parsed->collectibles)
 		return (map_error("not all collectibles are reachable"));
-	if (s->found_exits < 1)
+	if (!exit)
 		return (map_error("exit is not reachable"));
 	return (1);
 }
 
 /* Flood fill from P: every C and the exit must be reachable. */
-int	path_is_valid(const t_map *map)
+int	path_is_valid(t_game *game, const t_map *parsed)
 {
-	t_path_search	s;
+	bool	*seen;
+	int		valid;
 
-	if (!map || !map->lines)
-		return (0);
-	ft_bzero(&s, sizeof(s));
-	s.map = map;
-	s.visited = ft_calloc(map->rows * map->cols, sizeof(bool));
-	s.queue = malloc(map->rows * map->cols * sizeof(int));
-	if (!s.visited || !s.queue)
-	{
-		free(s.visited);
-		free(s.queue);
+	seen = reachable_tiles(game, parsed->player);
+	if (!seen)
 		return (map_error("memory allocation failed"));
-	}
-	search_from_player(&s);
-	free(s.visited);
-	free(s.queue);
-	return (report_path(&s));
-}
-
-/*
-** The same flood fill from P, but keeps the result: true for every tile the
-** player can reach. Returns NULL if memory runs out.
-*/
-bool	*reachable_tiles(const t_map *map)
-{
-	t_path_search	s;
-
-	ft_bzero(&s, sizeof(s));
-	s.map = map;
-	s.visited = ft_calloc(map->rows * map->cols, sizeof(bool));
-	s.queue = malloc(map->rows * map->cols * sizeof(int));
-	if (!s.visited || !s.queue)
-	{
-		free(s.visited);
-		free(s.queue);
-		return (NULL);
-	}
-	search_from_player(&s);
-	free(s.queue);
-	return (s.visited);
+	valid = report_path(game, parsed, seen);
+	free(seen);
+	return (valid);
 }
