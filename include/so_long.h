@@ -167,7 +167,6 @@ void			free_map(t_map *map);
 
 /* map/map_path.c */
 void			search_from_player(t_path_search *s);
-int				collectible_is_trapped(t_path_search *s);
 
 /* map/map_path_check.c */
 void			print_error(const char *msg, const char *detail);

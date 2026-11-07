@@ -36,7 +36,7 @@ int	move_player(t_game *game, int dx, int dy)
 	ny = game->progress.player.y + dy;
 	update_player_dir(game, dx, dy);
 	if (ny < 0 || ny >= game->rows || nx < 0 || nx >= game->cols
-		|| game->map[ny][nx] == '1' || is_collected(game, nx, ny)
+		|| game->map[ny][nx] == '1'
 		|| (game->map[ny][nx] == 'E'
 			&& game->progress.collectibles_left > 0))
 		return (render_map(game), 0);
@@ -48,7 +48,7 @@ int	move_player(t_game *game, int dx, int dy)
 		exit(0);
 	}
 	game->progress.player = (t_point){nx, ny};
-	if (game->map[ny][nx] == 'C')
+	if (game->map[ny][nx] == 'C' && !is_collected(game, nx, ny))
 		collect_tile(game, nx, ny);
 	game->player_frame++;
 	return (render_map(game), 0);

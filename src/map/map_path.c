@@ -38,7 +38,10 @@ static void	queue_tile(t_path_search *s, int x, int y)
 	s->queue[s->qend++] = index;
 }
 
-/* Walks every tile the player can reach. Collectibles and exits end a path. */
+/*
+** Walks every tile the player can reach. The exit ends a path: it stays
+** locked until every collectible is taken.
+*/
 void	search_from_player(t_path_search *s)
 {
 	size_t	next;
@@ -56,7 +59,7 @@ void	search_from_player(t_path_search *s)
 		tile = s->map->lines[y][x];
 		if (tile == 'C')
 			s->found_collectibles++;
-		else if (tile == 'E')
+		if (tile == 'E')
 			s->found_exits++;
 		else
 		{
@@ -66,33 +69,4 @@ void	search_from_player(t_path_search *s)
 			queue_tile(s, x, y - 1);
 		}
 	}
-}
-
-/* True if (x, y) is in the map, not a wall, and the search never got there. */
-static int	is_unreached(t_path_search *s, int x, int y)
-{
-	return (y >= 0 && y < (int) s->map->rows && x >= 0
-		&& x < (int) s->map->cols && s->map->lines[y][x] != '1'
-		&& !s->visited[y * (int) s->map->cols + x]);
-}
-
-/* True if a reached collectible opens onto tiles the player can't get to. */
-int	collectible_is_trapped(t_path_search *s)
-{
-	size_t	i;
-	int		x;
-	int		y;
-
-	i = 0;
-	while (i < s->qend)
-	{
-		x = s->queue[i] % (int) s->map->cols;
-		y = s->queue[i] / (int) s->map->cols;
-		i++;
-		if (s->map->lines[y][x] == 'C' && (is_unreached(s, x + 1, y)
-				|| is_unreached(s, x - 1, y) || is_unreached(s, x, y + 1)
-				|| is_unreached(s, x, y - 1)))
-			return (1);
-	}
-	return (0);
 }

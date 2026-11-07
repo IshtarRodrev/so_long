@@ -38,7 +38,7 @@ int	map_error(const char *msg)
 }
 
 /* Prints why the search failed, if it did. Returns 1 if the path is valid. */
-static int	report_path(t_path_search *s, int trapped)
+static int	report_path(t_path_search *s)
 {
 	if (s->leaked)
 		return (map_error("map is not sealed, player can reach the edge"));
@@ -46,16 +46,13 @@ static int	report_path(t_path_search *s, int trapped)
 		return (map_error("not all collectibles are reachable"));
 	if (s->found_exits < 1)
 		return (map_error("exit is not reachable"));
-	if (trapped)
-		return (map_error("a collectible leads to an area the player "
-				"can't leave"));
 	return (1);
 }
 
-int	path_is_valid(const t_map *map) //TODO: replace with flood fill
+/* Flood fill from P: every C and the exit must be reachable. */
+int	path_is_valid(const t_map *map)
 {
 	t_path_search	s;
-	int				trapped;
 
 	if (!map || !map->lines)
 		return (0);
@@ -70,8 +67,7 @@ int	path_is_valid(const t_map *map) //TODO: replace with flood fill
 		return (map_error("memory allocation failed"));
 	}
 	search_from_player(&s);
-	trapped = collectible_is_trapped(&s);
 	free(s.visited);
 	free(s.queue);
-	return (report_path(&s, trapped));
+	return (report_path(&s));
 }
