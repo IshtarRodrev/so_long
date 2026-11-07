@@ -55,7 +55,6 @@
 # define RGBA_WALL 0xE8E8E8FF
 # define RGBA_TODO 0xFFD700FF
 # define RGBA_BAR_BG 0x202020FF
-# define RGBA_BAR_FILL 0xFFD700FF
 
 typedef struct s_point
 {
@@ -188,6 +187,7 @@ char			**load_map(t_game *game, const char *name, t_lay *lay);
 void			progress_init(t_game *game, const t_lay *lay);
 bool			is_collected(t_game *game, int mx, int my);
 void			collect_tile(t_game *game, int mx, int my);
+uint32_t		progress_color(t_game *game);
 
 /* camera/camera.c */
 void			init_camera(t_game *game);

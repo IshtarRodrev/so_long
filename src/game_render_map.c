@@ -60,28 +60,36 @@ static void	update_player(t_game *game)
 	img->instances[0].enabled = true;
 }
 
-/* The bar above the map: empty at the start, full when all tasks are done. */
+/*
+** The bar above the map: empty at the start, full when all tasks are done.
+** Its colour goes from red through orange and yellow to green: the 1x1 image
+** is shrunk back to one pixel, recoloured, and stretched to the new width.
+*/
 static void	update_score_bar(t_game *game)
 {
-	int	width;
-	int	filled;
+	mlx_image_t	*bar;
+	int			filled;
+	bool		ok;
 
-	width = game->view_cols * TILE_SIZE - 2 * SCORE_BAR_BORDER;
-	filled = width * (game->progress.collectibles_total
-			- game->progress.collectibles_left)
+	bar = game->bar_img[1];
+	filled = (game->view_cols * TILE_SIZE - 2 * SCORE_BAR_BORDER)
+		* (game->progress.collectibles_total - game->progress.collectibles_left)
 		/ game->progress.collectibles_total;
+	bar->instances[0].enabled = (filled > 0);
 	if (filled <= 0)
-	{
-		game->bar_img[1]->instances[0].enabled = false;
 		return ;
+	ok = mlx_resize_image(bar, 1, 1);
+	if (ok)
+	{
+		mlx_put_pixel(bar, 0, 0, progress_color(game));
+		ok = mlx_resize_image(bar, filled,
+				SCORE_BAR_HEIGHT - 2 * SCORE_BAR_BORDER);
 	}
-	if (!mlx_resize_image(game->bar_img[1], filled,
-			SCORE_BAR_HEIGHT - 2 * SCORE_BAR_BORDER))
+	if (!ok)
 	{
 		print_error("failed to resize score bar", NULL);
 		exit_game(game, 1);
 	}
-	game->bar_img[1]->instances[0].enabled = true;
 }
 
 /* Puts every map tile, the player and the score bar in the window, once. */
@@ -107,7 +115,7 @@ void	build_scene(t_game *game)
 	game->bar_img[0] = color_image(game, RGBA_BAR_BG,
 			game->view_cols * TILE_SIZE, SCORE_BAR_HEIGHT);
 	put_image(game, game->bar_img[0], 0, 0);
-	game->bar_img[1] = color_image(game, RGBA_BAR_FILL, 1,
+	game->bar_img[1] = color_image(game, RGBA_BAR_BG, 1,
 			SCORE_BAR_HEIGHT - 2 * SCORE_BAR_BORDER);
 	put_image(game, game->bar_img[1], SCORE_BAR_BORDER, SCORE_BAR_BORDER);
 	render_map(game);

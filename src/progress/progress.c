@@ -38,3 +38,26 @@ void	collect_tile(t_game *game, int mx, int my)
 	game->progress.collectibles_left--;
 	uncover_tile(game, mx, my);
 }
+
+/*
+** Colour of the progress bar: red with nothing done, yellow at half, green
+** when every task is done (orange lies between red and yellow).
+*/
+uint32_t	progress_color(t_game *game)
+{
+	int	step;
+	int	red;
+	int	green;
+
+	step = 510 * (game->progress.collectibles_total
+			- game->progress.collectibles_left)
+		/ game->progress.collectibles_total;
+	red = 255;
+	green = step;
+	if (step > 255)
+	{
+		red = 510 - step;
+		green = 255 - (step - 255) * 55 / 255;
+	}
+	return (((uint32_t) red << 24) | ((uint32_t) green << 16) | 0xFF);
+}
