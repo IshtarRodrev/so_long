@@ -79,3 +79,23 @@ int	put_image(t_game *game, mlx_image_t *img, int x, int y)
 		fail(game, "failed to put image to window");
 	return (index);
 }
+
+/* Gives every visible pixel of img the colour of rgba, keeping its alpha. */
+void	tint_image(mlx_image_t *img, uint32_t rgba)
+{
+	uint32_t	i;
+	uint8_t		*px;
+
+	i = 0;
+	while (i < img->width * img->height)
+	{
+		px = img->pixels + i * 4;
+		if (px[3])
+		{
+			px[0] = rgba >> 24;
+			px[1] = rgba >> 16;
+			px[2] = rgba >> 8;
+		}
+		i++;
+	}
+}

@@ -10,46 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "so_long.h"
-#include <stdlib.h>
-
-/*
-** Shows the map name (no directories, no .ber) and how to start or quit in
-** the bottom right corner, 40 px from the right and the bottom border.
-*/
-static void	draw_menu(t_game *game, const char *map_name)
-{
-	char	*label;
-
-	if (ft_strrchr(map_name, '/'))
-		map_name = ft_strrchr(map_name, '/') + 1;
-	label = ft_strjoin("Map: ", map_name);
-	if (!label)
-		fail(game, "memory allocation failed");
-	label[ft_strlen(label) - 4] = '\0';
-	game->scene.menu[0] = mlx_put_string(game->mlx, label, 0, 40);
-	free(label);
-	game->scene.menu[1] = mlx_put_string(game->mlx,
-			"Press any key to start or ESC to exit", 0, 80);
-	if (!game->scene.menu[0] || !game->scene.menu[1])
-		fail(game, "failed to create image");
-	game->scene.menu[0]->instances[0].x = WINDOW_W - 40
-		- (int) game->scene.menu[0]->width;
-	game->scene.menu[1]->instances[0].x = WINDOW_W - 40
-		- (int) game->scene.menu[1]->width;
-	game->scene.menu[1]->instances[0].y = WINDOW_H - 40
-		- (int) game->scene.menu[1]->height;
-	game->scene.menu[0]->instances[0].y = game->scene.menu[1]->instances[0].y
-		- 40;
-}
 
 static void	clear_menu_images(t_game *game)
 {
 	int	i;
 
 	i = 0;
-	while (i < MENU_LINES)
+	while (i < MENU_IMAGES)
 	{
 		if (game->scene.menu[i])
 			mlx_delete_image(game->mlx, game->scene.menu[i]);
@@ -66,6 +34,8 @@ static void	start_game(t_game *game)
 		game->cam.rows * TILE_SIZE + SCORE_BAR_HEIGHT);
 	build_scene(game);
 	mlx_key_hook(game->mlx, key_hook, game);
+	if (!mlx_loop_hook(game->mlx, sign_blink_hook, game))
+		fail(game, "failed to add loop hook");
 }
 
 static void	menu_key_hook(mlx_key_data_t keydata, void *param)
@@ -82,6 +52,9 @@ static void	menu_key_hook(mlx_key_data_t keydata, void *param)
 
 void	start_map_menu(t_game *game, const char *map_name)
 {
-	draw_menu(game, map_name);
+	draw_menu_picture(game);
+	draw_menu_text(game, map_name);
 	mlx_key_hook(game->mlx, menu_key_hook, game);
+	if (!mlx_loop_hook(game->mlx, menu_blink_hook, game))
+		fail(game, "failed to add loop hook");
 }

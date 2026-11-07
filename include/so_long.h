@@ -29,7 +29,14 @@
 # define ASPHALT_ROWS 3
 # define TREE_SPACING 6
 # define WINDOW_MIN_RUN 6
-# define MENU_LINES 2
+# define MENU_LINES 5
+# define MENU_IMAGES 7
+# define MENU_TITLE_SCALE 8
+# define MENU_SHIFT_X 220
+# define MENU_SHIFT_Y 230
+# define MENU_TEXT_SCALE 2
+# define MENU_BLINK_SEC 0.5
+# define SIGN_BLINK_SEC 0.5
 # define MAPS_DIR "maps"
 # define SPRITE_DIR "assets/sprites"
 # define DIR_DOWN 0
@@ -56,6 +63,10 @@
 # define RGBA_CLOSED 0x262626FF
 # define RGBA_OUTSIDE 0x7A5230FF
 # define RGBA_BAR_BG 0x202020FF
+# define RGBA_MENU_BAND 0x141414FF
+# define RGBA_MENU_TITLE 0x2A9D8FFF
+# define RGBA_MENU_INFO 0xC2569BFF
+# define RGBA_MENU_PRESS 0xE9C46AFF
 
 typedef struct s_point
 {
@@ -105,7 +116,7 @@ typedef struct s_textures
 /* Every MLX image in the window and what is needed to update them. */
 typedef struct s_scene
 {
-	mlx_image_t		*menu[MENU_LINES];
+	mlx_image_t		*menu[MENU_IMAGES];
 	mlx_texture_t	*cache_tex[IMG_CACHE];
 	mlx_image_t		*cache_img[IMG_CACHE];
 	int				cache_count;
@@ -208,6 +219,14 @@ void			init_game(t_game *game, const char *map_name);
 /* game/menu.c */
 void			start_map_menu(t_game *game, const char *map_name);
 
+/* game/blink.c */
+void			menu_blink_hook(void *param);
+void			sign_blink_hook(void *param);
+
+/* game/menu_draw.c */
+void			draw_menu_picture(t_game *game);
+void			draw_menu_text(t_game *game, const char *map_name);
+
 /* game/input.c */
 void			move_player(t_game *game, int dx, int dy);
 void			key_hook(mlx_key_data_t keydata, void *param);
@@ -277,6 +296,7 @@ mlx_image_t		*cached_image(t_game *game, mlx_texture_t *tex);
 mlx_image_t		*color_image(t_game *game, uint32_t rgba, uint32_t w,
 					uint32_t h);
 int				put_image(t_game *game, mlx_image_t *img, int x, int y);
+void			tint_image(mlx_image_t *img, uint32_t rgba);
 
 /* render/camera.c */
 void			init_camera(t_game *game);
