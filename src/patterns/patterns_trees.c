@@ -63,7 +63,7 @@ bool	*tree_tiles(t_game *game)
 	{
 		x = i % game->cols;
 		y = i / game->cols;
-		if (game->map[y][x] == '0' && !game->reachable[i]
+		if (game->map[y][x] == '0' && !game->layout.reachable[i]
 			&& tree_fits(game, trees, x, y))
 			trees[i] = true;
 		i++;

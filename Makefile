@@ -20,15 +20,20 @@ SRCS = src/main.c \
 	src/render/render_tiles.c \
 	src/render/render_images.c \
 	src/render/camera.c \
-	src/sprites/sprites_player.c \
+	src/textures/textures.c \
+	src/textures/textures_player.c \
+	src/textures/textures_furniture.c \
+	src/textures/textures_glass.c \
+	src/textures/textures_free.c \
 	src/patterns/patterns_init.c \
-	src/patterns/patterns.c \
-	src/patterns/patterns_glass_sprites.c \
 	src/patterns/patterns_tile.c \
 	src/patterns/patterns_collectible.c \
 	src/patterns/patterns_lines.c \
 	src/patterns/patterns_runs.c \
 	src/patterns/patterns_desks.c \
+	src/patterns/patterns_lamp_spot.c \
+	src/patterns/patterns_lamps.c \
+	src/patterns/patterns_windows.c \
 	src/patterns/patterns_glass.c \
 	src/patterns/patterns_floor.c \
 	src/patterns/patterns_outside.c \

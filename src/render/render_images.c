@@ -43,18 +43,18 @@ mlx_image_t	*cached_image(t_game *game, mlx_texture_t *tex)
 	int	i;
 
 	i = 0;
-	while (i < game->cache_count)
+	while (i < game->scene.cache_count)
 	{
-		if (game->cache_tex[i] == tex)
-			return (game->cache_img[i]);
+		if (game->scene.cache_tex[i] == tex)
+			return (game->scene.cache_img[i]);
 		i++;
 	}
-	if (game->cache_count == IMG_CACHE)
+	if (game->scene.cache_count == IMG_CACHE)
 		fail(game, "too many different sprites");
-	game->cache_tex[i] = tex;
-	game->cache_img[i] = texture_image(game, tex);
-	game->cache_count++;
-	return (game->cache_img[i]);
+	game->scene.cache_tex[i] = tex;
+	game->scene.cache_img[i] = texture_image(game, tex);
+	game->scene.cache_count++;
+	return (game->scene.cache_img[i]);
 }
 
 /* A w x h image of one colour: a single pixel stretched by MLX. */
@@ -80,11 +80,4 @@ int	put_image(t_game *game, mlx_image_t *img, int x, int y)
 	if (index < 0)
 		fail(game, "failed to put image to window");
 	return (index);
-}
-
-void	load_exit_sprite(t_game *game)
-{
-	game->exit_tex = mlx_load_png(EXIT_SPRITE_PATH);
-	if (!game->exit_tex)
-		fail(game, "failed to load exit sprite");
 }

@@ -20,7 +20,7 @@ static bool	is_closed_floor(t_game *game, int x, int y)
 	if (!in_map(game, x, y) || game->map[y][x] != '0')
 		return (false);
 	index = tile_index(game, x, y);
-	return (!game->reachable[index] && !game->outside[index]);
+	return (!game->layout.reachable[index] && !game->layout.outside[index]);
 }
 
 /* Queues (x, y) if it is closed-area floor and was not seen yet. */

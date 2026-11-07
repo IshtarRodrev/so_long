@@ -20,9 +20,9 @@ static int	side_kind(t_game *game, int x, int y)
 	if (!in_map(game, x, y) || game->map[y][x] != '0')
 		return (0);
 	index = tile_index(game, x, y);
-	if (game->outside[index])
+	if (game->layout.outside[index])
 		return (SIDE_OUTSIDE);
-	if (!game->reachable[index])
+	if (!game->layout.reachable[index])
 		return (SIDE_CLOSED);
 	return (0);
 }
@@ -45,15 +45,15 @@ mlx_texture_t	*glass_texture(t_game *game, int mx, int my, int dx)
 		left = GLASS_DOWN_LEFT_LEFT;
 	l_kind = side_kind(game, mx - 1, my) | side_kind(game, mx, my + dx);
 	r_kind = side_kind(game, mx + 1, my) | side_kind(game, mx, my - dx);
-	if ((l_kind & SIDE_CLOSED) && game->glass_dark_tex[left])
-		return (game->glass_dark_tex[left]);
-	if ((r_kind & SIDE_CLOSED) && game->glass_dark_tex[left + 1])
-		return (game->glass_dark_tex[left + 1]);
-	if ((l_kind & SIDE_OUTSIDE) && game->glass_grass_tex[left])
-		return (game->glass_grass_tex[left]);
-	if ((r_kind & SIDE_OUTSIDE) && game->glass_grass_tex[left + 1])
-		return (game->glass_grass_tex[left + 1]);
+	if ((l_kind & SIDE_CLOSED) && game->textures.glass_dark[left])
+		return (game->textures.glass_dark[left]);
+	if ((r_kind & SIDE_CLOSED) && game->textures.glass_dark[left + 1])
+		return (game->textures.glass_dark[left + 1]);
+	if ((l_kind & SIDE_OUTSIDE) && game->textures.glass_grass[left])
+		return (game->textures.glass_grass[left]);
+	if ((r_kind & SIDE_OUTSIDE) && game->textures.glass_grass[left + 1])
+		return (game->textures.glass_grass[left + 1]);
 	if (dx < 0)
-		return (game->glass_down_left_tex);
-	return (game->glass_down_right_tex);
+		return (game->textures.glass_down_left);
+	return (game->textures.glass_down_right);
 }

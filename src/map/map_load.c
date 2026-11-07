@@ -18,21 +18,21 @@
 /*								 PARAM HELPERS								  */
 /******************************************************************************/
 
-char	**load_and_validate(t_game *game, const char *path, t_map *lay)
+char	**load_and_validate(t_game *game, const char *path, t_map *parsed)
 {
 	char	**map;
 
 	map = read_map_file(game, path);
 	if (!map)
 		return (NULL);
-	lay->lines = map;
-	lay->rows = (size_t) game->rows;
-	lay->cols = (size_t) game->cols;
-	lay->collectibles = 0;
-	lay->exits = 0;
-	if (!validate_map(lay) || !path_is_valid(lay))
+	parsed->lines = map;
+	parsed->rows = (size_t) game->rows;
+	parsed->cols = (size_t) game->cols;
+	parsed->collectibles = 0;
+	parsed->exits = 0;
+	if (!validate_map(parsed) || !path_is_valid(parsed))
 	{
-		free_map(lay);
+		free_map(parsed);
 		return (NULL);
 	}
 	return (map);
@@ -50,7 +50,7 @@ static int	has_ber_extension(const char *path)
 }
 
 /* Loads and validates the map file MAPS_DIR/<name>. name must end in .ber. */
-char	**load_map(t_game *game, const char *name, t_map *lay)
+char	**load_map(t_game *game, const char *name, t_map *parsed)
 {
 	char	*path;
 	char	**map;
@@ -60,7 +60,7 @@ char	**load_map(t_game *game, const char *name, t_map *lay)
 	path = ft_strjoin(MAPS_DIR "/", name);
 	if (!path)
 		return (print_error("memory allocation failed", NULL), NULL);
-	map = load_and_validate(game, path, lay);
+	map = load_and_validate(game, path, parsed);
 	free(path);
 	return (map);
 }

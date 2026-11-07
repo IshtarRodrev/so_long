@@ -25,9 +25,9 @@ static void	draw_menu(t_game *game, const char *map_name)
 	if (!label)
 		fail(game, "memory allocation failed");
 	label[ft_strlen(label) - 4] = '\0';
-	game->menu_imgs[0] = mlx_put_string(game->mlx, label, 40, 40);
+	game->scene.menu[0] = mlx_put_string(game->mlx, label, 40, 40);
 	free(label);
-	game->menu_imgs[1] = mlx_put_string(game->mlx,
+	game->scene.menu[1] = mlx_put_string(game->mlx,
 			"Press any key to start or ESC to exit", 40, 80);
 }
 
@@ -38,9 +38,9 @@ static void	clear_menu_images(t_game *game)
 	i = 0;
 	while (i < MENU_LINES)
 	{
-		if (game->menu_imgs[i])
-			mlx_delete_image(game->mlx, game->menu_imgs[i]);
-		game->menu_imgs[i] = NULL;
+		if (game->scene.menu[i])
+			mlx_delete_image(game->mlx, game->scene.menu[i]);
+		game->scene.menu[i] = NULL;
 		i++;
 	}
 }
@@ -49,8 +49,8 @@ static void	start_game(t_game *game)
 {
 	clear_menu_images(game);
 	init_camera(game);
-	mlx_set_window_size(game->mlx, game->view_cols * TILE_SIZE,
-		game->view_rows * TILE_SIZE + SCORE_BAR_HEIGHT);
+	mlx_set_window_size(game->mlx, game->cam.cols * TILE_SIZE,
+		game->cam.rows * TILE_SIZE + SCORE_BAR_HEIGHT);
 	build_scene(game);
 	mlx_key_hook(game->mlx, key_hook, game);
 }

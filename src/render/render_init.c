@@ -23,14 +23,14 @@ void	init_render(t_game *game)
 		RGBA_CLOSED, RGBA_OUTSIDE};
 	int						i;
 
-	game->sign_instance = ft_calloc((size_t) game->rows * game->cols,
+	game->scene.sign_instance = ft_calloc((size_t) game->rows * game->cols,
 			sizeof(int));
-	if (!game->sign_instance)
+	if (!game->scene.sign_instance)
 		fail(game, "memory allocation failed");
 	i = 0;
 	while (i < IMG_COLORS)
 	{
-		game->color_img[i] = color_image(game, rgba[i], TILE_SIZE, TILE_SIZE);
+		game->scene.color[i] = color_image(game, rgba[i], TILE_SIZE, TILE_SIZE);
 		i++;
 	}
 }

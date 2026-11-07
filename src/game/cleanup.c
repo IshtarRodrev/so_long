@@ -13,64 +13,23 @@
 #include "so_long.h"
 #include <stdlib.h>
 
-/* Deletes the count textures of tex that were loaded and clears them. */
-static void	delete_textures(mlx_texture_t **tex, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if (tex[i])
-			mlx_delete_texture(tex[i]);
-		tex[i] = NULL;
-		i++;
-	}
-}
-
-static void	free_sprites(t_game *game)
-{
-	int	d;
-
-	d = 0;
-	while (d < DIR_COUNT)
-		delete_textures(game->player_tex[d++], SPRITE_FRAMES);
-	delete_textures(&game->exit_tex, 1);
-	delete_textures(&game->broken_sign_tex, 1);
-	delete_textures(&game->facing_wall_tex, 1);
-	free_glass_sprites(game);
-	delete_textures(&game->flowerpot_tex, 1);
-	delete_textures(&game->asphalt_tex, 1);
-	delete_textures(&game->grass_tex, 1);
-	delete_textures(&game->tree_tex, 1);
-	delete_textures(game->shower_tex, DIR_COUNT);
-	delete_textures(game->desk_tex, DIR_COUNT);
-	delete_textures(game->table_tex, DIR_COUNT);
-	delete_textures(game->toilet_tex, DIR_COUNT);
-	delete_textures(game->lockers_tex, DIR_COUNT);
-	delete_textures(game->sink_tex, DIR_COUNT);
-	delete_textures(game->kitchen_tex, DIR_COUNT);
-	delete_textures(game->coffee_tex, DIR_COUNT);
-	delete_textures(game->water_cooler_tex, DIR_COUNT);
-	delete_textures(game->fridge_tex, DIR_COUNT);
-	delete_textures(game->vending_tex, DIR_COUNT);
-}
-
 /* Frees the per-tile arrays built at start (progress and decorations). */
 static void	free_tile_data(t_game *game)
 {
 	free(game->progress.collected);
 	game->progress.collected = NULL;
-	free(game->sign_instance);
-	game->sign_instance = NULL;
-	free(game->reachable);
-	game->reachable = NULL;
-	free(game->outside);
-	game->outside = NULL;
-	free(game->pots);
-	game->pots = NULL;
-	free(game->trees);
-	game->trees = NULL;
+	free(game->scene.sign_instance);
+	game->scene.sign_instance = NULL;
+	free(game->layout.reachable);
+	game->layout.reachable = NULL;
+	free(game->layout.outside);
+	game->layout.outside = NULL;
+	free(game->layout.pots);
+	game->layout.pots = NULL;
+	free(game->layout.trees);
+	game->layout.trees = NULL;
+	free(game->layout.lamps);
+	game->layout.lamps = NULL;
 }
 
 /*
@@ -91,7 +50,7 @@ void	free_game(t_game *game)
 		game->map = NULL;
 	}
 	free_tile_data(game);
-	free_sprites(game);
+	free_textures(game);
 	if (game->mlx)
 		mlx_terminate(game->mlx);
 	game->mlx = NULL;

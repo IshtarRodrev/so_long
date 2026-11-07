@@ -24,12 +24,12 @@ static void	place_player(t_game *game)
 	while (d < DIR_COUNT)
 	{
 		f = 0;
-		while (f < game->player_frame_count[d])
+		while (f < game->textures.player_frames[d])
 		{
-			game->player_img[d][f] = texture_image(game,
-					game->player_tex[d][f]);
-			put_image(game, game->player_img[d][f], 0, 0);
-			game->player_img[d][f]->instances[0].enabled = false;
+			game->scene.player[d][f] = texture_image(game,
+					game->textures.player[d][f]);
+			put_image(game, game->scene.player[d][f], 0, 0);
+			game->scene.player[d][f]->instances[0].enabled = false;
 			f++;
 		}
 		d++;
@@ -47,16 +47,16 @@ static void	update_player(t_game *game)
 	while (++d < DIR_COUNT)
 	{
 		f = -1;
-		while (++f < game->player_frame_count[d])
-			game->player_img[d][f]->instances[0].enabled = false;
+		while (++f < game->textures.player_frames[d])
+			game->scene.player[d][f]->instances[0].enabled = false;
 	}
 	d = game->player_dir;
-	img = game->player_img[d][game->player_frame
-		% game->player_frame_count[d]];
-	img->instances[0].x = (game->progress.player.x - game->cam_x) * TILE_SIZE
+	img = game->scene.player[d][game->player_frame
+		% game->textures.player_frames[d]];
+	img->instances[0].x = (game->progress.player.x - game->cam.x) * TILE_SIZE
 		+ (TILE_SIZE - (int) img->width) / 2;
 	img->instances[0].y = SCORE_BAR_HEIGHT + (game->progress.player.y
-			- game->cam_y) * TILE_SIZE + (TILE_SIZE - (int) img->height) / 2;
+			- game->cam.y) * TILE_SIZE + (TILE_SIZE - (int) img->height) / 2;
 	img->instances[0].enabled = true;
 }
 
@@ -71,8 +71,8 @@ static void	update_score_bar(t_game *game)
 	int			filled;
 	bool		ok;
 
-	bar = game->bar_img[1];
-	filled = (game->view_cols * TILE_SIZE - 2 * SCORE_BAR_BORDER)
+	bar = game->scene.bar[1];
+	filled = (game->cam.cols * TILE_SIZE - 2 * SCORE_BAR_BORDER)
 		* (game->progress.collectibles_total - game->progress.collectibles_left)
 		/ game->progress.collectibles_total;
 	bar->instances[0].enabled = (filled > 0);
@@ -104,12 +104,12 @@ void	build_scene(t_game *game)
 			place_tile(game, mx, my);
 	}
 	place_player(game);
-	game->bar_img[0] = color_image(game, RGBA_BAR_BG,
-			game->view_cols * TILE_SIZE, SCORE_BAR_HEIGHT);
-	put_image(game, game->bar_img[0], 0, 0);
-	game->bar_img[1] = color_image(game, RGBA_BAR_BG, 1,
+	game->scene.bar[0] = color_image(game, RGBA_BAR_BG,
+			game->cam.cols * TILE_SIZE, SCORE_BAR_HEIGHT);
+	put_image(game, game->scene.bar[0], 0, 0);
+	game->scene.bar[1] = color_image(game, RGBA_BAR_BG, 1,
 			SCORE_BAR_HEIGHT - 2 * SCORE_BAR_BORDER);
-	put_image(game, game->bar_img[1], SCORE_BAR_BORDER, SCORE_BAR_BORDER);
+	put_image(game, game->scene.bar[1], SCORE_BAR_BORDER, SCORE_BAR_BORDER);
 	render_map(game);
 }
 

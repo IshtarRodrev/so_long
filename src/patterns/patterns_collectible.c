@@ -32,12 +32,12 @@ static mlx_texture_t	*thin_line_desk_texture(t_game *game, int mx, int my)
 	top = tile_at(game, mx, my - 1);
 	bottom = tile_at(game, mx, my + 1);
 	if (top == '1' && bottom == '1' && left == '0' && right == '0')
-		return (game->desk_tex[DIR_LEFT]);
+		return (game->textures.desk[DIR_LEFT]);
 	if (left != '1' || right != '1' || top != '0' || bottom != '0')
 		return (NULL);
 	if (my < game->rows / 2)
-		return (game->desk_tex[DIR_DOWN]);
-	return (game->desk_tex[DIR_UP]);
+		return (game->textures.desk[DIR_DOWN]);
+	return (game->textures.desk[DIR_UP]);
 }
 
 /*
@@ -53,12 +53,12 @@ static bool	match_shower_texture(t_game *game, int mx, int my,
 		return (false);
 	if (tile_at(game, mx - 1, my) == '1' && is_corridor(game, mx + 1, my))
 	{
-		*sprite = game->shower_tex[DIR_RIGHT];
+		*sprite = game->textures.shower[DIR_RIGHT];
 		return (true);
 	}
 	if (tile_at(game, mx + 1, my) == '1' && is_corridor(game, mx - 1, my))
 	{
-		*sprite = game->shower_tex[DIR_LEFT];
+		*sprite = game->textures.shower[DIR_LEFT];
 		return (true);
 	}
 	return (false);
@@ -77,13 +77,13 @@ static mlx_texture_t	*desk_texture(t_game *game, int mx, int my)
 	top = tile_at(game, mx, my - 1);
 	bottom = tile_at(game, mx, my + 1);
 	if (is_sideways_desk(game, mx, my) && tile_at(game, mx - 1, my) == '0')
-		return (game->desk_tex[DIR_LEFT]);
+		return (game->textures.desk[DIR_LEFT]);
 	if (is_sideways_desk(game, mx, my))
-		return (game->desk_tex[DIR_RIGHT]);
+		return (game->textures.desk[DIR_RIGHT]);
 	if (top == '0' && (bottom == 'C' || (bottom == '1' && !beside)))
-		return (game->desk_tex[DIR_UP]);
+		return (game->textures.desk[DIR_UP]);
 	if (bottom == '0' && (top == 'C' || (top == '1' && !beside)))
-		return (game->desk_tex[DIR_DOWN]);
+		return (game->textures.desk[DIR_DOWN]);
 	return (thin_line_desk_texture(game, mx, my));
 }
 

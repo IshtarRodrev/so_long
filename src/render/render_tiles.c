@@ -20,8 +20,8 @@ static int	put_tile(t_game *game, mlx_image_t *img, int mx, int my)
 	int	x;
 	int	y;
 
-	x = (mx - game->cam_x) * TILE_SIZE + (TILE_SIZE - (int) img->width) / 2;
-	y = SCORE_BAR_HEIGHT + (my - game->cam_y) * TILE_SIZE
+	x = (mx - game->cam.x) * TILE_SIZE + (TILE_SIZE - (int) img->width) / 2;
+	y = SCORE_BAR_HEIGHT + (my - game->cam.y) * TILE_SIZE
 		+ (TILE_SIZE - (int) img->height) / 2;
 	return (put_image(game, img, x, y));
 }
@@ -35,27 +35,36 @@ static void	place_collectible(t_game *game, int mx, int my)
 {
 	mlx_texture_t	*sprite;
 
-	put_tile(game, game->color_img[IMG_FLOOR], mx, my);
+	put_tile(game, game->scene.color[IMG_FLOOR], mx, my);
 	sprite = collectible_tile_texture(game, mx, my);
 	if (sprite)
 		put_tile(game, cached_image(game, sprite), mx, my);
-	game->sign_instance[tile_index(game, mx, my)] = put_tile(game,
-			cached_image(game, game->broken_sign_tex), mx, my);
+	game->scene.sign_instance[tile_index(game, mx, my)] = put_tile(game,
+			cached_image(game, game->textures.broken_sign), mx, my);
 }
 
 static void	place_wall(t_game *game, int mx, int my)
 {
 	mlx_texture_t	*sprite;
 
-	sprite = empty_table_texture(game, mx, my);
+	sprite = window_texture(game, mx, my);
+	if (sprite)
+	{
+		put_tile(game, floor_image(game, mx, my - 1), mx, my);
+		put_tile(game, cached_image(game, sprite), mx, my);
+		return ;
+	}
+	sprite = lamp_texture(game, mx, my);
+	if (!sprite)
+		sprite = empty_table_texture(game, mx, my);
 	if (!sprite)
 		sprite = facing_wall_texture(game, mx, my);
 	if (!sprite)
 	{
-		put_tile(game, game->color_img[IMG_WALL], mx, my);
+		put_tile(game, game->scene.color[IMG_WALL], mx, my);
 		return ;
 	}
-	put_tile(game, game->color_img[IMG_FLOOR], mx, my);
+	put_tile(game, game->scene.color[IMG_FLOOR], mx, my);
 	put_tile(game, cached_image(game, sprite), mx, my);
 }
 
@@ -79,7 +88,7 @@ void	place_tile(t_game *game, int mx, int my)
 		if (decoration_image(game, mx, my))
 			put_tile(game, decoration_image(game, mx, my), mx, my);
 		if (tile == 'E')
-			put_tile(game, cached_image(game, game->exit_tex), mx, my);
+			put_tile(game, cached_image(game, game->textures.exit), mx, my);
 	}
 }
 
@@ -89,7 +98,7 @@ void	uncover_tile(t_game *game, int mx, int my)
 	mlx_image_t	*sign;
 	int			instance;
 
-	sign = cached_image(game, game->broken_sign_tex);
-	instance = game->sign_instance[tile_index(game, mx, my)];
+	sign = cached_image(game, game->textures.broken_sign);
+	instance = game->scene.sign_instance[tile_index(game, mx, my)];
 	sign->instances[instance].enabled = false;
 }

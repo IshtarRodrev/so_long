@@ -72,12 +72,12 @@ mlx_texture_t	*facing_wall_texture(t_game *game, int mx, int my)
 {
 	char	below;
 
-	if (game->glass_down_right_tex && diagonal_length(game, mx, my, 1) > 3)
+	if (game->textures.glass_down_right && diagonal_length(game, mx, my, 1) > 3)
 		return (glass_texture(game, mx, my, 1));
-	if (game->glass_down_left_tex && diagonal_length(game, mx, my, -1) > 3)
+	if (game->textures.glass_down_left && diagonal_length(game, mx, my, -1) > 3)
 		return (glass_texture(game, mx, my, -1));
 	below = tile_at(game, mx, my + 1);
 	if (below == '0' || below == 'C' || below == 'E')
-		return (game->facing_wall_tex);
+		return (game->textures.facing_wall);
 	return (NULL);
 }

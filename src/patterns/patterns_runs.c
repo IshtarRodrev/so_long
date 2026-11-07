@@ -23,12 +23,12 @@ static mlx_texture_t	*kitchen_part_texture(t_game *game, int index,
 	int length, int face)
 {
 	if (index == 0)
-		return (game->water_cooler_tex[face]);
+		return (game->textures.water_cooler[face]);
 	if (index == 1)
-		return (game->coffee_tex[face]);
+		return (game->textures.coffee[face]);
 	if (index == length - 1 || (length > 7 && index == length - 2))
-		return (game->fridge_tex[face]);
-	return (game->kitchen_tex[face]);
+		return (game->textures.fridge[face]);
+	return (game->textures.kitchen[face]);
 }
 
 /* True if a straight run with these two ends and this length is equipment. */
@@ -50,12 +50,12 @@ mlx_texture_t	*run_texture(t_game *game, t_run run, int face)
 	if (!is_equipment_run(run.first, run.last, run.length))
 		return (NULL);
 	if (run.first == '1' && run.last == '1' && run.length == 2)
-		return (game->sink_tex[face]);
+		return (game->textures.sink[face]);
 	if (run.first == '1' && run.last == '1' && run.length == 3)
-		return (game->toilet_tex[face]);
+		return (game->textures.toilet[face]);
 	if (run.first == '1' && run.last == '1')
-		return (game->lockers_tex[face]);
+		return (game->textures.lockers[face]);
 	if (run.length == 2)
-		return (game->vending_tex[face]);
+		return (game->textures.vending[face]);
 	return (kitchen_part_texture(game, run.index, run.length, face));
 }

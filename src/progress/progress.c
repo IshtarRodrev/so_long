@@ -13,14 +13,15 @@
 #include "libft.h"
 #include "so_long.h"
 
-void	init_progress(t_game *game, const t_map *lay)
+void	init_progress(t_game *game, const t_map *parsed)
 {
-	game->progress.collected = ft_calloc(lay->rows * lay->cols, sizeof(bool));
+	game->progress.collected = ft_calloc(parsed->rows * parsed->cols,
+			sizeof(bool));
 	if (!game->progress.collected)
 		fail(game, "memory allocation failed");
-	game->progress.player = lay->player;
-	game->progress.collectibles_left = lay->collectibles;
-	game->progress.collectibles_total = lay->collectibles;
+	game->progress.player = parsed->player;
+	game->progress.collectibles_left = parsed->collectibles;
+	game->progress.collectibles_total = parsed->collectibles;
 	pick_collectibles(game);
 }
 

@@ -74,8 +74,8 @@ static void	mark_area(t_pot_fill *f, size_t start)
 }
 
 /*
-** True for every tile that shows a flowerpot. Needs game->reachable and
-** game->outside. Returns NULL if memory runs out.
+** True for every tile that shows a flowerpot. Needs game->layout.reachable and
+** game->layout.outside. Returns NULL if memory runs out.
 */
 bool	*pot_tiles(t_game *game)
 {

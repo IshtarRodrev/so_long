@@ -15,17 +15,20 @@
 /*
 ** Works out how every tile of the map looks, once, before anything is drawn:
 ** which floor the player can reach, which unreachable floor is outside, and
-** where flowerpots and trees go. Each step needs the one before it.
+** where flowerpots, trees and lamps go. Each step needs the one before it.
+** Runs after load_textures: lamps check which collectibles are toilets.
 */
-void	init_patterns(t_game *game, const t_map *lay)
+void	init_patterns(t_game *game, const t_map *parsed)
 {
-	game->reachable = reachable_tiles(lay);
-	if (game->reachable)
-		game->outside = outside_tiles(lay, game->reachable);
-	if (game->outside)
-		game->pots = pot_tiles(game);
-	if (game->pots)
-		game->trees = tree_tiles(game);
-	if (!game->trees)
+	game->layout.reachable = reachable_tiles(parsed);
+	if (game->layout.reachable)
+		game->layout.outside = outside_tiles(parsed, game->layout.reachable);
+	if (game->layout.outside)
+		game->layout.pots = pot_tiles(game);
+	if (game->layout.pots)
+		game->layout.trees = tree_tiles(game);
+	if (game->layout.trees)
+		game->layout.lamps = lamp_tiles(game);
+	if (!game->layout.lamps)
 		fail(game, "memory allocation failed");
 }

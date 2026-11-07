@@ -28,20 +28,10 @@
 # define MAX_COLLECTIBLES 10
 # define ASPHALT_ROWS 3
 # define TREE_SPACING 6
+# define WINDOW_MIN_RUN 6
 # define MENU_LINES 2
 # define MAPS_DIR "maps"
 # define SPRITE_DIR "assets/sprites"
-# define EXIT_SPRITE_PATH "assets/sprites/exit/tile.png"
-# define BROKEN_SIGN_SPRITE_PATH "assets/sprites/broken_sign/tile.png"
-# define WALL_DOWN_SPRITE_PATH "assets/sprites/wall/down.png"
-# define SHOWER_RIGHT_SPRITE_PATH "assets/sprites/shower/right.png"
-# define SHOWER_LEFT_SPRITE_PATH "assets/sprites/shower/left.png"
-# define GLASS_DR_SPRITE_PATH "assets/sprites/glass_fence/down_right.png"
-# define GLASS_DL_SPRITE_PATH "assets/sprites/glass_fence/down_left.png"
-# define FLOWERPOT_SPRITE_PATH "assets/sprites/flowerpot/tile.png"
-# define ASPHALT_SPRITE_PATH "assets/sprites/asphalt/tile.png"
-# define GRASS_SPRITE_PATH "assets/sprites/grass/tile.png"
-# define TREE_SPRITE_PATH "assets/sprites/tree/tile.png"
 # define DIR_DOWN 0
 # define DIR_UP 1
 # define DIR_LEFT 2
@@ -81,56 +71,83 @@ typedef struct s_progress
 	int		collectibles_total;
 }	t_progress;
 
+/* Every texture loaded from assets/sprites. */
+typedef struct s_textures
+{
+	mlx_texture_t	*player[DIR_COUNT][SPRITE_FRAMES];
+	int				player_frames[DIR_COUNT];
+	mlx_texture_t	*exit;
+	mlx_texture_t	*broken_sign;
+	mlx_texture_t	*facing_wall;
+	mlx_texture_t	*glass_down_right;
+	mlx_texture_t	*glass_down_left;
+	mlx_texture_t	*glass_dark[GLASS_SIDES];
+	mlx_texture_t	*glass_grass[GLASS_SIDES];
+	mlx_texture_t	*flowerpot;
+	mlx_texture_t	*asphalt;
+	mlx_texture_t	*grass;
+	mlx_texture_t	*tree;
+	mlx_texture_t	*lamp;
+	mlx_texture_t	*window;
+	mlx_texture_t	*shower[DIR_COUNT];
+	mlx_texture_t	*desk[DIR_COUNT];
+	mlx_texture_t	*table[DIR_COUNT];
+	mlx_texture_t	*toilet[DIR_COUNT];
+	mlx_texture_t	*lockers[DIR_COUNT];
+	mlx_texture_t	*sink[DIR_COUNT];
+	mlx_texture_t	*kitchen[DIR_COUNT];
+	mlx_texture_t	*coffee[DIR_COUNT];
+	mlx_texture_t	*water_cooler[DIR_COUNT];
+	mlx_texture_t	*fridge[DIR_COUNT];
+	mlx_texture_t	*vending[DIR_COUNT];
+}	t_textures;
+
+/* Every MLX image in the window and what is needed to update them. */
+typedef struct s_scene
+{
+	mlx_image_t		*menu[MENU_LINES];
+	mlx_texture_t	*cache_tex[IMG_CACHE];
+	mlx_image_t		*cache_img[IMG_CACHE];
+	int				cache_count;
+	mlx_image_t		*color[IMG_COLORS];
+	mlx_image_t		*player[DIR_COUNT][SPRITE_FRAMES];
+	mlx_image_t		*bar[2];
+	int				*sign_instance;
+}	t_scene;
+
+/* Per-tile results of the patterns/ rules, computed once at start. */
+typedef struct s_layout
+{
+	bool	*reachable;
+	bool	*outside;
+	bool	*pots;
+	bool	*trees;
+	bool	*lamps;
+}	t_layout;
+
+/* Top-left tile of the view and the view size in tiles. */
+typedef struct s_camera
+{
+	int	x;
+	int	y;
+	int	cols;
+	int	rows;
+}	t_camera;
+
 typedef struct s_game
 {
 	mlx_t			*mlx;
 	char			**map;
 	int				rows;
 	int				cols;
-	mlx_image_t		*menu_imgs[MENU_LINES];
-	int				cam_x;
-	int				cam_y;
-	int				view_cols;
-	int				view_rows;
-	mlx_texture_t	*player_tex[DIR_COUNT][SPRITE_FRAMES];
-	int				player_frame_count[DIR_COUNT];
+	t_progress		progress;
+	t_textures		textures;
+	t_scene			scene;
+	t_layout		layout;
+	t_camera		cam;
 	int				player_dir;
 	int				player_frame;
-	mlx_texture_t	*exit_tex;
-	mlx_texture_t	*broken_sign_tex;
-	mlx_texture_t	*facing_wall_tex;
-	mlx_texture_t	*glass_down_right_tex;
-	mlx_texture_t	*glass_down_left_tex;
-	mlx_texture_t	*glass_dark_tex[GLASS_SIDES];
-	mlx_texture_t	*glass_grass_tex[GLASS_SIDES];
-	mlx_texture_t	*flowerpot_tex;
-	mlx_texture_t	*asphalt_tex;
-	mlx_texture_t	*grass_tex;
-	mlx_texture_t	*tree_tex;
-	mlx_texture_t	*shower_tex[DIR_COUNT];
-	mlx_texture_t	*desk_tex[DIR_COUNT];
-	mlx_texture_t	*table_tex[DIR_COUNT];
-	mlx_texture_t	*toilet_tex[DIR_COUNT];
-	mlx_texture_t	*lockers_tex[DIR_COUNT];
-	mlx_texture_t	*sink_tex[DIR_COUNT];
-	mlx_texture_t	*kitchen_tex[DIR_COUNT];
-	mlx_texture_t	*coffee_tex[DIR_COUNT];
-	mlx_texture_t	*water_cooler_tex[DIR_COUNT];
-	mlx_texture_t	*fridge_tex[DIR_COUNT];
-	mlx_texture_t	*vending_tex[DIR_COUNT];
-	mlx_texture_t	*cache_tex[IMG_CACHE];
-	mlx_image_t		*cache_img[IMG_CACHE];
-	int				cache_count;
-	mlx_image_t		*color_img[IMG_COLORS];
-	mlx_image_t		*player_img[DIR_COUNT][SPRITE_FRAMES];
-	mlx_image_t		*bar_img[2];
-	int				*sign_instance;
-	bool			*reachable;
-	bool			*outside;
-	bool			*pots;
-	bool			*trees;
 	int				move_count;
-	t_progress		progress;
 }	t_game;
 
 typedef struct s_map
@@ -171,6 +188,15 @@ typedef struct s_pot_fill
 	int			*queue;
 	size_t		qend;
 }	t_pot_fill;
+
+/* A flood fill over the tiles of a t_game: seen tiles and the queue. */
+typedef struct s_flood
+{
+	t_game		*game;
+	bool		*seen;
+	int			*queue;
+	size_t		qend;
+}	t_flood;
 
 typedef struct s_area
 {
@@ -217,8 +243,9 @@ void			free_game(t_game *game);
 void			exit_game(t_game *game, int code);
 
 /* map/map_load.c */
-char			**load_and_validate(t_game *game, const char *path, t_map *lay);
-char			**load_map(t_game *game, const char *name, t_map *lay);
+char			**load_and_validate(t_game *game, const char *path,
+					t_map *parsed);
+char			**load_map(t_game *game, const char *name, t_map *parsed);
 
 /* map/map_read.c */
 char			**read_map_file(t_game *game, const char *path);
@@ -240,7 +267,7 @@ int				tile_index(t_game *game, int x, int y);
 char			tile_at(t_game *game, int mx, int my);
 
 /* progress/progress.c */
-void			init_progress(t_game *game, const t_map *lay);
+void			init_progress(t_game *game, const t_map *parsed);
 bool			is_collected(t_game *game, int mx, int my);
 void			collect_tile(t_game *game, int mx, int my);
 uint32_t		progress_color(t_game *game);
@@ -265,24 +292,34 @@ mlx_image_t		*cached_image(t_game *game, mlx_texture_t *tex);
 mlx_image_t		*color_image(t_game *game, uint32_t rgba, uint32_t w,
 					uint32_t h);
 int				put_image(t_game *game, mlx_image_t *img, int x, int y);
-void			load_exit_sprite(t_game *game);
 
 /* render/camera.c */
 void			init_camera(t_game *game);
 void			update_camera(t_game *game);
 
-/* sprites/sprites_player.c */
-void			load_player_sprites(t_game *game);
+/* textures/textures.c */
+void			texture_path(char *path, size_t size, const char *dir,
+					const char *file);
+mlx_texture_t	*load_texture(const char *dir, const char *file);
+mlx_texture_t	*load_required_texture(t_game *game, const char *dir,
+					const char *file);
+void			load_textures(t_game *game);
+
+/* textures/textures_player.c */
+void			load_player_textures(t_game *game);
+
+/* textures/textures_furniture.c */
+void			load_furniture_textures(t_game *game);
+
+/* textures/textures_glass.c */
+void			load_glass_textures(t_game *game);
+void			free_glass_textures(t_game *game);
+
+/* textures/textures_free.c */
+void			free_textures(t_game *game);
 
 /* patterns/patterns_init.c */
-void			init_patterns(t_game *game, const t_map *lay);
-
-/* patterns/patterns.c */
-void			load_pattern_sprites(t_game *game);
-
-/* patterns/patterns_glass_sprites.c */
-void			load_glass_sprites(t_game *game);
-void			free_glass_sprites(t_game *game);
+void			init_patterns(t_game *game, const t_map *parsed);
 
 /* patterns/patterns_tile.c */
 bool			is_corridor(t_game *game, int mx, int my);
@@ -303,6 +340,16 @@ mlx_texture_t	*run_texture(t_game *game, t_run run, int face);
 /* patterns/patterns_desks.c */
 bool			is_sideways_desk(t_game *game, int mx, int my);
 mlx_texture_t	*empty_table_texture(t_game *game, int mx, int my);
+
+/* patterns/patterns_lamp_spot.c */
+bool			is_lamp_spot(t_game *game, int mx, int my);
+
+/* patterns/patterns_lamps.c */
+bool			*lamp_tiles(t_game *game);
+mlx_texture_t	*lamp_texture(t_game *game, int mx, int my);
+
+/* patterns/patterns_windows.c */
+mlx_texture_t	*window_texture(t_game *game, int mx, int my);
 
 /* patterns/patterns_glass.c */
 mlx_texture_t	*glass_texture(t_game *game, int mx, int my, int dx);

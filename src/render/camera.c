@@ -17,16 +17,16 @@ static void	clamp_camera(t_game *game)
 	int	max_cam_x;
 	int	max_cam_y;
 
-	max_cam_x = game->cols - game->view_cols;
-	max_cam_y = game->rows - game->view_rows;
-	if (game->cam_x < 0)
-		game->cam_x = 0;
-	if (game->cam_y < 0)
-		game->cam_y = 0;
-	if (game->cam_x > max_cam_x)
-		game->cam_x = max_cam_x;
-	if (game->cam_y > max_cam_y)
-		game->cam_y = max_cam_y;
+	max_cam_x = game->cols - game->cam.cols;
+	max_cam_y = game->rows - game->cam.rows;
+	if (game->cam.x < 0)
+		game->cam.x = 0;
+	if (game->cam.y < 0)
+		game->cam.y = 0;
+	if (game->cam.x > max_cam_x)
+		game->cam.x = max_cam_x;
+	if (game->cam.y > max_cam_y)
+		game->cam.y = max_cam_y;
 }
 
 /* Scrolls so the player stays at least CAMERA_MARGIN tiles from the edges. */
@@ -37,14 +37,14 @@ static void	follow_player(t_game *game)
 
 	px = game->progress.player.x;
 	py = game->progress.player.y;
-	if (px - game->cam_x < CAMERA_MARGIN)
-		game->cam_x = px - CAMERA_MARGIN;
-	else if (px - game->cam_x > game->view_cols - 1 - CAMERA_MARGIN)
-		game->cam_x = px - (game->view_cols - 1 - CAMERA_MARGIN);
-	if (py - game->cam_y < CAMERA_MARGIN)
-		game->cam_y = py - CAMERA_MARGIN;
-	else if (py - game->cam_y > game->view_rows - 1 - CAMERA_MARGIN)
-		game->cam_y = py - (game->view_rows - 1 - CAMERA_MARGIN);
+	if (px - game->cam.x < CAMERA_MARGIN)
+		game->cam.x = px - CAMERA_MARGIN;
+	else if (px - game->cam.x > game->cam.cols - 1 - CAMERA_MARGIN)
+		game->cam.x = px - (game->cam.cols - 1 - CAMERA_MARGIN);
+	if (py - game->cam.y < CAMERA_MARGIN)
+		game->cam.y = py - CAMERA_MARGIN;
+	else if (py - game->cam.y > game->cam.rows - 1 - CAMERA_MARGIN)
+		game->cam.y = py - (game->cam.rows - 1 - CAMERA_MARGIN);
 }
 
 /* Moves every instance of img by (dx, dy) tiles. */
@@ -63,14 +63,14 @@ static void	shift_image(mlx_image_t *img, int dx, int dy)
 
 void	init_camera(t_game *game)
 {
-	game->view_cols = VIEWPORT_COLS;
+	game->cam.cols = VIEWPORT_COLS;
 	if (game->cols < VIEWPORT_COLS)
-		game->view_cols = game->cols;
-	game->view_rows = VIEWPORT_ROWS;
+		game->cam.cols = game->cols;
+	game->cam.rows = VIEWPORT_ROWS;
 	if (game->rows < VIEWPORT_ROWS)
-		game->view_rows = game->rows;
-	game->cam_x = game->progress.player.x - game->view_cols / 2;
-	game->cam_y = game->progress.player.y - game->view_rows / 2;
+		game->cam.rows = game->rows;
+	game->cam.x = game->progress.player.x - game->cam.cols / 2;
+	game->cam.y = game->progress.player.y - game->cam.rows / 2;
 	clamp_camera(game);
 }
 
@@ -81,18 +81,18 @@ void	update_camera(t_game *game)
 	int	old_y;
 	int	i;
 
-	old_x = game->cam_x;
-	old_y = game->cam_y;
+	old_x = game->cam.x;
+	old_y = game->cam.y;
 	follow_player(game);
 	clamp_camera(game);
-	if (old_x == game->cam_x && old_y == game->cam_y)
+	if (old_x == game->cam.x && old_y == game->cam.y)
 		return ;
 	i = -1;
-	while (++i < game->cache_count)
-		shift_image(game->cache_img[i], old_x - game->cam_x,
-			old_y - game->cam_y);
+	while (++i < game->scene.cache_count)
+		shift_image(game->scene.cache_img[i], old_x - game->cam.x,
+			old_y - game->cam.y);
 	i = -1;
 	while (++i < IMG_COLORS)
-		shift_image(game->color_img[i], old_x - game->cam_x,
-			old_y - game->cam_y);
+		shift_image(game->scene.color[i], old_x - game->cam.x,
+			old_y - game->cam.y);
 }

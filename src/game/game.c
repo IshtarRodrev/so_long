@@ -23,18 +23,16 @@ static int	setup_window(t_game *game)
 
 void	init_game(t_game *game, const char *map_name)
 {
-	t_map	lay;
+	t_map	parsed;
 
-	game->map = load_map(game, map_name, &lay);
+	game->map = load_map(game, map_name, &parsed);
 	if (!game->map)
 		exit_game(game, 1);
-	init_progress(game, &lay);
-	init_patterns(game, &lay);
+	init_progress(game, &parsed);
+	load_textures(game);
+	init_patterns(game, &parsed);
 	if (!setup_window(game))
 		fail(game, "failed to initialize window");
-	load_player_sprites(game);
-	load_exit_sprite(game);
-	load_pattern_sprites(game);
 	start_map_menu(game, map_name);
 	mlx_loop(game->mlx);
 	free_game(game);

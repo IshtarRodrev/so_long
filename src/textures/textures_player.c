@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sprites_player.c                                   :+:      :+:    :+:   */
+/*   textures_player.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,7 +14,6 @@
 #include "so_long.h"
 #include "libft.h"
 #include <fcntl.h>
-#include <stdlib.h>
 #include <unistd.h>
 
 static const char	*dir_name(int d)
@@ -28,51 +27,46 @@ static const char	*dir_name(int d)
 	return ("front");
 }
 
-static char	*sprite_path(const char *dir_name, int frame)
+/* Writes the path of frame number frame (1, 2, ...) of direction d. */
+static void	frame_path(char *path, size_t size, int d, int frame)
 {
-	char	buf[128];
+	char	file[32];
 	char	num[3];
 
 	num[0] = '0' + frame / 10 % 10;
 	num[1] = '0' + frame % 10;
 	num[2] = '\0';
-	ft_strlcpy(buf, SPRITE_DIR "/player/", sizeof(buf));
-	ft_strlcat(buf, dir_name, sizeof(buf));
-	ft_strlcat(buf, "/", sizeof(buf));
-	ft_strlcat(buf, num, sizeof(buf));
-	ft_strlcat(buf, ".png", sizeof(buf));
-	return (ft_strdup(buf));
+	ft_strlcpy(file, dir_name(d), sizeof(file));
+	ft_strlcat(file, "/", sizeof(file));
+	ft_strlcat(file, num, sizeof(file));
+	texture_path(path, size, "player", file);
 }
 
 /* Loads frame f of direction d. Returns false if its file does not exist. */
 static bool	load_frame(t_game *game, int d, int f)
 {
-	char	*path;
+	char	path[128];
 	int		fd;
 
-	path = sprite_path(dir_name(d), f + 1);
+	frame_path(path, sizeof(path), d, f + 1);
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-	{
-		free(path);
 		return (false);
-	}
 	close(fd);
-	game->player_tex[d][f] = mlx_load_png(path);
-	free(path);
-	if (!game->player_tex[d][f])
+	game->textures.player[d][f] = mlx_load_png(path);
+	if (!game->textures.player[d][f])
 		fail(game, "failed to load player sprite");
 	return (true);
 }
 
-static void	load_direction_sprites(t_game *game, int d)
+static void	load_direction_textures(t_game *game, int d)
 {
 	int	f;
 
 	f = 0;
 	while (f < SPRITE_FRAMES && load_frame(game, d, f))
 		f++;
-	game->player_frame_count[d] = f;
+	game->textures.player_frames[d] = f;
 	if (f == 0)
 	{
 		print_error("no sprites found for direction", dir_name(d));
@@ -80,14 +74,14 @@ static void	load_direction_sprites(t_game *game, int d)
 	}
 }
 
-void	load_player_sprites(t_game *game)
+void	load_player_textures(t_game *game)
 {
 	int	d;
 
 	d = 0;
 	while (d < DIR_COUNT)
 	{
-		load_direction_sprites(game, d);
+		load_direction_textures(game, d);
 		d++;
 	}
 }
