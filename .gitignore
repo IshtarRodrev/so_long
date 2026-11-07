@@ -3,6 +3,7 @@ mlx42
 *.tgz
 .vscode
 so_long
-*.md
+*.a
 misc/
 tools/
+.env
