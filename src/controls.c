@@ -19,9 +19,6 @@ static int	setup_window(t_game *game)
 	game->mlx = mlx_init(MENU_WIN_W, MENU_WIN_H, "so_long", false);
 	if (!game->mlx)
 		return (0);
-	game->img = mlx_new_image(game->mlx, MENU_WIN_W, MENU_WIN_H);
-	if (!game->img || mlx_image_to_window(game->mlx, game->img, 0, 0) < 0)
-		return (0);
 	return (1);
 }
 
@@ -35,7 +32,7 @@ void	init_game(t_game *game, const char *map_name)
 	progress_init(game, &lay);
 	if (!setup_window(game))
 	{
-		ft_printf("Error: failed to initialize window\n");
+		print_error("failed to initialize window", NULL);
 		exit(1);
 	}
 	load_player_sprites(game);

@@ -25,7 +25,7 @@ char	**load_and_validate(t_game *game, const char *path, t_lay *lay)
 	map = read_map_file(game, path);
 	if (!map)
 	{
-		ft_printf("Error: cannot open or read map file '%s'\n", path);
+		print_error("cannot open or read map file", path);
 		return (NULL);
 	}
 	lay->lines = map;
@@ -55,7 +55,7 @@ char	**load_map_by_name(t_game *game, const char *map_name, t_lay *lay)
 	free(tmp);
 	if (!path)
 	{
-		ft_printf("Error: memory allocation failed\n");
+		print_error("memory allocation failed", NULL);
 		return (NULL);
 	}
 	map = load_and_validate(game, path, lay);

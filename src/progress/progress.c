@@ -17,9 +17,10 @@
 void	progress_init(t_game *game, const t_lay *lay)
 {
 	game->progress.collected = ft_calloc(lay->rows * lay->cols, sizeof(bool));
-	if (!game->progress.collected)
+	game->cover = ft_calloc(lay->rows * lay->cols, sizeof(int));
+	if (!game->progress.collected || !game->cover)
 	{
-		ft_printf("Error: memory allocation failed\n");
+		print_error("memory allocation failed", NULL);
 		exit(1);
 	}
 	game->progress.player = lay->player;
@@ -36,4 +37,5 @@ void	collect_tile(t_game *game, int mx, int my)
 {
 	game->progress.collected[(size_t) my * game->cols + mx] = true;
 	game->progress.collectibles_left--;
+	uncover_tile(game, mx, my);
 }

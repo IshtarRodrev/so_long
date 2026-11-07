@@ -13,97 +13,89 @@
 #include "MLX42.h"
 #include "so_long.h"
 #include "libft.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
-static uint32_t	blend_pixel(uint8_t *p, uint32_t bg)
+/* Makes an image of tex, scaled to fit a tile and keeping its proportions. */
+mlx_image_t	*texture_image(t_game *game, mlx_texture_t *tex)
 {
-	uint8_t	a;
-	uint8_t	out[3];
-	int		i;
-	int		bg_c;
+	mlx_image_t	*img;
+	uint32_t	size;
+	uint32_t	w;
+	uint32_t	h;
 
-	a = p[3];
-	if (a == 255)
-		return (((uint32_t) p[0] << 24) | ((uint32_t) p[1] << 16)
-			| ((uint32_t) p[2] << 8) | 0xFF);
-	i = 0;
-	while (i < 3)
+	size = tex->width;
+	if (tex->height > size)
+		size = tex->height;
+	w = tex->width * TILE_SIZE / size;
+	h = tex->height * TILE_SIZE / size;
+	if (w == 0)
+		w = 1;
+	if (h == 0)
+		h = 1;
+	img = mlx_texture_to_image(game->mlx, tex);
+	if (!img || !mlx_resize_image(img, w, h))
 	{
-		bg_c = (bg >> (24 - i * 8)) & 0xFF;
-		out[i] = (uint8_t)((p[i] * a + bg_c * (255 - a)) / 255);
-		i++;
+		print_error("failed to create image", NULL);
+		exit(1);
 	}
-	return (((uint32_t) out[0] << 24) | ((uint32_t) out[1] << 16)
-		| ((uint32_t) out[2] << 8) | 0xFF);
+	return (img);
 }
 
-static uint32_t	texture_pixel(mlx_texture_t *tex, int i, int j, uint32_t bg)
+/* The one map image made from tex: made on first use, then reused. */
+mlx_image_t	*image_for(t_game *game, mlx_texture_t *tex)
 {
-	int	size;
-	int	sx;
-	int	sy;
-
-	size = (int) tex->width;
-	if ((int) tex->height > size)
-		size = (int) tex->height;
-	sx = j * size / TILE_SIZE - (size - (int) tex->width) / 2;
-	sy = i * size / TILE_SIZE - (size - (int) tex->height) / 2;
-	if (sx < 0 || sx >= (int) tex->width || sy < 0 || sy >= (int) tex->height)
-		return (bg);
-	return (blend_pixel(tex->pixels + ((size_t) sy * tex->width + sx) * 4, bg));
-}
-
-/*
-** Draws layers[1] over bg at tile pos. If layers[0] is set, it is drawn between
-** the two.
-*/
-void	draw_texture_tile(t_game *game, mlx_texture_t *layers[2],
-	t_point pos, uint32_t bg)
-{
-	int			i;
-	int			j;
-	uint32_t	color;
+	int	i;
 
 	i = 0;
-	while (i < TILE_SIZE)
+	while (i < game->cache_count)
 	{
-		j = 0;
-		while (j < TILE_SIZE)
-		{
-			color = bg;
-			if (layers[0])
-				color = texture_pixel(layers[0], i, j, bg);
-			mlx_put_pixel(game->img, pos.x * TILE_SIZE + j,
-				SCORE_BAR_HEIGHT + pos.y * TILE_SIZE + i,
-				texture_pixel(layers[1], i, j, color));
-			j++;
-		}
+		if (game->cache_tex[i] == tex)
+			return (game->cache_img[i]);
 		i++;
 	}
+	if (game->cache_count == IMG_CACHE)
+	{
+		print_error("too many different sprites", NULL);
+		exit(1);
+	}
+	game->cache_tex[i] = tex;
+	game->cache_img[i] = texture_image(game, tex);
+	game->cache_count++;
+	return (game->cache_img[i]);
 }
 
-void	draw_player_tile(t_game *game, int x, int y)
+/* A w x h image of one colour: a single pixel stretched by MLX. */
+mlx_image_t	*color_image(t_game *game, uint32_t rgba, uint32_t w, uint32_t h)
 {
-	mlx_texture_t	*layers[2];
-	int				frame_idx;
-	char			tile;
+	mlx_image_t	*img;
 
-	frame_idx = game->player_frame
-		% game->player_frame_count[game->player_dir];
-	layers[1] = game->player_tex[game->player_dir][frame_idx];
-	layers[0] = NULL;
-	tile = '0';
-	if (is_collected(game, game->cam_x + x, game->cam_y + y))
+	img = mlx_new_image(game->mlx, 1, 1);
+	if (!img)
 	{
-		layers[0] = collectible_tile_texture(game, game->cam_x + x,
-				game->cam_y + y);
-		if (!layers[0])
-			tile = 'C';
+		print_error("failed to create image", NULL);
+		exit(1);
 	}
-	draw_texture_tile(game, layers, (t_point){x, y},
-		((uint32_t) tile_color(tile) << 8) | 0xFF);
+	mlx_put_pixel(img, 0, 0, rgba);
+	if (!mlx_resize_image(img, w, h))
+	{
+		print_error("failed to create image", NULL);
+		exit(1);
+	}
+	return (img);
+}
+
+/* Shows a new instance of img at window position (x, y). Returns its index. */
+int	put_image(t_game *game, mlx_image_t *img, int x, int y)
+{
+	int	index;
+
+	index = mlx_image_to_window(game->mlx, img, x, y);
+	if (index < 0)
+	{
+		print_error("failed to put image to window", NULL);
+		exit(1);
+	}
+	return (index);
 }
 
 void	load_exit_sprite(t_game *game)
@@ -111,7 +103,7 @@ void	load_exit_sprite(t_game *game)
 	game->exit_tex = mlx_load_png(EXIT_SPRITE_PATH);
 	if (!game->exit_tex)
 	{
-		ft_printf("Error: failed to load exit sprite\n");
+		print_error("failed to load exit sprite", NULL);
 		exit(1);
 	}
 }

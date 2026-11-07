@@ -22,7 +22,7 @@ static void	draw_menu(t_game *game, const char *map_name)
 	label = ft_strjoin("Map: ", map_name);
 	if (!label)
 	{
-		ft_printf("Error: memory allocation failed\n");
+		print_error("memory allocation failed", NULL);
 		exit(1);
 	}
 	game->menu_imgs[0] = mlx_put_string(game->mlx, label, 40, 40);
@@ -51,9 +51,7 @@ static void	start_game(t_game *game)
 	init_camera(game);
 	mlx_set_window_size(game->mlx, game->view_cols * TILE_SIZE,
 		game->view_rows * TILE_SIZE + SCORE_BAR_HEIGHT);
-	mlx_resize_image(game->img, game->view_cols * TILE_SIZE,
-		game->view_rows * TILE_SIZE + SCORE_BAR_HEIGHT);
-	render_map(game);
+	build_scene(game);
 	mlx_key_hook(game->mlx, key_hook, game);
 }
 

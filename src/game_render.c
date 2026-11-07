@@ -13,7 +13,7 @@
 #include "MLX42.h"
 #include "so_long.h"
 #include "libft.h"
-#include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -31,8 +31,16 @@ static const char	*dir_name(int d)
 static char	*sprite_path(const char *dir_name, int frame)
 {
 	char	buf[128];
+	char	num[3];
 
-	snprintf(buf, sizeof(buf), "%s/%s_%02d.png", SPRITE_DIR, dir_name, frame);
+	num[0] = '0' + frame / 10 % 10;
+	num[1] = '0' + frame % 10;
+	num[2] = '\0';
+	ft_strlcpy(buf, SPRITE_DIR "/", sizeof(buf));
+	ft_strlcat(buf, dir_name, sizeof(buf));
+	ft_strlcat(buf, "_", sizeof(buf));
+	ft_strlcat(buf, num, sizeof(buf));
+	ft_strlcat(buf, ".png", sizeof(buf));
 	return (ft_strdup(buf));
 }
 
@@ -40,18 +48,21 @@ static char	*sprite_path(const char *dir_name, int frame)
 static bool	load_frame(t_game *game, int d, int f)
 {
 	char	*path;
+	int		fd;
 
 	path = sprite_path(dir_name(d), f + 1);
-	if (access(path, F_OK) != 0)
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
 	{
 		free(path);
 		return (false);
 	}
+	close(fd);
 	game->player_tex[d][f] = mlx_load_png(path);
 	free(path);
 	if (!game->player_tex[d][f])
 	{
-		ft_printf("Error: failed to load player sprite\n");
+		print_error("failed to load player sprite", NULL);
 		exit(1);
 	}
 	return (true);
@@ -67,8 +78,7 @@ static void	load_direction_sprites(t_game *game, int d)
 	game->player_frame_count[d] = f;
 	if (f == 0)
 	{
-		ft_printf("Error: no sprites found for direction '%s'\n",
-			dir_name(d));
+		print_error("no sprites found for direction", dir_name(d));
 		exit(1);
 	}
 }

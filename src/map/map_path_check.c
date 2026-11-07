@@ -16,10 +16,24 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-/* Prints "Error: <msg>" on its own line. Always returns 0. */
+/* Prints "Error\n<msg>[ '<detail>']\n" to stderr. detail may be NULL. */
+void	print_error(const char *msg, const char *detail)
+{
+	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd((char *) msg, 2);
+	if (detail)
+	{
+		ft_putstr_fd(" '", 2);
+		ft_putstr_fd((char *) detail, 2);
+		ft_putstr_fd("'", 2);
+	}
+	ft_putstr_fd("\n", 2);
+}
+
+/* Prints "Error\n<msg>\n" to stderr. Always returns 0. */
 int	map_error(const char *msg)
 {
-	ft_printf("Error: %s\n", msg);
+	print_error(msg, NULL);
 	return (0);
 }
 

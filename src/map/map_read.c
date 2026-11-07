@@ -30,11 +30,22 @@ static void	strip_line_end(char *line)
 		line[i - 1] = '\0';
 }
 
+/* Frees the first rows lines of map, map itself and line. Returns NULL. */
+static char	**free_lines(char **map, int rows, char *line)
+{
+	while (rows > 0)
+		free(map[--rows]);
+	free(map);
+	free(line);
+	return (NULL);
+}
+
 /* Reads every line of fd into a NULL-terminated array and counts them. */
 static char	**read_lines(int fd, int *rows)
 {
 	char	*line;
 	char	**map;
+	char	**grown;
 
 	map = NULL;
 	*rows = 0;
@@ -42,12 +53,11 @@ static char	**read_lines(int fd, int *rows)
 	while (line != NULL)
 	{
 		strip_line_end(line);
-		if (*rows == 0)
-			map = malloc(sizeof(char *) * 2);
-		else
-			map = realloc(map, sizeof(char *) * (*rows + 2));
-		if (!map)
-			return (NULL);
+		grown = ft_realloc(map, sizeof(char *) * (*rows + 1),
+				sizeof(char *) * (*rows + 2));
+		if (!grown)
+			return (free_lines(map, *rows, line));
+		map = grown;
 		map[*rows] = line;
 		map[*rows + 1] = NULL;
 		(*rows)++;

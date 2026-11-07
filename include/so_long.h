@@ -46,6 +46,16 @@
 # define DIR_LEFT 2
 # define DIR_RIGHT 3
 # define DIR_COUNT 4
+# define IMG_CACHE 96
+# define IMG_FLOOR 0
+# define IMG_WALL 1
+# define IMG_TODO 2
+# define IMG_COLORS 3
+# define RGBA_FLOOR 0x505050FF
+# define RGBA_WALL 0xE8E8E8FF
+# define RGBA_TODO 0xFFD700FF
+# define RGBA_BAR_BG 0x202020FF
+# define RGBA_BAR_FILL 0xFFD700FF
 
 typedef struct s_point
 {
@@ -64,7 +74,6 @@ typedef struct s_progress
 typedef struct s_game
 {
 	mlx_t			*mlx;
-	mlx_image_t		*img;
 	char			**map;
 	int				rows;
 	int				cols;
@@ -93,6 +102,13 @@ typedef struct s_game
 	mlx_texture_t	*water_cooler_tex[FACE_COUNT];
 	mlx_texture_t	*fridge_tex[FACE_COUNT];
 	mlx_texture_t	*vending_tex[FACE_COUNT];
+	mlx_texture_t	*cache_tex[IMG_CACHE];
+	mlx_image_t		*cache_img[IMG_CACHE];
+	int				cache_count;
+	mlx_image_t		*color_img[IMG_COLORS];
+	mlx_image_t		*player_img[DIR_COUNT][SPRITE_FRAMES];
+	mlx_image_t		*bar_img[2];
+	int				*cover;
 	int				move_count;
 	t_progress		progress;
 }	t_game;
@@ -154,6 +170,7 @@ void			search_from_player(t_path_search *s);
 int				collectible_is_trapped(t_path_search *s);
 
 /* map/map_path_check.c */
+void			print_error(const char *msg, const char *detail);
 int				map_error(const char *msg);
 int				path_is_valid(const t_map *map);
 
@@ -182,17 +199,19 @@ void			key_hook(mlx_key_data_t keydata, void *param);
 void			load_player_sprites(t_game *game);
 
 /* game_render_texture.c */
-void			draw_texture_tile(t_game *game, mlx_texture_t *layers[2],
-					t_point pos, uint32_t bg);
-void			draw_player_tile(t_game *game, int x, int y);
+mlx_image_t		*texture_image(t_game *game, mlx_texture_t *tex);
+mlx_image_t		*image_for(t_game *game, mlx_texture_t *tex);
+mlx_image_t		*color_image(t_game *game, uint32_t rgba, uint32_t w,
+					uint32_t h);
+int				put_image(t_game *game, mlx_image_t *img, int x, int y);
 void			load_exit_sprite(t_game *game);
 
 /* game_render_tiles.c */
-int				tile_color(char tile);
-void			draw_exit_tile(t_game *game, int x, int y);
-void			draw_tile(t_game *game, int x, int y, int color);
+void			place_tile(t_game *game, int mx, int my);
+void			uncover_tile(t_game *game, int mx, int my);
 
 /* game_render_map.c */
+void			build_scene(t_game *game);
 void			render_map(t_game *game);
 
 /* patterns/patterns.c */

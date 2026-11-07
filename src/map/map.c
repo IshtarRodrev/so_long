@@ -134,6 +134,7 @@ static int	check_rows(const t_map *map)
 {
 	size_t	row;
 	size_t	col;
+	char	tile[2];
 
 	row = 0;
 	while (row < map->rows)
@@ -145,9 +146,9 @@ static int	check_rows(const t_map *map)
 		{
 			if (!is_valid_tile(map->lines[row][col]))
 			{
-				ft_printf("Error: invalid character '%c' in map\n",
-					map->lines[row][col]);
-				return (0);
+				tile[0] = map->lines[row][col];
+				tile[1] = '\0';
+				return (print_error("invalid character in map", tile), 0);
 			}
 			col++;
 		}
@@ -194,6 +195,8 @@ int	validate_map(const t_map *map)
 	if (map->collectibles < 1)
 		return (map_error("map must contain at least one collectible ('C')"));
 	if (map->exits < 1)
-		return (map_error("map must contain at least one exit ('E')"));
+		return (map_error("map must contain an exit ('E')"));
+	if (map->exits > 1)
+		return (map_error("map must contain only one exit ('E')"));
 	return (1);
 }

@@ -21,7 +21,7 @@ static mlx_texture_t	*load_required_texture(const char *path)
 	tex = mlx_load_png(path);
 	if (!tex)
 	{
-		ft_printf("Error: failed to load sprite '%s'\n", path);
+		print_error("failed to load sprite", path);
 		exit(1);
 	}
 	return (tex);
@@ -58,7 +58,7 @@ static void	load_required_faces(mlx_texture_t **tex, const char *name)
 	{
 		if (!tex[face])
 		{
-			ft_printf("Error: failed to load the sprites of '%s'\n", name);
+			print_error("failed to load the sprites of", name);
 			exit(1);
 		}
 		face++;
@@ -71,8 +71,8 @@ void	load_pattern_sprites(t_game *game)
 	load_required_faces(game->table_tex, "table");
 	game->broken_sign_tex = load_required_texture(BROKEN_SIGN_SPRITE_PATH);
 	game->facing_wall_tex = mlx_load_png(WALL_DOWN_SPRITE_PATH);
-	game->glass_down_right_tex = mlx_load_png(GLASS_DOWN_RIGHT_SPRITE_PATH);
-	game->glass_down_left_tex = mlx_load_png(GLASS_DOWN_LEFT_SPRITE_PATH);
+	game->glass_down_right_tex = mlx_load_png(GLASS_DR_SPRITE_PATH);
+	game->glass_down_left_tex = mlx_load_png(GLASS_DL_SPRITE_PATH);
 	game->shower_tex[FACE_RIGHT] = mlx_load_png(SHOWER_RIGHT_SPRITE_PATH);
 	game->shower_tex[FACE_LEFT] = mlx_load_png(SHOWER_LEFT_SPRITE_PATH);
 	load_faces(game->toilet_tex, "toilet");
