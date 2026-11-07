@@ -102,8 +102,6 @@ void	build_scene(t_game *game)
 			TILE_SIZE);
 	game->color_img[IMG_WALL] = color_image(game, RGBA_WALL, TILE_SIZE,
 			TILE_SIZE);
-	game->color_img[IMG_TODO] = color_image(game, RGBA_TODO, TILE_SIZE,
-			TILE_SIZE);
 	my = -1;
 	while (++my < game->rows)
 	{

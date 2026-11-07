@@ -27,27 +27,19 @@ static int	put_tile(t_game *game, mlx_image_t *img, int mx, int my)
 }
 
 /*
-** A task to do shows its sprite under the broken sign; without a sprite it is
-** a yellow tile over a wall-coloured one. The top layer is the cover: hiding
-** it marks the task as done.
+** A task to do shows its sprite (if its shape has one) on the floor, under the
+** broken sign. The sign is the cover: hiding it marks the task as done.
 */
 static void	place_collectible(t_game *game, int mx, int my)
 {
 	mlx_texture_t	*sprite;
-	int				*cover;
 
-	cover = &game->cover[my * game->cols + mx];
+	put_tile(game, game->color_img[IMG_FLOOR], mx, my);
 	sprite = collectible_tile_texture(game, mx, my);
 	if (sprite)
-	{
-		put_tile(game, game->color_img[IMG_FLOOR], mx, my);
 		put_tile(game, image_for(game, sprite), mx, my);
-		*cover = put_tile(game, image_for(game, game->broken_sign_tex),
-				mx, my);
-		return ;
-	}
-	put_tile(game, game->color_img[IMG_WALL], mx, my);
-	*cover = put_tile(game, game->color_img[IMG_TODO], mx, my);
+	game->cover[my * game->cols + mx] = put_tile(game,
+			image_for(game, game->broken_sign_tex), mx, my);
 }
 
 static void	place_wall(t_game *game, int mx, int my)
@@ -91,10 +83,8 @@ void	place_tile(t_game *game, int mx, int my)
 /* Hides the cover of the collected task at (mx, my). */
 void	uncover_tile(t_game *game, int mx, int my)
 {
-	mlx_image_t	*img;
+	mlx_image_t	*sign;
 
-	img = game->color_img[IMG_TODO];
-	if (collectible_tile_texture(game, mx, my))
-		img = image_for(game, game->broken_sign_tex);
-	img->instances[game->cover[my * game->cols + mx]].enabled = false;
+	sign = image_for(game, game->broken_sign_tex);
+	sign->instances[game->cover[my * game->cols + mx]].enabled = false;
 }
