@@ -25,16 +25,16 @@ void	init_progress(t_game *game, const t_map *parsed)
 	pick_collectibles(game);
 }
 
-bool	is_collected(t_game *game, int mx, int my)
+bool	is_collected(t_game *game, int x, int y)
 {
-	return (game->progress.collected[tile_index(game, mx, my)]);
+	return (game->progress.collected[tile_index(game, x, y)]);
 }
 
-void	collect_tile(t_game *game, int mx, int my)
+void	collect_tile(t_game *game, int x, int y)
 {
-	game->progress.collected[tile_index(game, mx, my)] = true;
+	game->progress.collected[tile_index(game, x, y)] = true;
 	game->progress.collectibles_left--;
-	uncover_tile(game, mx, my);
+	uncover_tile(game, x, y);
 }
 
 /*

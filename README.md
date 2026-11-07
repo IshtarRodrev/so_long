@@ -4,6 +4,31 @@ This project is a small 2D game. Its purpose is to learn working with textures, 
 # Description
 A “Description” section that clearly presents the project, including its goal and a brief overview.
 
+## Project structure
+
+```
+so_long/
+├── Makefile
+├── include/so_long.h       all types, defines and prototypes
+├── libft/                  own libft (+ ft_printf, get_next_line, ft_realloc)
+├── maps/                   .ber maps: playable ones, err_*.ber error cases
+├── assets/sprites/         the images, one folder per object (desk/, window/, player/front/ …)
+└── src/
+    ├── main.c
+    ├── game/       game flow     game · menu · input · error · cleanup
+    ├── map/        map file      map_load · map_read · map · map_path · map_path_check
+    │                             map_tile (tile helpers) · flood (the shared flood fill)
+    ├── progress/   progress      progress · collectibles (random task selection)
+    ├── render/     drawing       render_init · render_map · render_tiles · render_images · camera
+    ├── textures/   load / free   textures · textures_player · textures_furniture
+    │                             textures_glass · textures_free
+    └── patterns/   tile rules    which sprite / floor / decoration each tile gets:
+                                  tile · collectible · lines · runs · desks · lamps · lamp_spot
+                                  windows · glass · floor · outside · pots · trees · init
+```
+
+Each folder has one job: `map/` reads and validates the map, `patterns/` decides how every tile looks (rules only, no loading or drawing), `textures/` loads the images, and `render/` puts them in the window as MLX42 image instances.
+
 ## Tile render variants
 
 Collectibles (`C`) and walls (`1`) are drawn with different sprites depending on the tiles around them, so a map turns into an office floor plan. The rules live in `src/patterns/`. Equipment always faces the floor side (up, down, left or right).

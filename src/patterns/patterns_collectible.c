@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "so_long.h"
 
 /*
@@ -20,43 +19,43 @@
 ** centre of the map.
 */
 
-static mlx_texture_t	*thin_line_desk_texture(t_game *game, int mx, int my)
+static mlx_texture_t	*thin_line_desk_texture(t_game *game, int x, int y)
 {
 	char	left;
 	char	right;
 	char	top;
 	char	bottom;
 
-	left = tile_at(game, mx - 1, my);
-	right = tile_at(game, mx + 1, my);
-	top = tile_at(game, mx, my - 1);
-	bottom = tile_at(game, mx, my + 1);
+	left = tile_at(game, x - 1, y);
+	right = tile_at(game, x + 1, y);
+	top = tile_at(game, x, y - 1);
+	bottom = tile_at(game, x, y + 1);
 	if (top == '1' && bottom == '1' && left == '0' && right == '0')
 		return (game->textures.desk[DIR_LEFT]);
 	if (left != '1' || right != '1' || top != '0' || bottom != '0')
 		return (NULL);
-	if (my < game->rows / 2)
+	if (y < game->rows / 2)
 		return (game->textures.desk[DIR_DOWN]);
 	return (game->textures.desk[DIR_UP]);
 }
 
 /*
 ** A shower has walls above, below and on one side, and opens into a corridor.
-** True if (mx, my) is a shower. Gives its sprite, which is NULL if the picture
+** True if (x, y) is a shower. Gives its sprite, which is NULL if the picture
 ** is missing.
 */
 
-static bool	match_shower_texture(t_game *game, int mx, int my,
+static bool	match_shower_texture(t_game *game, int x, int y,
 		mlx_texture_t **sprite)
 {
-	if (tile_at(game, mx, my - 1) != '1' || tile_at(game, mx, my + 1) != '1')
+	if (tile_at(game, x, y - 1) != '1' || tile_at(game, x, y + 1) != '1')
 		return (false);
-	if (tile_at(game, mx - 1, my) == '1' && is_corridor(game, mx + 1, my))
+	if (tile_at(game, x - 1, y) == '1' && is_corridor(game, x + 1, y))
 	{
 		*sprite = game->textures.shower[DIR_RIGHT];
 		return (true);
 	}
-	if (tile_at(game, mx + 1, my) == '1' && is_corridor(game, mx - 1, my))
+	if (tile_at(game, x + 1, y) == '1' && is_corridor(game, x - 1, y))
 	{
 		*sprite = game->textures.shower[DIR_LEFT];
 		return (true);
@@ -66,43 +65,43 @@ static bool	match_shower_texture(t_game *game, int mx, int my,
 
 /* Collectibles side by side against a wall are other equipment, not desks. */
 
-static mlx_texture_t	*desk_texture(t_game *game, int mx, int my)
+static mlx_texture_t	*desk_texture(t_game *game, int x, int y)
 {
 	bool	beside;
 	char	top;
 	char	bottom;
 
-	beside = (tile_at(game, mx - 1, my) == 'C'
-			|| tile_at(game, mx + 1, my) == 'C');
-	top = tile_at(game, mx, my - 1);
-	bottom = tile_at(game, mx, my + 1);
-	if (is_sideways_desk(game, mx, my) && tile_at(game, mx - 1, my) == '0')
+	beside = (tile_at(game, x - 1, y) == 'C'
+			|| tile_at(game, x + 1, y) == 'C');
+	top = tile_at(game, x, y - 1);
+	bottom = tile_at(game, x, y + 1);
+	if (is_sideways_desk(game, x, y) && tile_at(game, x - 1, y) == '0')
 		return (game->textures.desk[DIR_LEFT]);
-	if (is_sideways_desk(game, mx, my))
+	if (is_sideways_desk(game, x, y))
 		return (game->textures.desk[DIR_RIGHT]);
 	if (top == '0' && (bottom == 'C' || (bottom == '1' && !beside)))
 		return (game->textures.desk[DIR_UP]);
 	if (bottom == '0' && (top == 'C' || (top == '1' && !beside)))
 		return (game->textures.desk[DIR_DOWN]);
-	return (thin_line_desk_texture(game, mx, my));
+	return (thin_line_desk_texture(game, x, y));
 }
 
 /*
-** Returns the sprite for the collectible at (mx, my), or NULL if no rule fits.
+** Returns the sprite for the collectible at (x, y), or NULL if no rule fits.
 ** Toilets, sinks, kitchens and vending machines are recognised by their row or
 ** column.
 */
 
-mlx_texture_t	*collectible_tile_texture(t_game *game, int mx, int my)
+mlx_texture_t	*collectible_tile_texture(t_game *game, int x, int y)
 {
 	mlx_texture_t	*sprite;
 
-	sprite = row_texture(game, mx, my);
+	sprite = row_texture(game, x, y);
 	if (sprite)
 		return (sprite);
-	if (match_column_texture(game, mx, my, &sprite))
+	if (match_column_texture(game, x, y, &sprite))
 		return (sprite);
-	if (match_shower_texture(game, mx, my, &sprite))
+	if (match_shower_texture(game, x, y, &sprite))
 		return (sprite);
-	return (desk_texture(game, mx, my));
+	return (desk_texture(game, x, y));
 }

@@ -10,53 +10,54 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "so_long.h"
 
-/* True if (mx, my) is a floor tile with walls above and below it. */
+/* True if (x, y) is a floor tile with walls above and below it. */
 
-bool	is_corridor(t_game *game, int mx, int my)
+bool	is_corridor(t_game *game, int x, int y)
 {
-	return (tile_at(game, mx, my) == '0' && tile_at(game, mx, my - 1) == '1'
-		&& tile_at(game, mx, my + 1) == '1');
+	return (tile_at(game, x, y) == '0' && tile_at(game, x, y - 1) == '1'
+		&& tile_at(game, x, y + 1) == '1');
 }
 
-/* True if the walls at (mx, my) and (mx + dx, my + 1)
+/* True if the walls at (x, y) and (x + dx, y + 1)
 touch only at a corner.*/
 
-static bool	diagonal_step(t_game *game, int mx, int my, int dx)
+static bool	diagonal_step(t_game *game, int x, int y, int dx)
 {
-	return (tile_at(game, mx, my) == '1'
-		&& tile_at(game, mx + dx, my + 1) == '1'
-		&& tile_at(game, mx + dx, my) != '1'
-		&& tile_at(game, mx, my + 1) != '1');
+	return (tile_at(game, x, y) == '1'
+		&& tile_at(game, x + dx, y + 1) == '1'
+		&& tile_at(game, x + dx, y) != '1'
+		&& tile_at(game, x, y + 1) != '1');
 }
 
 /*
-** How many walls the diagonal chain through the wall at (mx, my) has. It runs
+** How many walls the diagonal chain through the wall at (x, y) has. It runs
 ** down to the right if dx is 1, and down to the left if dx is -1.
 */
 
-static int	diagonal_length(t_game *game, int mx, int my, int dx)
+static int	diagonal_length(t_game *game, int x, int y, int dx)
 {
 	int	length;
-	int	x;
-	int	y;
+	int	cx;
+	int	cy;
 
 	length = 1;
-	x = mx;
-	y = my;
-	while (diagonal_step(game, x, y, dx) && ++length)
+	cx = x;
+	cy = y;
+	while (diagonal_step(game, cx, cy, dx))
 	{
-		x += dx;
-		y++;
+		length++;
+		cx += dx;
+		cy++;
 	}
-	x = mx;
-	y = my;
-	while (diagonal_step(game, x - dx, y - 1, dx) && ++length)
+	cx = x;
+	cy = y;
+	while (diagonal_step(game, cx - dx, cy - 1, dx))
 	{
-		x -= dx;
-		y--;
+		length++;
+		cx -= dx;
+		cy--;
 	}
 	return (length);
 }
@@ -68,15 +69,15 @@ static int	diagonal_length(t_game *game, int mx, int my, int dx)
 ** Facing the camera: floor, a collectible or the exit below it.
 */
 
-mlx_texture_t	*facing_wall_texture(t_game *game, int mx, int my)
+mlx_texture_t	*facing_wall_texture(t_game *game, int x, int y)
 {
 	char	below;
 
-	if (game->textures.glass_down_right && diagonal_length(game, mx, my, 1) > 3)
-		return (glass_texture(game, mx, my, 1));
-	if (game->textures.glass_down_left && diagonal_length(game, mx, my, -1) > 3)
-		return (glass_texture(game, mx, my, -1));
-	below = tile_at(game, mx, my + 1);
+	if (game->textures.glass_down_right && diagonal_length(game, x, y, 1) > 3)
+		return (glass_texture(game, x, y, 1));
+	if (game->textures.glass_down_left && diagonal_length(game, x, y, -1) > 3)
+		return (glass_texture(game, x, y, -1));
+	below = tile_at(game, x, y + 1);
 	if (below == '0' || below == 'C' || below == 'E')
 		return (game->textures.facing_wall);
 	return (NULL);

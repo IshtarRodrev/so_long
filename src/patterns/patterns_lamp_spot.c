@@ -32,10 +32,10 @@ static bool	is_toilet(t_game *game, int x, int y)
 }
 
 /*
-** Counts the collectibles touching (mx, my), sides and corners. Returns -1 if
+** Counts the collectibles touching (x, y), sides and corners. Returns -1 if
 ** one of them is a toilet: no lamp goes next to a toilet.
 */
-static int	touching_collectibles(t_game *game, int mx, int my)
+static int	touching_collectibles(t_game *game, int x, int y)
 {
 	int	count;
 	int	dx;
@@ -48,9 +48,9 @@ static int	touching_collectibles(t_game *game, int mx, int my)
 		dx = -1;
 		while (dx <= 1)
 		{
-			if (is_toilet(game, mx + dx, my + dy))
+			if (is_toilet(game, x + dx, y + dy))
 				return (-1);
-			if (tile_at(game, mx + dx, my + dy) == 'C')
+			if (tile_at(game, x + dx, y + dy) == 'C')
 				count++;
 			dx++;
 		}
@@ -63,9 +63,9 @@ static int	touching_collectibles(t_game *game, int mx, int my)
 ** True for a wall touching at least 4 collectibles (sides and corners), none
 ** of them a toilet. Needs the textures to be loaded (to recognise toilets).
 */
-bool	is_lamp_spot(t_game *game, int mx, int my)
+bool	is_lamp_spot(t_game *game, int x, int y)
 {
-	if (tile_at(game, mx, my) != '1')
+	if (tile_at(game, x, y) != '1')
 		return (false);
-	return (touching_collectibles(game, mx, my) >= 4);
+	return (touching_collectibles(game, x, y) >= 4);
 }

@@ -28,13 +28,13 @@ static int	side_kind(t_game *game, int x, int y)
 }
 
 /*
-** The glass sprite for the fence wall at (mx, my). dx is 1 for a fence going
+** The glass sprite for the fence wall at (x, y). dx is 1 for a fence going
 ** down to the right, -1 for one going down to the left. Its left side touches
-** (mx - 1, my) and (mx, my + dx), its right side (mx + 1, my) and
-** (mx, my - dx). A side next to a closed area is drawn dark, a side next to
+** (x - 1, y) and (x, y + dx), its right side (x + 1, y) and
+** (x, y - dx). A side next to a closed area is drawn dark, a side next to
 ** the outside is drawn as grass, otherwise the plain sprite is used.
 */
-mlx_texture_t	*glass_texture(t_game *game, int mx, int my, int dx)
+mlx_texture_t	*glass_texture(t_game *game, int x, int y, int dx)
 {
 	int	left;
 	int	l_kind;
@@ -43,8 +43,8 @@ mlx_texture_t	*glass_texture(t_game *game, int mx, int my, int dx)
 	left = GLASS_DOWN_RIGHT_LEFT;
 	if (dx < 0)
 		left = GLASS_DOWN_LEFT_LEFT;
-	l_kind = side_kind(game, mx - 1, my) | side_kind(game, mx, my + dx);
-	r_kind = side_kind(game, mx + 1, my) | side_kind(game, mx, my - dx);
+	l_kind = side_kind(game, x - 1, y) | side_kind(game, x, y + dx);
+	r_kind = side_kind(game, x + 1, y) | side_kind(game, x, y - dx);
 	if ((l_kind & SIDE_CLOSED) && game->textures.glass_dark[left])
 		return (game->textures.glass_dark[left]);
 	if ((r_kind & SIDE_CLOSED) && game->textures.glass_dark[left + 1])

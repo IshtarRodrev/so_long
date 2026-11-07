@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MLX42.h"
 #include "so_long.h"
-#include "libft.h"
 
 /* Makes an image of tex, scaled to fit a tile and keeping its proportions. */
 mlx_image_t	*texture_image(t_game *game, mlx_texture_t *tex)

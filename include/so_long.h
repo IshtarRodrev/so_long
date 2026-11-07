@@ -249,12 +249,12 @@ int				path_is_valid(t_game *game, const t_map *parsed);
 /* map/map_tile.c */
 bool			in_map(t_game *game, int x, int y);
 int				tile_index(t_game *game, int x, int y);
-char			tile_at(t_game *game, int mx, int my);
+char			tile_at(t_game *game, int x, int y);
 
 /* progress/progress.c */
 void			init_progress(t_game *game, const t_map *parsed);
-bool			is_collected(t_game *game, int mx, int my);
-void			collect_tile(t_game *game, int mx, int my);
+bool			is_collected(t_game *game, int x, int y);
+void			collect_tile(t_game *game, int x, int y);
 uint32_t		progress_color(t_game *game);
 
 /* progress/collectibles.c */
@@ -268,8 +268,8 @@ void			build_scene(t_game *game);
 void			render_map(t_game *game);
 
 /* render/render_tiles.c */
-void			place_tile(t_game *game, int mx, int my);
-void			uncover_tile(t_game *game, int mx, int my);
+void			place_tile(t_game *game, int x, int y);
+void			uncover_tile(t_game *game, int x, int y);
 
 /* render/render_images.c */
 mlx_image_t		*texture_image(t_game *game, mlx_texture_t *tex);
@@ -307,41 +307,41 @@ void			free_textures(t_game *game);
 void			init_patterns(t_game *game, const t_map *parsed);
 
 /* patterns/patterns_tile.c */
-bool			is_corridor(t_game *game, int mx, int my);
-mlx_texture_t	*facing_wall_texture(t_game *game, int mx, int my);
+bool			is_corridor(t_game *game, int x, int y);
+mlx_texture_t	*facing_wall_texture(t_game *game, int x, int y);
 
 /* patterns/patterns_collectible.c */
-mlx_texture_t	*collectible_tile_texture(t_game *game, int mx, int my);
+mlx_texture_t	*collectible_tile_texture(t_game *game, int x, int y);
 
 /* patterns/patterns_lines.c */
-bool			match_column_texture(t_game *game, int mx, int my,
+bool			match_column_texture(t_game *game, int x, int y,
 					mlx_texture_t **sprite);
-mlx_texture_t	*row_texture(t_game *game, int mx, int my);
+mlx_texture_t	*row_texture(t_game *game, int x, int y);
 
 /* patterns/patterns_runs.c */
 bool			is_equipment_run(char first, char last, int length);
 mlx_texture_t	*run_texture(t_game *game, t_run run, int face);
 
 /* patterns/patterns_desks.c */
-bool			is_sideways_desk(t_game *game, int mx, int my);
-mlx_texture_t	*empty_table_texture(t_game *game, int mx, int my);
+bool			is_sideways_desk(t_game *game, int x, int y);
+mlx_texture_t	*empty_table_texture(t_game *game, int x, int y);
 
 /* patterns/patterns_lamp_spot.c */
-bool			is_lamp_spot(t_game *game, int mx, int my);
+bool			is_lamp_spot(t_game *game, int x, int y);
 
 /* patterns/patterns_lamps.c */
 bool			*lamp_tiles(t_game *game);
-mlx_texture_t	*lamp_texture(t_game *game, int mx, int my);
+mlx_texture_t	*lamp_texture(t_game *game, int x, int y);
 
 /* patterns/patterns_windows.c */
-mlx_texture_t	*window_texture(t_game *game, int mx, int my);
+mlx_texture_t	*window_texture(t_game *game, int x, int y);
 
 /* patterns/patterns_glass.c */
-mlx_texture_t	*glass_texture(t_game *game, int mx, int my, int dx);
+mlx_texture_t	*glass_texture(t_game *game, int x, int y, int dx);
 
 /* patterns/patterns_floor.c */
-mlx_image_t		*floor_image(t_game *game, int mx, int my);
-mlx_image_t		*decoration_image(t_game *game, int mx, int my);
+mlx_image_t		*floor_image(t_game *game, int x, int y);
+mlx_image_t		*decoration_image(t_game *game, int x, int y);
 
 /* patterns/patterns_outside.c */
 bool			*outside_tiles(t_game *game);

@@ -26,11 +26,11 @@ int	tile_index(t_game *game, int x, int y)
 
 /* The player's starting tile ('P') is floor. */
 
-char	tile_at(t_game *game, int mx, int my)
+char	tile_at(t_game *game, int x, int y)
 {
-	if (!in_map(game, mx, my))
+	if (!in_map(game, x, y))
 		return ('\0');
-	if (game->map[my][mx] == 'P')
+	if (game->map[y][x] == 'P')
 		return ('0');
-	return (game->map[my][mx]);
+	return (game->map[y][x]);
 }

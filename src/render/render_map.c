@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MLX42.h"
 #include "so_long.h"
-#include "libft.h"
 
 /* One hidden instance per player frame, on top of the map. */
 static void	place_player(t_game *game)
@@ -92,16 +90,16 @@ static void	update_score_bar(t_game *game)
 /* Puts every map tile, the player and the score bar in the window, once. */
 void	build_scene(t_game *game)
 {
-	int	mx;
-	int	my;
+	int	x;
+	int	y;
 
 	init_render(game);
-	my = -1;
-	while (++my < game->rows)
+	y = -1;
+	while (++y < game->rows)
 	{
-		mx = -1;
-		while (++mx < game->cols)
-			place_tile(game, mx, my);
+		x = -1;
+		while (++x < game->cols)
+			place_tile(game, x, y);
 	}
 	place_player(game);
 	game->scene.bar[0] = color_image(game, RGBA_BAR_BG,

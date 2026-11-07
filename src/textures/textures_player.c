@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MLX42.h"
 #include "so_long.h"
 #include "libft.h"
 #include <fcntl.h>

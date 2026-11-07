@@ -54,9 +54,9 @@ bool	*lamp_tiles(t_game *game)
 }
 
 /* The neon lamp on a wall chosen by lamp_tiles, or NULL. */
-mlx_texture_t	*lamp_texture(t_game *game, int mx, int my)
+mlx_texture_t	*lamp_texture(t_game *game, int x, int y)
 {
-	if (game->layout.lamps[tile_index(game, mx, my)])
+	if (game->layout.lamps[tile_index(game, x, y)])
 		return (game->textures.lamp);
 	return (NULL);
 }

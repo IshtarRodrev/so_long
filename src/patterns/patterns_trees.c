@@ -21,8 +21,8 @@ static bool	blocks_tree(t_game *game, bool *trees, int x, int y)
 	return (game->map[y][x] == '1' || trees[tile_index(game, x, y)]);
 }
 
-/* True if no wall or tree is closer than TREE_SPACING to (mx, my). */
-static bool	tree_fits(t_game *game, bool *trees, int mx, int my)
+/* True if no wall or tree is closer than TREE_SPACING to (x, y). */
+static bool	tree_fits(t_game *game, bool *trees, int x, int y)
 {
 	int	dx;
 	int	dy;
@@ -33,7 +33,7 @@ static bool	tree_fits(t_game *game, bool *trees, int mx, int my)
 		dx = -(TREE_SPACING - 1);
 		while (dx < TREE_SPACING)
 		{
-			if (blocks_tree(game, trees, mx + dx, my + dy))
+			if (blocks_tree(game, trees, x + dx, y + dy))
 				return (false);
 			dx++;
 		}
