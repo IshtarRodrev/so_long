@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:41:14 by akechedz          #+#    #+#             */
 /*   Updated: 2026/11/06 17:41:16 by akechedz         ###   ########.fr       */

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   patterns_lines.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:42:55 by akechedz          #+#    #+#             */
 /*   Updated: 2026/11/06 17:42:56 by akechedz         ###   ########.fr       */

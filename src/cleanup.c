@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/07 12:00:00 by akechedz          #+#    #+#             */
 /*   Updated: 2026/11/07 12:00:00 by akechedz         ###   ########.fr       */

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   game_controls.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:11:30 by akechedz          #+#    #+#             */
 /*   Updated: 2026/11/06 19:45:38 by akechedz         ###   ########.fr       */

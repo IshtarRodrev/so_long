@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   progress.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akechedz <akechedz@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 17:13:30 by akechedz          #+#    #+#             */
 /*   Updated: 2026/11/06 17:42:04 by akechedz         ###   ########.fr       */
