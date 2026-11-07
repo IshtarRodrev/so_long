@@ -30,13 +30,18 @@ static void	strip_line_end(char *line)
 		line[i - 1] = '\0';
 }
 
-/* Frees the first rows lines of map, map itself and line. Returns NULL. */
-static char	**free_lines(char **map, int rows, char *line)
+/*
+** On allocation failure: frees the *rows lines of map, map itself and line,
+** reports the error and sets *rows to -1. Returns NULL.
+*/
+static char	**free_lines(char **map, int *rows, char *line)
 {
-	while (rows > 0)
-		free(map[--rows]);
+	while (*rows > 0)
+		free(map[--(*rows)]);
 	free(map);
 	free(line);
+	*rows = -1;
+	print_error("memory allocation failed", NULL);
 	return (NULL);
 }
 
@@ -56,7 +61,7 @@ static char	**read_lines(int fd, int *rows)
 		grown = ft_realloc(map, sizeof(char *) * (*rows + 1),
 				sizeof(char *) * (*rows + 2));
 		if (!grown)
-			return (free_lines(map, *rows, line));
+			return (free_lines(map, rows, line));
 		map = grown;
 		map[*rows] = line;
 		map[*rows + 1] = NULL;
@@ -72,11 +77,19 @@ char	**read_map_file(t_game *game, const char *path)
 	int		rows;
 	char	**map;
 
+	fd = open(path, O_RDONLY | O_DIRECTORY);
+	if (fd >= 0)
+	{
+		close(fd);
+		return (print_error("map file is a directory", path), NULL);
+	}
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		return (NULL);
+		return (print_error("cannot open map file", path), NULL);
 	map = read_lines(fd, &rows);
 	close(fd);
+	if (!map && rows == 0)
+		print_error("map file is empty", path);
 	if (!map)
 		return (NULL);
 	game->rows = rows;

@@ -129,7 +129,7 @@ static int	is_valid_tile(char t)
 	return (t == '0' || t == '1' || t == 'C' || t == 'E' || t == 'P');
 }
 
-/* True if every row is map->cols long and holds only valid tiles. */
+/* True if rows are non-empty, map->cols long and hold only valid tiles. */
 static int	check_rows(const t_map *map)
 {
 	size_t	row;
@@ -139,6 +139,8 @@ static int	check_rows(const t_map *map)
 	row = 0;
 	while (row < map->rows)
 	{
+		if (map->lines[row][0] == '\0')
+			return (map_error("map contains an empty line"));
 		if (ft_strlen(map->lines[row]) != map->cols)
 			return (map_error("map rows must have equal width"));
 		col = 0;
@@ -186,10 +188,10 @@ static int	count_tiles(t_map *map)
 
 int	validate_map(const t_map *map)
 {
-	if (!map || !map->lines || map->rows < 3 || map->cols < 3)
-		return (map_error("map is too small"));
-	if (!check_rows(map))
+	if (!map || !map->lines || !check_rows(map))
 		return (0);
+	if (map->rows < 3 || map->cols < 3)
+		return (map_error("map is too small"));
 	if (count_tiles((t_map *) map) != 1)
 		return (map_error("map must contain exactly one player ('P')"));
 	if (map->collectibles < 1)

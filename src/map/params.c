@@ -24,10 +24,7 @@ char	**load_and_validate(t_game *game, const char *path, t_lay *lay)
 
 	map = read_map_file(game, path);
 	if (!map)
-	{
-		print_error("cannot open or read map file", path);
 		return (NULL);
-	}
 	lay->lines = map;
 	lay->rows = (size_t) game->rows;
 	lay->cols = (size_t) game->cols;
