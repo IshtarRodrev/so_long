@@ -14,7 +14,10 @@
 #include "so_long.h"
 #include <stdlib.h>
 
-/* Shows the map name (no directories, no .ber) and how to start or quit. */
+/*
+** Shows the map name (no directories, no .ber) and how to start or quit in
+** the bottom right corner, 40 px from the right and the bottom border.
+*/
 static void	draw_menu(t_game *game, const char *map_name)
 {
 	char	*label;
@@ -25,10 +28,20 @@ static void	draw_menu(t_game *game, const char *map_name)
 	if (!label)
 		fail(game, "memory allocation failed");
 	label[ft_strlen(label) - 4] = '\0';
-	game->scene.menu[0] = mlx_put_string(game->mlx, label, 40, 40);
+	game->scene.menu[0] = mlx_put_string(game->mlx, label, 0, 40);
 	free(label);
 	game->scene.menu[1] = mlx_put_string(game->mlx,
-			"Press any key to start or ESC to exit", 40, 80);
+			"Press any key to start or ESC to exit", 0, 80);
+	if (!game->scene.menu[0] || !game->scene.menu[1])
+		fail(game, "failed to create image");
+	game->scene.menu[0]->instances[0].x = WINDOW_W - 40
+		- (int) game->scene.menu[0]->width;
+	game->scene.menu[1]->instances[0].x = WINDOW_W - 40
+		- (int) game->scene.menu[1]->width;
+	game->scene.menu[1]->instances[0].y = WINDOW_H - 40
+		- (int) game->scene.menu[1]->height;
+	game->scene.menu[0]->instances[0].y = game->scene.menu[1]->instances[0].y
+		- 40;
 }
 
 static void	clear_menu_images(t_game *game)
