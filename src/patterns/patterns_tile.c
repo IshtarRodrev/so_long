@@ -13,17 +13,6 @@
 #include "libft.h"
 #include "so_long.h"
 
-/* The player's starting tile ('P') is floor. */
-
-char	tile_at(t_game *game, int mx, int my)
-{
-	if (my < 0 || my >= game->rows || mx < 0 || mx >= game->cols)
-		return ('\0');
-	if (game->map[my][mx] == 'P')
-		return ('0');
-	return (game->map[my][mx]);
-}
-
 /* True if (mx, my) is a floor tile with walls above and below it. */
 
 bool	is_corridor(t_game *game, int mx, int my)

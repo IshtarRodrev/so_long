@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   params.c                                           :+:      :+:    :+:   */
+/*   map_load.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -18,7 +18,7 @@
 /*								 PARAM HELPERS								  */
 /******************************************************************************/
 
-char	**load_and_validate(t_game *game, const char *path, t_lay *lay)
+char	**load_and_validate(t_game *game, const char *path, t_map *lay)
 {
 	char	**map;
 
@@ -50,7 +50,7 @@ static int	has_ber_extension(const char *path)
 }
 
 /* Loads and validates the map file MAPS_DIR/<name>. name must end in .ber. */
-char	**load_map(t_game *game, const char *name, t_lay *lay)
+char	**load_map(t_game *game, const char *name, t_map *lay)
 {
 	char	*path;
 	char	**map;

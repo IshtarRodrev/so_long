@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_controls.c                                    :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,16 +16,24 @@
 static void	update_player_dir(t_game *game, int dx, int dy)
 {
 	if (dy < 0)
-		game->player_dir = DIR_BACK;
+		game->player_dir = DIR_UP;
 	else if (dy > 0)
-		game->player_dir = DIR_FRONT;
+		game->player_dir = DIR_DOWN;
 	else if (dx < 0)
 		game->player_dir = DIR_LEFT;
 	else if (dx > 0)
 		game->player_dir = DIR_RIGHT;
 }
 
-int	move_player(t_game *game, int dx, int dy)
+/* True if the player may step onto (x, y): not a wall, not a locked exit. */
+static bool	can_enter(t_game *game, int x, int y)
+{
+	if (!in_map(game, x, y) || game->map[y][x] == '1')
+		return (false);
+	return (game->map[y][x] != 'E' || game->progress.collectibles_left == 0);
+}
+
+void	move_player(t_game *game, int dx, int dy)
 {
 	int	nx;
 	int	ny;
@@ -33,24 +41,24 @@ int	move_player(t_game *game, int dx, int dy)
 	nx = game->progress.player.x + dx;
 	ny = game->progress.player.y + dy;
 	update_player_dir(game, dx, dy);
-	if (ny < 0 || ny >= game->rows || nx < 0 || nx >= game->cols
-		|| game->map[ny][nx] == '1'
-		|| (game->map[ny][nx] == 'E'
-			&& game->progress.collectibles_left > 0))
-		return (render_map(game), 0);
+	if (!can_enter(game, nx, ny))
+	{
+		render_map(game);
+		return ;
+	}
 	game->move_count++;
 	ft_printf("Moves: %d\n", game->move_count);
 	if (game->map[ny][nx] == 'E')
 	{
 		ft_printf("You won!\n");
 		mlx_close_window(game->mlx);
-		return (0);
+		return ;
 	}
 	game->progress.player = (t_point){nx, ny};
 	if (game->map[ny][nx] == 'C' && !is_collected(game, nx, ny))
 		collect_tile(game, nx, ny);
 	game->player_frame++;
-	return (render_map(game), 0);
+	render_map(game);
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)

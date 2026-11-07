@@ -20,21 +20,21 @@ void	load_glass_sprites(t_game *game)
 {
 	game->glass_down_right_tex = mlx_load_png(GLASS_DR_SPRITE_PATH);
 	game->glass_down_left_tex = mlx_load_png(GLASS_DL_SPRITE_PATH);
-	game->glass_dark_tex[GLASS_DR_LEFT] = mlx_load_png(SPRITE_DIR
+	game->glass_dark_tex[GLASS_DOWN_RIGHT_LEFT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_right_dark_left.png");
-	game->glass_dark_tex[GLASS_DR_RIGHT] = mlx_load_png(SPRITE_DIR
+	game->glass_dark_tex[GLASS_DOWN_RIGHT_RIGHT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_right_dark_right.png");
-	game->glass_dark_tex[GLASS_DL_LEFT] = mlx_load_png(SPRITE_DIR
+	game->glass_dark_tex[GLASS_DOWN_LEFT_LEFT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_left_dark_left.png");
-	game->glass_dark_tex[GLASS_DL_RIGHT] = mlx_load_png(SPRITE_DIR
+	game->glass_dark_tex[GLASS_DOWN_LEFT_RIGHT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_left_dark_right.png");
-	game->glass_grass_tex[GLASS_DR_LEFT] = mlx_load_png(SPRITE_DIR
+	game->glass_grass_tex[GLASS_DOWN_RIGHT_LEFT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_right_grass_left.png");
-	game->glass_grass_tex[GLASS_DR_RIGHT] = mlx_load_png(SPRITE_DIR
+	game->glass_grass_tex[GLASS_DOWN_RIGHT_RIGHT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_right_grass_right.png");
-	game->glass_grass_tex[GLASS_DL_LEFT] = mlx_load_png(SPRITE_DIR
+	game->glass_grass_tex[GLASS_DOWN_LEFT_LEFT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_left_grass_left.png");
-	game->glass_grass_tex[GLASS_DL_RIGHT] = mlx_load_png(SPRITE_DIR
+	game->glass_grass_tex[GLASS_DOWN_LEFT_RIGHT] = mlx_load_png(SPRITE_DIR
 			"/glass_fence/down_left_grass_right.png");
 }
 

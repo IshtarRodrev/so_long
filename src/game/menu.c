@@ -23,10 +23,7 @@ static void	draw_menu(t_game *game, const char *map_name)
 		map_name = ft_strrchr(map_name, '/') + 1;
 	label = ft_strjoin("Map: ", map_name);
 	if (!label)
-	{
-		print_error("memory allocation failed", NULL);
-		exit_game(game, 1);
-	}
+		fail(game, "memory allocation failed");
 	label[ft_strlen(label) - 4] = '\0';
 	game->menu_imgs[0] = mlx_put_string(game->mlx, label, 40, 40);
 	free(label);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_render_map.c                                  :+:      :+:    :+:   */
+/*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -86,10 +86,7 @@ static void	update_score_bar(t_game *game)
 				SCORE_BAR_HEIGHT - 2 * SCORE_BAR_BORDER);
 	}
 	if (!ok)
-	{
-		print_error("failed to resize score bar", NULL);
-		exit_game(game, 1);
-	}
+		fail(game, "failed to resize score bar");
 }
 
 /* Puts every map tile, the player and the score bar in the window, once. */
@@ -98,10 +95,7 @@ void	build_scene(t_game *game)
 	int	mx;
 	int	my;
 
-	game->color_img[IMG_FLOOR] = color_image(game, RGBA_FLOOR, TILE_SIZE,
-			TILE_SIZE);
-	game->color_img[IMG_WALL] = color_image(game, RGBA_WALL, TILE_SIZE,
-			TILE_SIZE);
+	init_render(game);
 	my = -1;
 	while (++my < game->rows)
 	{

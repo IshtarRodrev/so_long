@@ -41,10 +41,10 @@ static mlx_texture_t	*load_named(const char *name, const char *direction)
 
 static void	load_faces(mlx_texture_t **tex, const char *name)
 {
-	tex[FACE_DOWN] = load_named(name, "/down.png");
-	tex[FACE_UP] = load_named(name, "/up.png");
-	tex[FACE_LEFT] = load_named(name, "/left.png");
-	tex[FACE_RIGHT] = load_named(name, "/right.png");
+	tex[DIR_DOWN] = load_named(name, "/down.png");
+	tex[DIR_UP] = load_named(name, "/up.png");
+	tex[DIR_LEFT] = load_named(name, "/left.png");
+	tex[DIR_RIGHT] = load_named(name, "/right.png");
 }
 
 static void	load_required_faces(t_game *game, mlx_texture_t **tex,
@@ -54,7 +54,7 @@ static void	load_required_faces(t_game *game, mlx_texture_t **tex,
 
 	load_faces(tex, name);
 	face = 0;
-	while (face < FACE_COUNT)
+	while (face < DIR_COUNT)
 	{
 		if (!tex[face])
 		{
@@ -77,8 +77,8 @@ void	load_pattern_sprites(t_game *game)
 	game->asphalt_tex = mlx_load_png(ASPHALT_SPRITE_PATH);
 	game->grass_tex = mlx_load_png(GRASS_SPRITE_PATH);
 	game->tree_tex = mlx_load_png(TREE_SPRITE_PATH);
-	game->shower_tex[FACE_RIGHT] = mlx_load_png(SHOWER_RIGHT_SPRITE_PATH);
-	game->shower_tex[FACE_LEFT] = mlx_load_png(SHOWER_LEFT_SPRITE_PATH);
+	game->shower_tex[DIR_RIGHT] = mlx_load_png(SHOWER_RIGHT_SPRITE_PATH);
+	game->shower_tex[DIR_LEFT] = mlx_load_png(SHOWER_LEFT_SPRITE_PATH);
 	load_faces(game->toilet_tex, "toilet");
 	load_faces(game->lockers_tex, "lockers");
 	load_faces(game->sink_tex, "sink");

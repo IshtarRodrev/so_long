@@ -17,10 +17,9 @@ static bool	is_closed_floor(t_game *game, int x, int y)
 {
 	int	index;
 
-	if (y < 0 || y >= game->rows || x < 0 || x >= game->cols
-		|| game->map[y][x] != '0')
+	if (!in_map(game, x, y) || game->map[y][x] != '0')
 		return (false);
-	index = y * game->cols + x;
+	index = tile_index(game, x, y);
 	return (!game->reachable[index] && !game->outside[index]);
 }
 
@@ -31,7 +30,7 @@ void	add_area_tile(t_pot_fill *f, int x, int y)
 
 	if (!is_closed_floor(f->game, x, y))
 		return ;
-	index = y * f->game->cols + x;
+	index = tile_index(f->game, x, y);
 	if (f->seen[index])
 		return ;
 	f->seen[index] = true;

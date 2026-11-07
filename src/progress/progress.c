@@ -13,29 +13,25 @@
 #include "libft.h"
 #include "so_long.h"
 
-void	progress_init(t_game *game, const t_lay *lay)
+void	init_progress(t_game *game, const t_map *lay)
 {
 	game->progress.collected = ft_calloc(lay->rows * lay->cols, sizeof(bool));
-	game->cover = ft_calloc(lay->rows * lay->cols, sizeof(int));
-	if (!game->progress.collected || !game->cover)
-	{
-		print_error("memory allocation failed", NULL);
-		exit_game(game, 1);
-	}
+	if (!game->progress.collected)
+		fail(game, "memory allocation failed");
 	game->progress.player = lay->player;
 	game->progress.collectibles_left = lay->collectibles;
 	game->progress.collectibles_total = lay->collectibles;
-	pick_tasks(game);
+	pick_collectibles(game);
 }
 
 bool	is_collected(t_game *game, int mx, int my)
 {
-	return (game->progress.collected[(size_t) my * game->cols + mx]);
+	return (game->progress.collected[tile_index(game, mx, my)]);
 }
 
 void	collect_tile(t_game *game, int mx, int my)
 {
-	game->progress.collected[(size_t) my * game->cols + mx] = true;
+	game->progress.collected[tile_index(game, mx, my)] = true;
 	game->progress.collectibles_left--;
 	uncover_tile(game, mx, my);
 }

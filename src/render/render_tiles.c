@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_render_tiles.c                                :+:      :+:    :+:   */
+/*   render_tiles.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -28,7 +28,8 @@ static int	put_tile(t_game *game, mlx_image_t *img, int mx, int my)
 
 /*
 ** A task to do shows its sprite (if its shape has one) on the floor, under the
-** broken sign. The sign is the cover: hiding it marks the task as done.
+** broken sign. Its instance index is kept in sign_instance: hiding it marks
+** the collectible as collected.
 */
 static void	place_collectible(t_game *game, int mx, int my)
 {
@@ -37,9 +38,9 @@ static void	place_collectible(t_game *game, int mx, int my)
 	put_tile(game, game->color_img[IMG_FLOOR], mx, my);
 	sprite = collectible_tile_texture(game, mx, my);
 	if (sprite)
-		put_tile(game, image_for(game, sprite), mx, my);
-	game->cover[my * game->cols + mx] = put_tile(game,
-			image_for(game, game->broken_sign_tex), mx, my);
+		put_tile(game, cached_image(game, sprite), mx, my);
+	game->sign_instance[tile_index(game, mx, my)] = put_tile(game,
+			cached_image(game, game->broken_sign_tex), mx, my);
 }
 
 static void	place_wall(t_game *game, int mx, int my)
@@ -55,7 +56,7 @@ static void	place_wall(t_game *game, int mx, int my)
 		return ;
 	}
 	put_tile(game, game->color_img[IMG_FLOOR], mx, my);
-	put_tile(game, image_for(game, sprite), mx, my);
+	put_tile(game, cached_image(game, sprite), mx, my);
 }
 
 /* Puts the images of map tile (mx, my) in the window. */
@@ -74,17 +75,21 @@ void	place_tile(t_game *game, int mx, int my)
 		place_wall(game, mx, my);
 	else
 	{
-		put_tile(game, game->color_img[IMG_FLOOR], mx, my);
+		put_tile(game, floor_image(game, mx, my), mx, my);
+		if (decoration_image(game, mx, my))
+			put_tile(game, decoration_image(game, mx, my), mx, my);
 		if (tile == 'E')
-			put_tile(game, image_for(game, game->exit_tex), mx, my);
+			put_tile(game, cached_image(game, game->exit_tex), mx, my);
 	}
 }
 
-/* Hides the cover of the collected task at (mx, my). */
+/* Hides the broken sign of the collected collectible at (mx, my). */
 void	uncover_tile(t_game *game, int mx, int my)
 {
 	mlx_image_t	*sign;
+	int			instance;
 
-	sign = image_for(game, game->broken_sign_tex);
-	sign->instances[game->cover[my * game->cols + mx]].enabled = false;
+	sign = cached_image(game, game->broken_sign_tex);
+	instance = game->sign_instance[tile_index(game, mx, my)];
+	sign->instances[instance].enabled = false;
 }

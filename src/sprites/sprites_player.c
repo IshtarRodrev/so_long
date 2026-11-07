@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_render.c                                      :+:      :+:    :+:   */
+/*   sprites_player.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,7 +19,7 @@
 
 static const char	*dir_name(int d)
 {
-	if (d == DIR_BACK)
+	if (d == DIR_UP)
 		return ("back");
 	if (d == DIR_LEFT)
 		return ("left");
@@ -36,9 +36,9 @@ static char	*sprite_path(const char *dir_name, int frame)
 	num[0] = '0' + frame / 10 % 10;
 	num[1] = '0' + frame % 10;
 	num[2] = '\0';
-	ft_strlcpy(buf, SPRITE_DIR "/", sizeof(buf));
+	ft_strlcpy(buf, SPRITE_DIR "/player/", sizeof(buf));
 	ft_strlcat(buf, dir_name, sizeof(buf));
-	ft_strlcat(buf, "_", sizeof(buf));
+	ft_strlcat(buf, "/", sizeof(buf));
 	ft_strlcat(buf, num, sizeof(buf));
 	ft_strlcat(buf, ".png", sizeof(buf));
 	return (ft_strdup(buf));
@@ -61,10 +61,7 @@ static bool	load_frame(t_game *game, int d, int f)
 	game->player_tex[d][f] = mlx_load_png(path);
 	free(path);
 	if (!game->player_tex[d][f])
-	{
-		print_error("failed to load player sprite", NULL);
-		exit_game(game, 1);
-	}
+		fail(game, "failed to load player sprite");
 	return (true);
 }
 

@@ -30,9 +30,17 @@ void	free_map(t_map *map)
 	map->lines = NULL;
 }
 
-static int	is_valid_tile(char t)
+/* True if t is a map character; otherwise prints which one is invalid. */
+static int	check_tile(char t)
 {
-	return (t == '0' || t == '1' || t == 'C' || t == 'E' || t == 'P');
+	char	tile[2];
+
+	if (t == '0' || t == '1' || t == 'C' || t == 'E' || t == 'P')
+		return (1);
+	tile[0] = t;
+	tile[1] = '\0';
+	print_error("invalid character in map", tile);
+	return (0);
 }
 
 /* True if rows are non-empty, map->cols long and hold only valid tiles. */
@@ -40,7 +48,6 @@ static int	check_rows(const t_map *map)
 {
 	size_t	row;
 	size_t	col;
-	char	tile[2];
 
 	row = 0;
 	while (row < map->rows)
@@ -52,12 +59,8 @@ static int	check_rows(const t_map *map)
 		col = 0;
 		while (col < map->cols)
 		{
-			if (!is_valid_tile(map->lines[row][col]))
-			{
-				tile[0] = map->lines[row][col];
-				tile[1] = '\0';
-				return (print_error("invalid character in map", tile), 0);
-			}
+			if (!check_tile(map->lines[row][col]))
+				return (0);
 			col++;
 		}
 		row++;

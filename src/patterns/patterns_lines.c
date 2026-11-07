@@ -34,9 +34,9 @@ static int	row_face(t_game *game, int start, int end, int my)
 		start++;
 	}
 	if (above == '1' && below == '0')
-		return (FACE_DOWN);
+		return (DIR_DOWN);
 	if (above == '0' && below == '1')
-		return (FACE_UP);
+		return (DIR_UP);
 	return (-1);
 }
 
@@ -61,9 +61,9 @@ static int	column_face(t_game *game, int start, int end, int mx)
 		start++;
 	}
 	if (left == '1' && right == '0')
-		return (FACE_RIGHT);
+		return (DIR_RIGHT);
 	if (left == '0' && right == '1')
-		return (FACE_LEFT);
+		return (DIR_LEFT);
 	return (-1);
 }
 
@@ -74,7 +74,8 @@ static int	column_face(t_game *game, int start, int end, int mx)
 ** the left, left if the wall is on the right.
 */
 
-bool	column_sprite(t_game *game, int mx, int my, mlx_texture_t **sprite)
+bool	match_column_texture(t_game *game, int mx, int my,
+		mlx_texture_t **sprite)
 {
 	int		start;
 	int		end;

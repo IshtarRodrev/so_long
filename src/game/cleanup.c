@@ -38,19 +38,39 @@ static void	free_sprites(t_game *game)
 	delete_textures(&game->exit_tex, 1);
 	delete_textures(&game->broken_sign_tex, 1);
 	delete_textures(&game->facing_wall_tex, 1);
-	delete_textures(&game->glass_down_right_tex, 1);
-	delete_textures(&game->glass_down_left_tex, 1);
-	delete_textures(game->shower_tex, FACE_COUNT);
-	delete_textures(game->desk_tex, FACE_COUNT);
-	delete_textures(game->table_tex, FACE_COUNT);
-	delete_textures(game->toilet_tex, FACE_COUNT);
-	delete_textures(game->lockers_tex, FACE_COUNT);
-	delete_textures(game->sink_tex, FACE_COUNT);
-	delete_textures(game->kitchen_tex, FACE_COUNT);
-	delete_textures(game->coffee_tex, FACE_COUNT);
-	delete_textures(game->water_cooler_tex, FACE_COUNT);
-	delete_textures(game->fridge_tex, FACE_COUNT);
-	delete_textures(game->vending_tex, FACE_COUNT);
+	free_glass_sprites(game);
+	delete_textures(&game->flowerpot_tex, 1);
+	delete_textures(&game->asphalt_tex, 1);
+	delete_textures(&game->grass_tex, 1);
+	delete_textures(&game->tree_tex, 1);
+	delete_textures(game->shower_tex, DIR_COUNT);
+	delete_textures(game->desk_tex, DIR_COUNT);
+	delete_textures(game->table_tex, DIR_COUNT);
+	delete_textures(game->toilet_tex, DIR_COUNT);
+	delete_textures(game->lockers_tex, DIR_COUNT);
+	delete_textures(game->sink_tex, DIR_COUNT);
+	delete_textures(game->kitchen_tex, DIR_COUNT);
+	delete_textures(game->coffee_tex, DIR_COUNT);
+	delete_textures(game->water_cooler_tex, DIR_COUNT);
+	delete_textures(game->fridge_tex, DIR_COUNT);
+	delete_textures(game->vending_tex, DIR_COUNT);
+}
+
+/* Frees the per-tile arrays built at start (progress and decorations). */
+static void	free_tile_data(t_game *game)
+{
+	free(game->progress.collected);
+	game->progress.collected = NULL;
+	free(game->sign_instance);
+	game->sign_instance = NULL;
+	free(game->reachable);
+	game->reachable = NULL;
+	free(game->outside);
+	game->outside = NULL;
+	free(game->pots);
+	game->pots = NULL;
+	free(game->trees);
+	game->trees = NULL;
 }
 
 /*
@@ -70,10 +90,7 @@ void	free_game(t_game *game)
 		free(game->map);
 		game->map = NULL;
 	}
-	free(game->progress.collected);
-	game->progress.collected = NULL;
-	free(game->cover);
-	game->cover = NULL;
+	free_tile_data(game);
 	free_sprites(game);
 	if (game->mlx)
 		mlx_terminate(game->mlx);

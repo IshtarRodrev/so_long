@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   patterns_ground.c                                  :+:      :+:    :+:   */
+/*   patterns_floor.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -25,8 +25,8 @@ static bool	near_wall_below(t_game *game, int mx, int my)
 	{
 		if (tile_at(game, mx, my + k) == '1')
 			return (true);
-		if (my + k >= game->rows
-			|| !game->outside[(my + k) * game->cols + mx])
+		if (!in_map(game, mx, my + k)
+			|| !game->outside[tile_index(game, mx, my + k)])
 			return (false);
 		k++;
 	}
@@ -39,17 +39,17 @@ static bool	near_wall_below(t_game *game, int mx, int my)
 ** missing). Floor the player can never reach inside: near-black. Floor the
 ** player can walk on: grey.
 */
-mlx_image_t	*floor_tile(t_game *game, int mx, int my)
+mlx_image_t	*floor_image(t_game *game, int mx, int my)
 {
 	int	index;
 
-	index = my * game->cols + mx;
+	index = tile_index(game, mx, my);
 	if (game->outside[index])
 	{
 		if (game->asphalt_tex && near_wall_below(game, mx, my))
-			return (image_for(game, game->asphalt_tex));
+			return (cached_image(game, game->asphalt_tex));
 		if (game->grass_tex)
-			return (image_for(game, game->grass_tex));
+			return (cached_image(game, game->grass_tex));
 		return (game->color_img[IMG_OUTSIDE]);
 	}
 	if (!game->reachable[index])
@@ -58,14 +58,14 @@ mlx_image_t	*floor_tile(t_game *game, int mx, int my)
 }
 
 /* The decoration drawn on top of a floor tile (flowerpot or tree), or NULL. */
-mlx_image_t	*decoration_tile(t_game *game, int mx, int my)
+mlx_image_t	*decoration_image(t_game *game, int mx, int my)
 {
 	int	index;
 
-	index = my * game->cols + mx;
+	index = tile_index(game, mx, my);
 	if (game->pots[index] && game->flowerpot_tex)
-		return (image_for(game, game->flowerpot_tex));
+		return (cached_image(game, game->flowerpot_tex));
 	if (game->trees[index] && game->tree_tex)
-		return (image_for(game, game->tree_tex));
+		return (cached_image(game, game->tree_tex));
 	return (NULL);
 }

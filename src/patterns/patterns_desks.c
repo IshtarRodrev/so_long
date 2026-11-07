@@ -67,9 +67,9 @@ static mlx_texture_t	*sideways_table_texture(t_game *game, int mx, int my)
 	if (!((above && below) || ((above || below) && beside)))
 		return (NULL);
 	if (left == '0')
-		return (game->table_tex[FACE_LEFT]);
+		return (game->table_tex[DIR_LEFT]);
 	if (right == '0')
-		return (game->table_tex[FACE_RIGHT]);
+		return (game->table_tex[DIR_RIGHT]);
 	return (NULL);
 }
 
@@ -94,8 +94,8 @@ mlx_texture_t	*empty_table_texture(t_game *game, int mx, int my)
 	top = tile_at(game, mx, my - 1);
 	bottom = tile_at(game, mx, my + 1);
 	if (top == '0' && (sides == 2 || (sides == 1 && bottom == 'C')))
-		return (game->table_tex[FACE_UP]);
+		return (game->table_tex[DIR_UP]);
 	if (bottom == '0' && (sides == 2 || (sides == 1 && top == 'C')))
-		return (game->table_tex[FACE_DOWN]);
+		return (game->table_tex[DIR_DOWN]);
 	return (NULL);
 }

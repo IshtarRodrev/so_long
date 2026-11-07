@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tasks.c                                            :+:      :+:    :+:   */
+/*   collectibles.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -40,11 +40,11 @@ static uint32_t	random_seed(void)
 }
 
 /*
-** Keeps at most MAX_TASKS collectibles to do, chosen at random; the others
-** start completed. Each C tile is kept with probability need / left, which
-** picks exactly need tiles, every choice equally likely.
+** Keeps at most MAX_COLLECTIBLES collectibles to do, chosen at random; the
+** others start completed. Each C tile is kept with probability need / left,
+** which picks exactly need tiles, every choice equally likely.
 */
-void	pick_tasks(t_game *game)
+void	pick_collectibles(t_game *game)
 {
 	uint32_t	state;
 	int			need;
@@ -53,8 +53,8 @@ void	pick_tasks(t_game *game)
 
 	left = game->progress.collectibles_total;
 	need = left;
-	if (need > MAX_TASKS)
-		need = MAX_TASKS;
+	if (need > MAX_COLLECTIBLES)
+		need = MAX_COLLECTIBLES;
 	game->progress.collectibles_total = need;
 	game->progress.collectibles_left = need;
 	state = random_seed();

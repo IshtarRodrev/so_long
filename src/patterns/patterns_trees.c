@@ -16,9 +16,9 @@
 /* True if (x, y) keeps a tree away: a wall or another tree. */
 static bool	blocks_tree(t_game *game, bool *trees, int x, int y)
 {
-	if (y < 0 || y >= game->rows || x < 0 || x >= game->cols)
+	if (!in_map(game, x, y))
 		return (false);
-	return (game->map[y][x] == '1' || trees[y * game->cols + x]);
+	return (game->map[y][x] == '1' || trees[tile_index(game, x, y)]);
 }
 
 /* True if no wall or tree is closer than TREE_SPACING to (mx, my). */

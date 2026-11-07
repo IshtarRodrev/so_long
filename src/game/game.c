@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   controls.c                                         :+:      :+:    :+:   */
+/*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,7 +15,7 @@
 
 static int	setup_window(t_game *game)
 {
-	game->mlx = mlx_init(MENU_WIN_W, MENU_WIN_H, "so_long", false);
+	game->mlx = mlx_init(WINDOW_W, WINDOW_H, "so_long", false);
 	if (!game->mlx)
 		return (0);
 	return (1);
@@ -23,17 +23,15 @@ static int	setup_window(t_game *game)
 
 void	init_game(t_game *game, const char *map_name)
 {
-	t_lay	lay;
+	t_map	lay;
 
 	game->map = load_map(game, map_name, &lay);
 	if (!game->map)
 		exit_game(game, 1);
-	progress_init(game, &lay);
+	init_progress(game, &lay);
+	init_patterns(game, &lay);
 	if (!setup_window(game))
-	{
-		print_error("failed to initialize window", NULL);
-		exit_game(game, 1);
-	}
+		fail(game, "failed to initialize window");
 	load_player_sprites(game);
 	load_exit_sprite(game);
 	load_pattern_sprites(game);
