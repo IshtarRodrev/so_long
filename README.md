@@ -2,7 +2,47 @@
 # so_long
 This project is a small 2D game. Its purpose is to learn working with textures, sprites, and other basic gameplay elements.
 # Description
-A “Description” section that clearly presents the project, including its goal and a brief overview.
+You play a member of the 42 bocal on a floor where things keep breaking. Every
+collectible (`C`) is a piece of cluster equipment marked with a warning sign: walk
+onto it to fix it. When everything works again, the exit (`E`) opens and you can
+call it a day.
+
+## The story behind it
+
+Behind every working cluster there is someone from the bocal walking the floor:
+a screen that won't wake up, a log in issue, a ticket waiting to be closed.
+This game is about that routine, the quiet work that keeps the school running, one
+task at a time.
+
+## Special thanks
+
+to [Rayan (rmehadje)](https://profile.intra.42.fr/users/rmehadje) who was just starting as
+an IT intern at 42 when the idea for this game came up. We were talking about his
+new duties (tickets, cluster maintenance and features of the
+[Learning Hub](https://intranet.42heilbronn.de/)) and about a ticket system he was
+planning to build for it on top of the school's floor plans. I joked that it sounded
+a lot like the tasks in *Among Us*.
+
+He might forget forget that joke already, but I didn't. I took those floor plans, turned them into the tile maps
+in `maps/`, and brought the school into this project, with Rayan as the player character.
+
+Unfortunately, it took me so_long to finish the game that Rayan finished his
+internship a few days before my evaluation...
+
+## Under the hood
+
+This is the 42 *so_long* project: a small top-down 2D game written in C with MLX42.
+The map is a `.ber` file (`0` floor, `1` wall, `C` collectible, `E` exit, `P` player).
+The program validates it (rectangular, one `P`, one `E`, at least one `C`, every `C`
+and the exit reachable) and prints `Error` with a reason if it is not valid.
+
+Beyond the mandatory part:
+- the map is drawn as a 42 Heilbronn floor plan (see *Tile render variants* below);
+- maps with more than 10 collectibles get 10 random ones to fix, the rest start fixed;
+- a progress bar above the map fills up from red to green;
+- a camera follows the player on maps larger than the window;
+- everything is drawn with MLX42 images (no pixel-by-pixel drawing), and all memory
+  is freed on every exit (ESC, window cross, win, errors).
 
 ## Project structure
 
@@ -27,11 +67,9 @@ so_long/
                                   windows · glass · floor · outside · pots · trees · init
 ```
 
-Each folder has one job: `map/` reads and validates the map, `patterns/` decides how every tile looks (rules only, no loading or drawing), `textures/` loads the images, and `render/` puts them in the window as MLX42 image instances.
-
 ## Tile render variants
 
-Collectibles (`C`) and walls (`1`) are drawn with different sprites depending on the tiles around them, so a map turns into an office floor plan. The rules live in `src/patterns/`. Equipment always faces the floor side (up, down, left or right).
+Collectibles (`C`) and walls (`1`) get their sprite from the tiles around them. Equipment always faces the floor side (up, down, left or right).
 
 | Variant | Shape that triggers it |
 |---|---|
@@ -55,6 +93,63 @@ Collectibles (`C`) and walls (`1`) are drawn with different sprites depending on
 `maps/labyrinth.ber` uses every variant.
 
 # Instructions
-An “Instructions” section containing any relevant information about compilation, installation, and/or execution.
+**Requirements** (all present on the 42 Heilbronn cluster machines): `cc`, `make`,
+`cmake`, the GLFW library, and network access on the first build — the Makefile
+downloads [MLX42](https://github.com/codam-coding-college/MLX42) (pinned to `v2.4.2`).
+
+**Build**
+```
+make            # MLX42 + libft + so_long
+make clean      # remove object files
+make fclean     # also remove so_long, libft.a and the MLX42 build
+make re         # fclean + make
+make patch      # update assets/sprites/ from the public GitHub copy of this project
+make unpatch    # undo patches: back to the original sprites
+```
+
+`make patch` downloads only `assets/sprites/` from
+[github.com/IshtarRodrev/so_long/tree/main/assets/sprites](https://github.com/IshtarRodrev/so_long/tree/main/assets/sprites)
+(branch `main`, or `make patch PATCH_REF=<branch or tag>`) and copies it over the local
+folder: files are replaced or added, never deleted. It is never run by `make`.
+`make unpatch` undoes it: replaced files come back from the last commit (`git restore`)
+and the files a patch added are deleted; other new sprites of yours are kept, but
+uncommitted edits to committed sprites are reverted too.
+
+**Run** — the argument is the name of a map file in `maps/`:
+```
+./so_long floorOG.ber
+./so_long labyrinth.ber
+./so_long err_two_exits.ber  # every err_*.ber map shows one error message
+```
+
+**Controls**: `W A S D` or the arrow keys to move, any key to start from the menu,
+`ESC` or the window cross to quit. Every move is printed in the terminal.
+
 # Resources
-• A “Resources” section listing classic references related to the topic (documentation, articles, tutorials, etc.), as well as a description of how AI was used — specifying for which tasks and which parts of the project.
+**References**
+- [42 so_long subject](https://projects.intra.42.fr) and the evaluation sheet
+- [MLX42 documentation](https://github.com/codam-coding-college/MLX42/tree/master/docs) — images, instances, hooks, textures
+- [42 Heilbronn floor plans](https://intranet.42heilbronn.de/floor-plans) — map reference for the `.ber` maps in `maps/`
+- [Flood fill / breadth-first search](https://en.wikipedia.org/wiki/Flood_fill) — path check, closed areas, outside, desk islands
+- [Xorshift random number generators](https://en.wikipedia.org/wiki/Xorshift) (G. Marsaglia, 2003) — seeded with `gettimeofday`
+- [Selection sampling, Knuth's *Algorithm S*](https://en.wikipedia.org/wiki/Reservoir_sampling) — picking the random collectibles in one pass
+- [Valgrind](https://valgrind.org/docs/manual/mc-manual.html) and [norminette](https://github.com/42School/norminette)
+
+**AI usage**
+
+Claude Sonnet 5.5 was used as an assistant during development. Every change was
+reviewed, tested and is understood by me. It was used for:
+- **Sprite pipeline**: I set up a pipeline in which Nano Banana (Google's Gemini
+  Flash Image model) draws the sprites from a tile description sheet.
+  The sheet has one prompt for every sprite the game loads. Every prompt shares the
+  same base rules (pixel art, top-down, flat grey floor, readable at 40x40) and uses
+  the office map in `assets/reference/` as the style reference, so all sprites look
+  like one set. The up / left / right versions are made from the finished down sprite
+  so every object matches from all four sides. Claude helped correcting the prompts in
+  the sheet.
+- **review**: checking the project against the subject and the evaluation sheet,
+  and keeping a TODO list of the issues found;
+- **tests**: the `err_*.ber` and `labyrinth.ber` maps generation;
+- **structure**: splitting the code into the folders of *Project structure*;
+- **tile rules and sprites**: implementing some complex pattern rules for the 
+  sprites (flowerpots, trees, lamps, glass fence variants).
