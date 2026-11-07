@@ -26,7 +26,7 @@ void	init_game(t_game *game, const char *map_name)
 {
 	t_lay	lay;
 
-	game->map = load_map_by_name(game, map_name, &lay);
+	game->map = load_map(game, map_name, &lay);
 	if (!game->map)
 		exit(1);
 	progress_init(game, &lay);

@@ -179,8 +179,7 @@ char			**read_map_file(t_game *game, const char *path);
 
 /* map/params.c */
 char			**load_and_validate(t_game *game, const char *path, t_lay *lay);
-char			**load_map_by_name(t_game *game, const char *map_name,
-					t_lay *lay);
+char			**load_map(t_game *game, const char *name, t_lay *lay);
 
 /* progress/progress.c */
 void			progress_init(t_game *game, const t_lay *lay);

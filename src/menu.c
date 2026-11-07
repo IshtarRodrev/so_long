@@ -14,17 +14,20 @@
 #include "so_long.h"
 #include <stdlib.h>
 
-/* Shows the chosen map's name and how to start or quit. */
+/* Shows the map name (no directories, no .ber) and how to start or quit. */
 static void	draw_menu(t_game *game, const char *map_name)
 {
 	char	*label;
 
+	if (ft_strrchr(map_name, '/'))
+		map_name = ft_strrchr(map_name, '/') + 1;
 	label = ft_strjoin("Map: ", map_name);
 	if (!label)
 	{
 		print_error("memory allocation failed", NULL);
 		exit(1);
 	}
+	label[ft_strlen(label) - 4] = '\0';
 	game->menu_imgs[0] = mlx_put_string(game->mlx, label, 40, 40);
 	free(label);
 	game->menu_imgs[1] = mlx_put_string(game->mlx,

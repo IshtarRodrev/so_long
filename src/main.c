@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		print_error("usage: ./so_long <map name>", NULL);
+		print_error("usage: ./so_long <map_name.ber>", NULL);
 		return (1);
 	}
 	ft_bzero(&game, sizeof(game));

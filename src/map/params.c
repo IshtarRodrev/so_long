@@ -41,23 +41,28 @@ char	**load_and_validate(t_game *game, const char *path, t_lay *lay)
 	return (map);
 }
 
-/* Loads and validates maps/<map_name>.ber. */
-char	**load_map_by_name(t_game *game, const char *map_name, t_lay *lay)
+/* True if path names a file that ends in ".ber" and has a name before it. */
+static int	has_ber_extension(const char *path)
 {
-	char	*tmp;
+	size_t	len;
+
+	len = ft_strlen(path);
+	if (len < 5 || ft_strncmp(path + len - 4, ".ber", 4) != 0)
+		return (0);
+	return (path[len - 5] != '/');
+}
+
+/* Loads and validates the map file MAPS_DIR/<name>. name must end in .ber. */
+char	**load_map(t_game *game, const char *name, t_lay *lay)
+{
 	char	*path;
 	char	**map;
 
-	tmp = ft_strjoin(MAPS_DIR "/", map_name);
-	path = NULL;
-	if (tmp)
-		path = ft_strjoin(tmp, ".ber");
-	free(tmp);
+	if (!has_ber_extension(name))
+		return (print_error("map file must have a .ber extension", name), NULL);
+	path = ft_strjoin(MAPS_DIR "/", name);
 	if (!path)
-	{
-		print_error("memory allocation failed", NULL);
-		return (NULL);
-	}
+		return (print_error("memory allocation failed", NULL), NULL);
 	map = load_and_validate(game, path, lay);
 	free(path);
 	return (map);
