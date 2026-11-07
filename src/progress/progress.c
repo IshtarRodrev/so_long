@@ -25,6 +25,7 @@ void	progress_init(t_game *game, const t_lay *lay)
 	game->progress.player = lay->player;
 	game->progress.collectibles_left = lay->collectibles;
 	game->progress.collectibles_total = lay->collectibles;
+	pick_tasks(game);
 }
 
 bool	is_collected(t_game *game, int mx, int my)

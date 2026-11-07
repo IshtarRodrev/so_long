@@ -25,6 +25,7 @@
 # define VIEWPORT_COLS 30
 # define VIEWPORT_ROWS 20
 # define CAMERA_MARGIN 5
+# define MAX_TASKS 10
 # define MENU_LINES 2
 # define MAPS_DIR "maps"
 # define SPRITE_DIR "assets/sprites"
@@ -188,6 +189,9 @@ void			progress_init(t_game *game, const t_lay *lay);
 bool			is_collected(t_game *game, int mx, int my);
 void			collect_tile(t_game *game, int mx, int my);
 uint32_t		progress_color(t_game *game);
+
+/* progress/tasks.c */
+void			pick_tasks(t_game *game);
 
 /* camera/camera.c */
 void			init_camera(t_game *game);

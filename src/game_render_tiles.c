@@ -73,7 +73,11 @@ void	place_tile(t_game *game, int mx, int my)
 
 	tile = game->map[my][mx];
 	if (tile == 'C')
+	{
 		place_collectible(game, mx, my);
+		if (is_collected(game, mx, my))
+			uncover_tile(game, mx, my);
+	}
 	else if (tile == '1')
 		place_wall(game, mx, my);
 	else

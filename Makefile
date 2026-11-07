@@ -57,6 +57,7 @@ SRCS = src/main.c \
 	src/patterns/patterns_desks.c \
 	src/patterns/patterns_collectible.c \
 	src/progress/progress.c \
+	src/progress/tasks.c \
 	src/cleanup.c
 OBJS = $(SRCS:.c=.o)
 
