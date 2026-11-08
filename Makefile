@@ -90,6 +90,21 @@ fclean: clean
 
 re: fclean all
 
+# patch: replace assets/ in the working tree with assets/ from the public GitHub copy
+# of this project. Works in any clone (also without that remote): it fetches by URL.
+# unpatch: undo it, back to the assets/ of the last commit.
+PATCH_URL = https://github.com/IshtarRodrev/so_long.git
+PATCH_REF = master
+ASSETS_DIR = assets
+
+patch:
+	git fetch --quiet $(PATCH_URL) $(PATCH_REF)
+	git restore --source=FETCH_HEAD --worktree -- $(ASSETS_DIR)
+	@echo "$(ASSETS_DIR)/ patched from $(PATCH_URL) ($(PATCH_REF)); 'make unpatch' to undo"
+
+unpatch:
+	git restore -- $(ASSETS_DIR)
+
 FORCE:
 
 .PHONY: all clean fclean re patch unpatch FORCE

@@ -103,17 +103,17 @@ make            # MLX42 + libft + so_long
 make clean      # remove object files
 make fclean     # also remove so_long, libft.a and the MLX42 build
 make re         # fclean + make
-make patch      # update assets/sprites/ from the public GitHub copy of this project
-make unpatch    # undo patches: back to the original sprites
+make patch      # replace assets/ with the one from the public GitHub copy of this project
+make unpatch    # undo it: back to the assets/ of the last commit
 ```
 
-`make patch` downloads only `assets/sprites/` from
-[github.com/IshtarRodrev/so_long/tree/main/assets/sprites](https://github.com/IshtarRodrev/so_long/tree/main/assets/sprites)
-(branch `main`, or `make patch PATCH_REF=<branch or tag>`) and copies it over the local
-folder: files are replaced or added, never deleted. It is never run by `make`.
-`make unpatch` undoes it: replaced files come back from the last commit (`git restore`)
-and the files a patch added are deleted; other new sprites of yours are kept, but
-uncommitted edits to committed sprites are reverted too.
+`make patch` fetches the branch `master` of
+[github.com/IshtarRodrev/so_long](https://github.com/IshtarRodrev/so_long/tree/master) by URL
+(`git fetch`, so it works in any clone of this repository, also without that remote) and puts
+its `assets/` folder into the working tree (`git restore --source=FETCH_HEAD`). Commits and
+code are not touched; `make patch PATCH_REF=<branch, tag or commit>` takes another version.
+`make unpatch` is `git restore assets/`: every tracked file in `assets/` is back as in the
+last commit. Files that only exist in the GitHub version stay as untracked files.
 
 **Run** — the argument is a path to a `.ber` file; a bare name is also looked up in `maps/`:
 ```
