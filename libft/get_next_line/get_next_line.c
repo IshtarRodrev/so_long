@@ -1,4 +1,4 @@
-﻿/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -6,86 +6,111 @@
 /*   By: akechedz <akechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:47:44 by akechedz          #+#    #+#             */
-/*   Updated: 2026/06/05 00:00:00 by GitHub Copilot  ###   ########.fr       */
+/*   Updated: 2025/12/04 17:36:24 by akechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
+#include <stdlib.h>
 #include "libft.h"
-# include <unistd.h>
-# include <stdlib.h>
 
-static char *join_remainder(char *remainder, const char *buffer)
+static int	clean_buffer(char *buffer)
 {
-    char *next;
+	char	*line;
+	size_t	n;
 
-    if (!remainder)
-        return ft_strdup(buffer);
-    next = ft_strjoin(remainder, buffer);
-    free(remainder);
-    return next;
+	n = 0;
+	line = ft_strchr(buffer, '\n');
+	if (!line)
+	{
+		buffer[0] = '\0';
+		return (0);
+	}
+	line++;
+	if (*line == '\0')
+	{
+		buffer[0] = '\0';
+		return (0);
+	}
+	while (line[n] != '\0')
+	{
+		buffer[n] = line[n];
+		n++;
+	}
+	buffer[n] = '\0';
+	return (1);
 }
 
-static char *extract_line(const char *remainder)
+static char	*extract_line(char *input)
 {
-    size_t len;
-    char *newline;
-    char *line;
+	char	*line;
+	size_t	n;
 
-    if (!remainder)
-        return NULL;
-    newline = ft_strchr(remainder, '\n');
-    if (newline)
-        len = newline - remainder + 1;
-    else
-        len = ft_strlen(remainder);
-    line = ft_substr(remainder, 0, len);
-    return line;
+	n = 0;
+	while (input[n] && input[n] != '\n')
+		n++;
+	if (input[n] == '\n')
+		n++;
+	line = malloc((n + 1) * sizeof(char));
+	if (!line)
+		return (NULL);
+	ft_strlcpy(line, input, n + 1);
+	return (line);
 }
 
-static char *save_remainder(char *remainder)
+static char	*read_input(char *buffer, int fd)
 {
-    char *newline;
-    char *next;
+	char	*line;
+	ssize_t	nbyte;
+	char	*joined;
 
-    if (!remainder)
-        return NULL;
-    newline = ft_strchr(remainder, '\n');
-    if (!newline)
-    {
-        free(remainder);
-        return NULL;
-    }
-    next = ft_strdup(newline + 1);
-    free(remainder);
-    return next;
+	line = ft_strjoin(buffer, "");
+	if (line == NULL)
+		return (NULL);
+	if (ft_strchr(line, '\n') != NULL)
+		return (line);
+	nbyte = read(fd, buffer, BUFFER_SIZE);
+	while (nbyte > 0)
+	{
+		buffer[nbyte] = '\0';
+		joined = ft_strjoin(line, buffer);
+		if (!joined)
+			return (free(line), NULL);
+		free(line);
+		line = joined;
+		if (ft_strchr(line, '\n') != NULL)
+			return (line);
+		nbyte = read(fd, buffer, BUFFER_SIZE);
+	}
+	if (nbyte == -1)
+		return (free(line), NULL);
+	return (line);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-    static char *remainder;
-    char buffer[BUFFER_SIZE + 1];
-    ssize_t bytes_read;
-    char *line;
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*input;
+	char		*output;
 
-    if (fd < 0 || BUFFER_SIZE <= 0)
-        return NULL;
-    while (!remainder || !ft_strchr(remainder, '\n'))
-    {
-        bytes_read = read(fd, buffer, BUFFER_SIZE);
-        if (bytes_read <= 0)
-            break;
-        buffer[bytes_read] = '\0';
-        remainder = join_remainder(remainder, buffer);
-        if (!remainder)
-            return NULL;
-    }
-    if (!remainder || *remainder == '\0')
-    {
-        free(remainder);
-        remainder = NULL;
-        return NULL;
-    }
-    line = extract_line(remainder);
-    remainder = save_remainder(remainder);
-    return line;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	input = read_input(buffer, fd);
+	if (!input)
+	{
+		buffer[0] = '\0';
+		return (NULL);
+	}
+	output = extract_line(input);
+	free(input);
+	if (!output)
+		return (buffer[0] = '\0', NULL);
+	clean_buffer(buffer);
+	if (output[0] == '\0')
+	{
+		free(output);
+		buffer[0] = '\0';
+		return (NULL);
+	}
+	return (output);
 }

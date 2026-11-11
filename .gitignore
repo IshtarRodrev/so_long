@@ -2,6 +2,8 @@ mlx42
 *.o
 *.tgz
 .vscode
-game
-*.md
+so_long
+*.a
 misc/
+tools/
+.env

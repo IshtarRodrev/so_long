@@ -36,6 +36,7 @@ size_t	ft_strlen(const char *str);
 void	*ft_memset(void *b, int c, size_t len);
 void	ft_bzero(void *s, size_t n);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
@@ -69,12 +70,11 @@ int		ft_lstsize(t_list *lst);
 # define PTRNULL "(nil)"
 # define NPTRSIZE 5
 
-int	ft_putptr_ul(unsigned long ptr);
-int	ft_putnbr(int n);
-int	ft_putnbr_unsigned(unsigned int n);
-int	ft_puthex_unsigned(unsigned int n, int uppercase);
-
-int	ft_printf(const char *format, ...);
+int		ft_putptr_ul(unsigned long ptr);
+int		ft_putnbr(int n);
+int		ft_putnbr_unsigned(unsigned int n);
+int		ft_puthex_unsigned(unsigned int n, int uppercase);
+int		ft_printf(const char *format, ...);
 long	ft_atol(char *str);
 
 #endif
